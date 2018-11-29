@@ -9,9 +9,9 @@
    },
    "alloc":
    {
-      "d24e2a3f694d5cf06a61a4b27346c904be89e635":
+      "0xd24e2a3f694d5cf06a61a4b27346c904be89e635":
       { "balance": "2000000000000000000000000" },
-      "c078e98aeaf24473cebf9fa69513bf78b5f9a766":
+      "0xc078e98aeaf24473cebf9fa69513bf78b5f9a766":
       { "balance": "2000000000000000000000000" }
    },
    "difficulty": "0x400",
