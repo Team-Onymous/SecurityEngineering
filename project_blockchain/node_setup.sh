@@ -1,12 +1,17 @@
 #!/bin/bash
 
+# Download this from github and set execution rights:
+# wget https://raw.githubusercontent.com/Team-Onymous/SecurityEngineering/develop/project_blockchain/node_setup.sh
+# sudo chmod 755 node_setup.sh
+# Then run: sudo ./node_setup.sh
+
 # Update & upgrade
 sudo apt update
 sudo apt upgrade -y
 
 # install ethereum
 sudo apt install software-properties-common -y
-sudo add-apt-repository ppa:ethereum/ethereum
+yes "" | sudo add-apt-repository ppa:ethereum/ethereum
 sudo apt update
 sudo apt install ethereum -y
 
@@ -18,7 +23,8 @@ cd ..
 
 # make a new account to act as a coinbase account 
 geth --datadir ./blockchain_data account new
-sudo chmod 755 /blockchain_data/keystore
+sudo chmod 777 /blockchain_data/keystore
+sudo chmod 777 /blockchain_data
 
 # initialize the genesisblock
 geth --datadir ./blockchain_data init ./blockchain_data/genesisblock.json
