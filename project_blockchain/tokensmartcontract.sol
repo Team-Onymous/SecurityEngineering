@@ -37,7 +37,7 @@ contract onycoin_ico {
         
     }
     
-    function sell_jstcoins(address investor, uint onycoins_sold) external {
+    function sell_onycoins(address investor, uint onycoins_sold) external {
         equity_onycoins[investor] -= onycoins_sold;
         equity_eur[investor] = equity_onycoins[investor] / 1000;
         total_onycoins_bought -= onycoins_sold;
