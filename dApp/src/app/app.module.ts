@@ -6,10 +6,14 @@ import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routes.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { HomeComponent } from './home/home.component';
+import { BlockComponent } from './block/block.component';
+import { AddCoinsComponent } from './addCoins/add.coins.component';
+import { RefundComponent } from './refund/refund.component';
 import { MaterialModule } from './material.module';
 
 import { AppComponent } from './app.component';
-import {MetaModule} from './meta/meta.module';
+import { MetaModule } from './meta/meta.module';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -24,6 +28,10 @@ import {
   declarations: [
     NavbarComponent,
     ToolbarComponent,
+    HomeComponent,
+    BlockComponent,
+    RefundComponent,
+    AddCoinsComponent,
     AppComponent
   ],
   imports: [
