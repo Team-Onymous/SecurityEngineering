@@ -10,7 +10,12 @@ import { HomeComponent } from './home/home.component';
 import { BlockComponent } from './block/block.component';
 import { AddCoinsComponent } from './addCoins/add.coins.component';
 import { RefundComponent } from './refund/refund.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { AddCardComponent } from './addCard/add.card.component';
 import { MaterialModule } from './material.module';
+import { UserService } from './services/user.service';
+import { AuthGuard } from './services/authguard.service';
 
 import { AppComponent } from './app.component';
 import { MetaModule } from './meta/meta.module';
@@ -32,6 +37,9 @@ import {
     BlockComponent,
     RefundComponent,
     AddCoinsComponent,
+    LoginComponent,
+    RegisterComponent,
+    AddCardComponent,
     AppComponent
   ],
   imports: [
@@ -49,7 +57,10 @@ import {
     HttpClientModule,
     MetaModule
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
