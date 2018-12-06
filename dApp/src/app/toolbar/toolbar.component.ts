@@ -13,4 +13,9 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['toolbar.component.css']
 })
 
-export class ToolbarComponent {}
+
+export class ToolbarComponent {
+
+  @Input('navbar') navbar: any;
+
+}
