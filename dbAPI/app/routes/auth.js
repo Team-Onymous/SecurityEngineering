@@ -3,16 +3,19 @@ const authController = require('../controllers/authcontroller.js');
 
 module.exports = function (app, passport) {
 
-    app.get('/signup', authController.signup);
+    // app.get('/signup', authController.signup);
 
     app.get('/signin', authController.signin);
 
-    app.post('/signup', passport.authenticate('local-signup', {
-            successRedirect: '/dashboard',
-
-            failureRedirect: '/signup'
-        }
-    ));
+    app.post('/api/users/register', passport.authenticate('register'),
+        function (req, res) {
+            // If this function gets called, authentication was successful.
+            // `req.user` contains the authenticated user.
+            res.send({
+                message: 'hooray',
+                request: req.user
+            });
+        });
 
     app.get('/dashboard', isLoggedIn, authController.dashboard);
 

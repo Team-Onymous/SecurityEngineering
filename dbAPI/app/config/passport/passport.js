@@ -36,12 +36,14 @@ module.exports = function (passport, user) {
     });
 
 
-    passport.use('local-signup', new LocalStrategy(
+    passport.use('register', new LocalStrategy(
         {
 
             usernameField: 'email',
 
             passwordField: 'password',
+
+            date_of_birth: 'date_of_birth',
 
             passReqToCallback: true // allows us to pass back the entire request to the callback
 
@@ -82,7 +84,8 @@ module.exports = function (passport, user) {
 
                             firstname: req.body.firstname,
 
-                            lastname: req.body.lastname
+                            lastname: req.body.lastname,
+                            date_of_birth: req.body.date_of_birth
 
                         };
 
@@ -90,13 +93,13 @@ module.exports = function (passport, user) {
 
                         if (!newUser) {
 
-                            return done(null, false);
+                            return done(null, false, { message: 'bad password' });
 
                         }
 
                         if (newUser) {
-
-                            return done(null, newUser);
+                            console.log('Gelukt!');
+                            return done(null, newUser, { message: 'User created' });
 
                         }
                     });
@@ -128,7 +131,7 @@ module.exports = function (passport, user) {
 
                 return bCrypt.compareSync(password, userpass);
 
-            }
+            };
 
             User.findOne({
                 where: {
