@@ -1,7 +1,7 @@
 /**
  * Created by bryan on 4-12-2018.
  */
-import { Component} from '@angular/core';
+import { Component, HostListener, OnInit} from '@angular/core';
 
 
 @Component({
@@ -11,4 +11,36 @@ import { Component} from '@angular/core';
   styleUrls: ['refund.component.css'],
 })
 
-export class RefundComponent{}
+export class RefundComponent{
+
+  visible: boolean = true;
+  breakpoint: number = 520;
+
+  ngOnInit() {
+    const w = window.innerWidth;
+    if (w >= this.breakpoint) {
+      this.visible = true;
+      console.log('true');
+    } else {
+      // whenever the window is less than 520, hide this component.
+      this.visible = false;
+      console.log('false');
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const w = event.target.innerWidth;
+    if (w >= this.breakpoint) {
+      this.visible = true;
+      console.log('true');
+    } else {
+      // whenever the window is less than 768, hide this component.
+      this.visible = false;
+      console.log('false');
+    }
+  }
+
+  goToRegister(){}
+
+}

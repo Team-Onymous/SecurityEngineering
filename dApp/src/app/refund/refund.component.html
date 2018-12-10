@@ -1,1 +1,28 @@
-refund page
+<div class="outer">
+  <div class="middle">
+    <div [ngClass]="visible ? 'addCard-card-container' : 'addCard-card-container-xs'">
+      <mat-card class="addCard-card">
+        <mat-card-title>Refund OnyCoins</mat-card-title>
+        <mat-card-content>
+          <form #addCoinsForm="ngForm" class="addCard-form">
+            <div>
+              <mat-form-field>
+                <input matInput #Coins name="Coins" required class="addCard-input" placeholder="Amount of Coins"/>
+                <mat-icon class="clear" matSuffix (click)="Coins.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #CoinsInEuros name="CoinsInEuros" class="addCard-input" placeholder="Cost in Euros"/>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #IbanNmber name="IbanNumber" required class="addCard-input" placeholder="IBAN Number"/>
+                <mat-icon class="clear" matSuffix (click)="IbanNumber.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <br />
+              <button mat-raised-button [disabled]="Coins.value == '' || IbanNumber.value == ''" type="submit" class="addCard-button">Refund Coins</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
