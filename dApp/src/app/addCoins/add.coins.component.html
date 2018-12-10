@@ -12,8 +12,7 @@
                 <mat-icon class="clear" matSuffix (click)="Coins.value = ''">clear</mat-icon>
               </mat-form-field>
               <mat-form-field>
-                <input matInput #CoinsInEuros name="CoinsInEuros" required class="addCard-input" placeholder="Cost in Euros"/>
-                <mat-icon class="clear" matSuffix (click)="CoinsInEuros.value = ''">clear</mat-icon>
+                <input matInput #CoinsInEuros name="CoinsInEuros" class="addCard-input" placeholder="Cost in Euros"/>
               </mat-form-field>
               <br />
               <button mat-raised-button [disabled]="Coins.value == ''" type="submit" class="addCard-button">Add Coins</button>
