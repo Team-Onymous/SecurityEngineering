@@ -21,11 +21,9 @@ export class LoginComponent{
     const w = window.innerWidth;
     if (w >= this.breakpoint) {
       this.visible = true;
-      console.log('true');
     } else {
       // whenever the window is less than 520, hide this component.
       this.visible = false;
-      console.log('false');
     }
   }
 
@@ -34,11 +32,9 @@ export class LoginComponent{
     const w = event.target.innerWidth;
     if (w >= this.breakpoint) {
       this.visible = true;
-      console.log('true');
     } else {
-      // whenever the window is less than 768, hide this component.
+      // whenever the window is less than 520, hide this component.
       this.visible = false;
-      console.log('false');
     }
   }
 
