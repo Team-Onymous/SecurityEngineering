@@ -1,1 +1,26 @@
-block page
+<div class="outer">
+  <div class="middle">
+    <div [ngClass]="visible ? 'addCard-card-container' : 'addCard-card-container-xs'">
+      <mat-card class="addCard-card">
+        <mat-card-title>Block Card</mat-card-title>
+        <mat-card-content>
+          <form #addCoinsForm="ngForm" class="addCard-form">
+            <div>
+              <mat-form-field>
+                <mat-select matNativeControl #Options placeholder="Reason" [(ngModel)]="selectedOption" name="Options">
+                  <mat-option value="" disabled selected></mat-option>
+                  <mat-option *ngFor="let option of options" [value]="option.value">
+                    {{option.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+                  <mat-checkbox [(ngModel)]="checked" name="checked">I want a new card</mat-checkbox>
+              <br />
+              <button mat-raised-button [disabled]="Options.value == ''" type="submit" class="addCard-button">block Card</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

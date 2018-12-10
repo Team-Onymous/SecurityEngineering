@@ -1,0 +1,77 @@
+.addCard-card-container {
+  padding-top: 0px;
+  margin-left: 25%;
+  margin-bottom: 25%;
+}
+.addCard-card-container-xs {
+  padding-top: 0px;
+  margin-left: 0%;
+  margin-bottom: 75%;
+}
+
+.addCard-card {
+  position: fixed;
+  width: 400px;
+}
+
+.addCard-form {
+  padding: 0;
+}
+
+.addCard-input {
+  font-size: 14px;
+  width: 300px;
+}
+
+.addCard-button {
+  font-size: 16px;
+  margin: 10px 10px 10px 0;
+  color: white;
+  background-color: #38817A;
+}
+
+.outer {
+  display: table;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.inner {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+mat-icon.clear {
+  cursor: pointer;
+}
+
+.version-text {
+  color: #d3d3d3;
+  position: fixed;
+  bottom: 0;
+  right: 5px;
+}
+
+.lang-text {
+  position: absolute;
+  bottom: 0;
+  display: inline-block;
+}
+
+.lang-switch-button {
+  text-transform: capitalize;
+}
+
+.mat-form-field {
+  width: auto;
+}
+
+mat-form-field {
+  width: 300px !important;
+}
