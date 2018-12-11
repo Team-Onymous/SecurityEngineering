@@ -68,30 +68,21 @@ module.exports = function (passport, user) {
 
                         {
                             email: email,
-
                             password: userPassword,
-
                             firstname: req.body.firstname,
-
                             lastname: req.body.lastname,
                             date_of_birth: req.body.date_of_birth
-
                         };
 
 
                     User.create(data).then(function (newUser, created) {
 
                         if (!newUser) {
-
                             return done(null, false, {message: 'bad password'});
-
                         }
 
                         if (newUser) {
-                            console.log('Gelukt!');
-                            console.log(newUser);
                             return done(null, newUser, {message: 'User created'});
-
                         }
                     });
                 }
@@ -135,23 +126,16 @@ module.exports = function (passport, user) {
                     return done(null, false, {
                         message: 'Email does not exist'
                     });
-
                 }
 
                 if (!isValidPassword(user.password, password)) {
-
                     return done(null, false, {
                         message: 'Incorrect password.'
                     });
-
                 }
 
-
                 var userinfo = user.get();
-                console.log(userinfo);
                 return done(null, userinfo);
-
-
             }).catch(function (err) {
 
                 console.log("Error:", err);
@@ -175,13 +159,11 @@ module.exports = function (passport, user) {
 
             var User = user;
 
-            console.log('begin');
             User.findOne({
                 where: {
                     email: email
                 }
             }).then(function (user) {
-                console.log('net na de then');
                 let makeID = function () {
                     var text = "";
                     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -192,8 +174,6 @@ module.exports = function (passport, user) {
                     return text;
                 };
 
-                console.log('net na makeID functie');
-                console.log(user);
                 let data =
                     {
                         pass_id: makeID(),
@@ -202,22 +182,13 @@ module.exports = function (passport, user) {
                         city: req.body.city
                     };
 
-                console.log('voor de update functie');
-
                 User.update(data, {where: {id: user.id}}).then(function () {
-                    console.log('in de update functie');
 
                     var userinfo = user.get();
-                    // // console.log(userinfo);
-                    // return done(null, userinfo);
-
                     return done(null, userinfo, {message: 'User updated!'});
-
                 });
 
-                console.log(user);
                 var userinfo = user.get();
-                // // console.log(userinfo);
                 return done(null, userinfo);
 
             }).catch(function (err) {

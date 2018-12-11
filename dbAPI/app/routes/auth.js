@@ -21,8 +21,6 @@ module.exports = function (app, passport, models) {
         function (req, res) {
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.
-            // console.log(res.userinfo);
-            // console.log(user);
             res.send({
                 message: 'Successfully logged in!',
                 request: req.user.id
@@ -34,8 +32,6 @@ module.exports = function (app, passport, models) {
         function (req, res) {
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.
-            console.log('it gets here');
-            console.log(req);
             res.send({
                 message: 'Card successfully ordered',
             });
@@ -44,43 +40,33 @@ module.exports = function (app, passport, models) {
 
     // get all users
     app.get('/api/users', isLoggedIn, (req, res) => {
-        User.findAll().then(users => res.json(users))
+        User.findAll().then(users => res.json(users)).catch(err => res.json(err));
     });
 
     // find current logged in user
     app.get('/api/users/currentUser', isLoggedIn, (req, res) => {
-
-        User.findOne({where: {id: req.user.id}}).then(user => res.json(user));
-
+        User.findOne({where: {id: req.user.id}}).then(user => res.json(user)).catch(err => res.json(err));
     });
 
     //find specific user by ID
     app.get('/api/users/:id', isLoggedIn, (req, res) => {
-
-        console.log(req.params);
-        User.findOne({where: {id: req.params.id}}).then(user => res.json(user));
+        User.findOne({where: {id: req.params.id}}).then(user => res.json(user)).catch(err => res.json(err));
 
     });
 
     //find transactions per specific user
     app.get('/api/transactions/currentUser', isLoggedIn, (req, res) => {
-
-        console.log(req.params);
-        Transaction.findAll({where: {user_id: req.user.id}}).then(user => res.json(user));
+        Transaction.findAll({where: {user_id: req.user.id}}).then(user => res.json(user)).catch(err => res.json(err));
     });
 
     //find transactions per specific user
     app.get('/api/transactions/:user_id', isLoggedIn, (req, res) => {
-
-        Transaction.findAll({where: {user_id: req.params.id}}).then(user => res.json(user));
-
+        Transaction.findAll({where: {user_id: req.params.user_id}}).then(user => res.json(user)).catch(err => res.json(err));
     });
 
     //find all consumables
     app.get('/api/consumables', isLoggedIn, (req, res) => {
-
-        console.log(req.params);
-        Consumable.findAll().then(user => res.json(user));
+        Consumable.findAll().then(user => res.json(user)).catch(err => res.json(err));
     });
 
 
