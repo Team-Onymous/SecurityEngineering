@@ -4,21 +4,18 @@ var bCrypt = require('bcrypt-nodejs');
 
 module.exports = function (passport, user) {
 
+    const User = user;
 
-    var User = user;
-
-    var LocalStrategy = require('passport-local').Strategy;
+    const LocalStrategy = require('passport-local').Strategy;
 
 //serialize
     passport.serializeUser(function (user, done) {
 
         done(null, user.id);
-
     });
 
     // deserialize user
     passport.deserializeUser(function (id, done) {
-
         User.findById(id).then(function (user) {
 
             if (user) {
@@ -30,34 +27,26 @@ module.exports = function (passport, user) {
                 done(user.errors, null);
 
             }
-
         });
-
     });
 
 
     passport.use('register', new LocalStrategy(
         {
-
             usernameField: 'email',
-
             passwordField: 'password',
-
             date_of_birth: 'date_of_birth',
-
             passReqToCallback: true // allows us to pass back the entire request to the callback
-
         },
 
 
         function (req, email, password, done) {
 
-            var generateHash = function (password) {
+            const generateHash = function (password) {
 
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
 
             };
-
 
             User.findOne({
                 where: {
@@ -89,17 +78,19 @@ module.exports = function (passport, user) {
 
                         };
 
+
                     User.create(data).then(function (newUser, created) {
 
                         if (!newUser) {
 
-                            return done(null, false, { message: 'bad password' });
+                            return done(null, false, {message: 'bad password'});
 
                         }
 
                         if (newUser) {
                             console.log('Gelukt!');
-                            return done(null, newUser, { message: 'User created' });
+                            console.log(newUser);
+                            return done(null, newUser, {message: 'User created'});
 
                         }
                     });
@@ -109,7 +100,7 @@ module.exports = function (passport, user) {
     ));
 
     //LOCAL SIGNIN
-    passport.use('local-signin', new LocalStrategy(
+    passport.use('login', new LocalStrategy(
         {
 
             // by default, local strategy uses username and password, we will override with email
@@ -157,6 +148,7 @@ module.exports = function (passport, user) {
 
 
                 var userinfo = user.get();
+                console.log(userinfo);
                 return done(null, userinfo);
 
 
@@ -173,4 +165,75 @@ module.exports = function (passport, user) {
 
         }
     ));
+
+    // orderCard
+    passport.use('orderCard', new LocalStrategy(
+        {
+            usernameField: 'email',
+            passReqToCallback: true // allows us to pass back the entire request to the callback
+        },
+
+        function (req, email, password, done) {
+
+            var User = user;
+
+            console.log('begin');
+            User.findOne({
+                where: {
+                    email: email
+                }
+            }).then(function (user) {
+                console.log('net na de then');
+                let makeID = function () {
+                    var text = "";
+                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                    for (var i = 0; i < 10; i++)
+                        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+                    return text;
+                };
+
+                console.log('net na makeID functie');
+                console.log(user);
+                let data =
+                    {
+                        pass_id: makeID(),
+                        street: req.body.street,
+                        postal_code: req.body.postal_code,
+                        city: req.body.city
+                    };
+
+                console.log('voor de update functie');
+
+                User.update(data, {where: {id: user.id}}).then(function () {
+                    console.log('in de update functie');
+
+                    var userinfo = user.get();
+                    // // console.log(userinfo);
+                    // return done(null, userinfo);
+
+                    return done(null, userinfo, {message: 'User updated!'});
+
+                });
+
+                console.log(user);
+                var userinfo = user.get();
+                // // console.log(userinfo);
+                return done(null, userinfo);
+
+            }).catch(function (err) {
+
+                console.log("Error:", err);
+
+                return done(null, false, {
+                    message: 'Something went wrong with the order of the card'
+                });
+
+            });
+
+
+        }
+    ));
+
 };

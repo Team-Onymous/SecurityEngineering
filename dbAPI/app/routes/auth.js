@@ -1,33 +1,50 @@
 const authController = require('../controllers/authcontroller.js');
 
-
 module.exports = function (app, passport) {
 
-    // app.get('/signup', authController.signup);
 
-    app.get('/signin', authController.signin);
-
-    app.post('/api/users/register', passport.authenticate('register'),
+    app.post('/api/users/register', passport.authenticate('register', {failureRedirect: '/register'}),
         function (req, res) {
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.
             res.send({
-                message: 'hooray',
+                message: 'User successfully created!',
                 request: req.user
             });
+
         });
+
+    app.post('/api/users/login', passport.authenticate('login', {failureRedirect: '/login'}),
+        function (req, res) {
+            // If this function gets called, authentication was successful.
+            // `req.user` contains the authenticated user.
+            // console.log(res.userinfo);
+            // console.log(user);
+            res.send({
+                message: 'Successfully logged in!',
+                request: req.user.id
+            });
+
+        });
+
+    app.put('/api/users/orderCard', isLoggedIn, passport.authenticate('orderCard', {failureRedirect: '/'}),
+        function (req, res) {
+            // If this function gets called, authentication was successful.
+            // `req.user` contains the authenticated user.
+            console.log('it gets here');
+            console.log(req);
+            res.send({
+                message: 'Card successfully ordered',
+            });
+
+        });
+
+
 
     app.get('/dashboard', isLoggedIn, authController.dashboard);
 
 
     app.get('/logout', authController.logout);
-
-    app.post('/signin', passport.authenticate('local-signin', {
-            successRedirect: '/dashboard',
-
-            failureRedirect: '/signin'
-        }
-    ));
 
     function isLoggedIn(req, res, next) {
 

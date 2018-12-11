@@ -1,10 +1,10 @@
-var express = require('express')
-var app = express()
-var passport = require('passport')
-var session = require('express-session')
-var bodyParser = require('body-parser')
-var env = require('dotenv').load()
-var exphbs = require('express-handlebars')
+var express = require('express');
+var app = express();
+var passport = require('passport');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var env = require('dotenv').load();
+var exphbs = require('express-handlebars');
 
 
 //For BodyParser
@@ -25,7 +25,7 @@ app.use(passport.session()); // persistent login sessions
 
 
 //For Handlebars
-app.set('views', './app/views')
+app.set('views', './app/views');
 app.engine('hbs', exphbs({
     extname: '.hbs'
 }));
@@ -39,7 +39,7 @@ app.get('/', function (req, res) {
 });
 
 //Models
-var models = require("./app/models");
+const models = require("./app/models");
 
 //Routes
 
