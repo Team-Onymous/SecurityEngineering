@@ -26,3 +26,7 @@
 a.router-link-active button {
   background-color: #38817A;
 }
+
+.route-sidenav {
+  overflow-y: hidden;
+}

@@ -28,6 +28,7 @@ import {
   MatInputModule,
   MatToolbarModule
 } from '@angular/material';
+import {BarComponent} from "./bar/bar.component";
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import {
     LoginComponent,
     RegisterComponent,
     AddCardComponent,
+    BarComponent,
     AppComponent
   ],
   imports: [

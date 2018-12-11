@@ -11,6 +11,7 @@ import {BlockComponent} from "./block/block.component";
 import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {AddCardComponent} from "./addCard/add.card.component";
+import {BarComponent} from "./bar/bar.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'login',  component: LoginComponent },
   { path: 'register', component: RegisterComponent},
   { path: 'addcard', component: AddCardComponent},
+  { path: 'bar', component: BarComponent},
   { path: 'metaSender', component: MetaSenderComponent },
   { path: 'metasender', component: MetaSenderComponent }
 ];
