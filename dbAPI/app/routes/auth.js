@@ -1,7 +1,8 @@
 const authController = require('../controllers/authcontroller.js');
 
-module.exports = function (app, passport) {
+module.exports = function (app, passport, models) {
 
+    let User = models.user;
 
     app.post('/api/users/register', passport.authenticate('register', {failureRedirect: '/register'}),
         function (req, res) {
@@ -27,7 +28,7 @@ module.exports = function (app, passport) {
 
         });
 
-    app.put('/api/users/orderCard', isLoggedIn, passport.authenticate('orderCard', {failureRedirect: '/'}),
+    app.put('/api/users/orderCard', isLoggedIn, passport.authenticate('orderCard', {failureRedirect: '/login'}),
         function (req, res) {
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.
@@ -39,6 +40,16 @@ module.exports = function (app, passport) {
 
         });
 
+    app.get('/api/users', (req, res) => {
+        User.findAll().then(users => res.json(users))
+    });
+
+    // find logged in user
+    app.get('/api/users/currentUser', (req, res) => {
+
+        User.findOne({where: {id: req.user.id}}).then(user => res.json(user));
+
+    });
 
 
     app.get('/dashboard', isLoggedIn, authController.dashboard);

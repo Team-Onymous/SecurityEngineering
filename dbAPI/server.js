@@ -43,7 +43,7 @@ const models = require("./app/models");
 
 //Routes
 
-const authRoute = require('./app/routes/auth.js')(app, passport);
+const authRoute = require('./app/routes/auth.js')(app, passport, models);
 
 
 //load passport strategies
