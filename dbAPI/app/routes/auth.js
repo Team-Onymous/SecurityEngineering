@@ -41,28 +41,50 @@ module.exports = function (app, passport, models) {
             });
 
         });
+
     // get all users
-    app.get('/api/users', (req, res) => {
+    app.get('/api/users', isLoggedIn, (req, res) => {
         User.findAll().then(users => res.json(users))
     });
 
     // find current logged in user
-    app.get('/api/users/currentUser', (req, res) => {
+    app.get('/api/users/currentUser', isLoggedIn, (req, res) => {
 
         User.findOne({where: {id: req.user.id}}).then(user => res.json(user));
 
     });
 
     //find specific user by ID
-    app.get('/api/users/:id', (req, res) => {
+    app.get('/api/users/:id', isLoggedIn, (req, res) => {
 
         console.log(req.params);
         User.findOne({where: {id: req.params.id}}).then(user => res.json(user));
 
     });
 
-    app.get('/dashboard', isLoggedIn, authController.dashboard);
+    //find transactions per specific user
+    app.get('/api/transactions/currentUser', isLoggedIn, (req, res) => {
 
+        console.log(req.params);
+        Transaction.findAll({where: {user_id: req.user.id}}).then(user => res.json(user));
+    });
+
+    //find transactions per specific user
+    app.get('/api/transactions/:user_id', isLoggedIn, (req, res) => {
+
+        Transaction.findAll({where: {user_id: req.params.id}}).then(user => res.json(user));
+
+    });
+
+    //find all consumables
+    app.get('/api/consumables', isLoggedIn, (req, res) => {
+
+        console.log(req.params);
+        Consumable.findAll().then(user => res.json(user));
+    });
+
+
+    app.get('/dashboard', isLoggedIn, authController.dashboard);
 
     app.get('/logout', authController.logout);
 
