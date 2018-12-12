@@ -19,7 +19,7 @@ module.exports = function (sequelize, Sequelize) {
             type: Sequelize.BOOLEAN
         },
         order: {
-            type: Sequelize.JSON
+            type: Sequelize.STRING,
         },
         user_id: {
             type: Sequelize.INTEGER,

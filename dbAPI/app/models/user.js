@@ -40,6 +40,9 @@ module.exports = function (sequelize, Sequelize) {
         street: {
             type: Sequelize.STRING
         },
+        house_number: {
+            type: Sequelize.STRING
+        },
         postal_code: {
             type: Sequelize.STRING
         },
