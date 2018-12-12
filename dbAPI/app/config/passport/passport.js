@@ -63,7 +63,8 @@ module.exports = function (passport, user) {
                             password: userPassword,
                             firstname: req.body.firstname,
                             lastname: req.body.lastname,
-                            date_of_birth: req.body.date_of_birth
+                            date_of_birth: req.body.date_of_birth,
+                            role: 0
                         };
 
                     User.create(data).then(function (newUser, created) {
@@ -134,58 +135,6 @@ module.exports = function (passport, user) {
 
                 return done(null, false, {
                     message: 'Something went wrong with your Signin',
-                    error: err
-                });
-
-            });
-        }
-    ));
-
-    // orderCard
-    passport.use('orderCard', new LocalStrategy(
-        {
-            usernameField: 'email',
-            passReqToCallback: true // allows us to pass back the entire request to the callback
-        },
-
-        function (req, email, password, done) {
-
-            var User = user;
-
-            User.findOne({where: {id: user.id}}).then(function (user) {
-                let makeID = function () {
-                    var text = "";
-                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-                    for (var i = 0; i < 10; i++)
-                        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-                    return text; // TODO: check of pass_id al bestaat
-                };
-
-                let data =
-                    {
-                        pass_id: makeID(),
-                        street: req.body.street,
-                        postal_code: req.body.postal_code,
-                        city: req.body.city
-                    };
-
-                User.update(data, {where: {id: user.id}}).then(function () {
-
-                    var userinfo = user.get();
-                    return done(null, userinfo, {message: 'User updated!'});
-                });
-
-                var userinfo = user.get();
-                return done(null, userinfo);
-
-            }).catch(function (err) {
-
-                console.log("Error:", err);
-
-                return done(null, false, {
-                    message: 'Something went wrong with the order of the card',
                     error: err
                 });
 
