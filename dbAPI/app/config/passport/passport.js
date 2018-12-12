@@ -43,9 +43,7 @@ module.exports = function (passport, user) {
         function (req, email, password, done) {
 
             const generateHash = function (password) {
-
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
-
             };
 
             User.findOne({
@@ -53,19 +51,13 @@ module.exports = function (passport, user) {
                     email: email
                 }
             }).then(function (user) {
-
                 if (user) {
-
                     return done(null, false, {
                         message: 'That email is already taken'
                     });
-
                 } else {
-
                     var userPassword = generateHash(password);
-
                     var data =
-
                         {
                             email: email,
                             password: userPassword,
@@ -74,16 +66,17 @@ module.exports = function (passport, user) {
                             date_of_birth: req.body.date_of_birth
                         };
 
-
                     User.create(data).then(function (newUser, created) {
 
-                        if (!newUser) {
-                            return done(null, false, {message: 'bad password'});
-                        }
+                        // if (!newUser) {
+                        //     return done(null, false, {message: 'Something went wrong, try again'});
+                        // }
 
                         if (newUser) {
                             return done(null, newUser, {message: 'User created'});
                         }
+                    }).catch(err => {
+                        return done(null, false, err)
                     });
                 }
             });
@@ -112,7 +105,6 @@ module.exports = function (passport, user) {
             var isValidPassword = function (userpass, password) {
 
                 return bCrypt.compareSync(password, userpass);
-
             };
 
             User.findOne({
@@ -124,13 +116,13 @@ module.exports = function (passport, user) {
                 if (!user) {
 
                     return done(null, false, {
-                        message: 'Email does not exist'
+                        message: 'Email does not exist or password incorrect'
                     });
                 }
 
                 if (!isValidPassword(user.password, password)) {
                     return done(null, false, {
-                        message: 'Incorrect password.'
+                        message: 'Email does not exist or password incorrect.'
                     });
                 }
 
@@ -141,7 +133,8 @@ module.exports = function (passport, user) {
                 console.log("Error:", err);
 
                 return done(null, false, {
-                    message: 'Something went wrong with your Signin'
+                    message: 'Something went wrong with your Signin',
+                    error: err
                 });
 
             });
@@ -159,11 +152,7 @@ module.exports = function (passport, user) {
 
             var User = user;
 
-            User.findOne({
-                where: {
-                    email: email
-                }
-            }).then(function (user) {
+            User.findOne({where: {id: user.id}}).then(function (user) {
                 let makeID = function () {
                     var text = "";
                     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -171,7 +160,7 @@ module.exports = function (passport, user) {
                     for (var i = 0; i < 10; i++)
                         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-                    return text;
+                    return text; // TODO: check of pass_id al bestaat
                 };
 
                 let data =
@@ -196,7 +185,8 @@ module.exports = function (passport, user) {
                 console.log("Error:", err);
 
                 return done(null, false, {
-                    message: 'Something went wrong with the order of the card'
+                    message: 'Something went wrong with the order of the card',
+                    error: err
                 });
 
             });

@@ -14,7 +14,6 @@ module.exports = function (app, passport, models) {
                 message: 'User successfully created!',
                 request: req.user
             });
-
         });
 
     app.post('/api/users/login', passport.authenticate('login', {failureRedirect: '/login'}),
@@ -25,7 +24,6 @@ module.exports = function (app, passport, models) {
                 message: 'Successfully logged in!',
                 request: req.user.id
             });
-
         });
 
     app.put('/api/users/orderCard', isLoggedIn, passport.authenticate('orderCard', {failureRedirect: '/login'}),
@@ -45,22 +43,28 @@ module.exports = function (app, passport, models) {
 
     // find current logged in user
     app.get('/api/users/currentUser', isLoggedIn, (req, res) => {
+        //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {id: req.user.id}}).then(user => res.json(user)).catch(err => res.json(err));
     });
 
     //find specific user by ID
     app.get('/api/users/:id', isLoggedIn, (req, res) => {
+        //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {id: req.params.id}}).then(user => res.json(user)).catch(err => res.json(err));
-
     });
 
     //find transactions per specific user
     app.get('/api/transactions/currentUser', isLoggedIn, (req, res) => {
-        Transaction.findAll({where: {user_id: req.user.id}}).then(user => res.json(user)).catch(err => res.json(err));
+        // TODO: aantal consumables koppelen aan de transactie
+        Transaction.findAll({where: {user_id: req.user.id}}).then(user => {
+
+            res.json(user)
+        }).catch(err => res.json(err));
     });
 
     //find transactions per specific user
     app.get('/api/transactions/:user_id', isLoggedIn, (req, res) => {
+        // TODO: aantal consumables koppelen aan de transactie
         Transaction.findAll({where: {user_id: req.params.user_id}}).then(user => res.json(user)).catch(err => res.json(err));
     });
 
@@ -80,7 +84,7 @@ module.exports = function (app, passport, models) {
 
             return next();
 
-        res.redirect('/signin');
+        res.redirect('/login');
 
     }
 };
