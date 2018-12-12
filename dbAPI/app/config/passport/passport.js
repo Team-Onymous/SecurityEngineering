@@ -4,21 +4,18 @@ var bCrypt = require('bcrypt-nodejs');
 
 module.exports = function (passport, user) {
 
+    const User = user;
 
-    var User = user;
-
-    var LocalStrategy = require('passport-local').Strategy;
+    const LocalStrategy = require('passport-local').Strategy;
 
 //serialize
     passport.serializeUser(function (user, done) {
 
         done(null, user.id);
-
     });
 
     // deserialize user
     passport.deserializeUser(function (id, done) {
-
         User.findById(id).then(function (user) {
 
             if (user) {
@@ -30,75 +27,56 @@ module.exports = function (passport, user) {
                 done(user.errors, null);
 
             }
-
         });
-
     });
 
 
-    passport.use('local-signup', new LocalStrategy(
+    passport.use('register', new LocalStrategy(
         {
-
             usernameField: 'email',
-
             passwordField: 'password',
-
+            date_of_birth: 'date_of_birth',
             passReqToCallback: true // allows us to pass back the entire request to the callback
-
         },
 
 
         function (req, email, password, done) {
 
-            var generateHash = function (password) {
-
+            const generateHash = function (password) {
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
-
             };
-
 
             User.findOne({
                 where: {
                     email: email
                 }
             }).then(function (user) {
-
                 if (user) {
-
                     return done(null, false, {
                         message: 'That email is already taken'
                     });
-
                 } else {
-
                     var userPassword = generateHash(password);
-
                     var data =
-
                         {
                             email: email,
-
                             password: userPassword,
-
                             firstname: req.body.firstname,
-
-                            lastname: req.body.lastname
-
+                            lastname: req.body.lastname,
+                            date_of_birth: req.body.date_of_birth
                         };
 
                     User.create(data).then(function (newUser, created) {
 
-                        if (!newUser) {
-
-                            return done(null, false);
-
-                        }
+                        // if (!newUser) {
+                        //     return done(null, false, {message: 'Something went wrong, try again'});
+                        // }
 
                         if (newUser) {
-
-                            return done(null, newUser);
-
+                            return done(null, newUser, {message: 'User created'});
                         }
+                    }).catch(err => {
+                        return done(null, false, err)
                     });
                 }
             });
@@ -106,7 +84,7 @@ module.exports = function (passport, user) {
     ));
 
     //LOCAL SIGNIN
-    passport.use('local-signin', new LocalStrategy(
+    passport.use('login', new LocalStrategy(
         {
 
             // by default, local strategy uses username and password, we will override with email
@@ -127,8 +105,7 @@ module.exports = function (passport, user) {
             var isValidPassword = function (userpass, password) {
 
                 return bCrypt.compareSync(password, userpass);
-
-            }
+            };
 
             User.findOne({
                 where: {
@@ -139,35 +116,80 @@ module.exports = function (passport, user) {
                 if (!user) {
 
                     return done(null, false, {
-                        message: 'Email does not exist'
+                        message: 'Email does not exist or password incorrect'
                     });
-
                 }
 
                 if (!isValidPassword(user.password, password)) {
-
                     return done(null, false, {
-                        message: 'Incorrect password.'
+                        message: 'Email does not exist or password incorrect.'
                     });
-
                 }
-
 
                 var userinfo = user.get();
                 return done(null, userinfo);
+            }).catch(function (err) {
 
+                console.log("Error:", err);
+
+                return done(null, false, {
+                    message: 'Something went wrong with your Signin',
+                    error: err
+                });
+
+            });
+        }
+    ));
+
+    // orderCard
+    passport.use('orderCard', new LocalStrategy(
+        {
+            usernameField: 'email',
+            passReqToCallback: true // allows us to pass back the entire request to the callback
+        },
+
+        function (req, email, password, done) {
+
+            var User = user;
+
+            User.findOne({where: {id: user.id}}).then(function (user) {
+                let makeID = function () {
+                    var text = "";
+                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                    for (var i = 0; i < 10; i++)
+                        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+                    return text; // TODO: check of pass_id al bestaat
+                };
+
+                let data =
+                    {
+                        pass_id: makeID(),
+                        street: req.body.street,
+                        postal_code: req.body.postal_code,
+                        city: req.body.city
+                    };
+
+                User.update(data, {where: {id: user.id}}).then(function () {
+
+                    var userinfo = user.get();
+                    return done(null, userinfo, {message: 'User updated!'});
+                });
+
+                var userinfo = user.get();
+                return done(null, userinfo);
 
             }).catch(function (err) {
 
                 console.log("Error:", err);
 
                 return done(null, false, {
-                    message: 'Something went wrong with your Signin'
+                    message: 'Something went wrong with the order of the card',
+                    error: err
                 });
 
             });
-
-
         }
     ));
 };

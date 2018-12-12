@@ -1,4 +1,4 @@
-module.exports = function(sequelize, Sequelize) {
+module.exports = function (sequelize, Sequelize) {
 
     return sequelize.define('user', {
 
@@ -7,47 +7,48 @@ module.exports = function(sequelize, Sequelize) {
             primaryKey: true,
             type: Sequelize.INTEGER
         },
-
+        wallet_address: {
+            type: Sequelize.STRING,
+            notEmpty: true
+        },
+        pass_id: {
+            type: Sequelize.STRING,
+            notEmpty: true
+        },
         firstname: {
-            type: Sequelize.STRING,
-            notEmpty: true
+            type: Sequelize.STRING
         },
-
         lastname: {
-            type: Sequelize.STRING,
-            notEmpty: true
+            type: Sequelize.STRING
         },
-
-        username: {
-            type: Sequelize.TEXT
-        },
-
-        about: {
-            type: Sequelize.TEXT
-        },
-
         email: {
             type: Sequelize.STRING,
             validate: {
                 isEmail: true
             }
         },
-
         password: {
             type: Sequelize.STRING,
             allowNull: false
         },
-
         last_login: {
             type: Sequelize.DATE
         },
-
-        status: {
-            type: Sequelize.ENUM('active', 'inactive'),
-            defaultValue: 'active'
+        date_of_birth: {
+            type: Sequelize.DATE
+        },
+        street: {
+            type: Sequelize.STRING
+        },
+        postal_code: {
+            type: Sequelize.STRING
+        },
+        city: {
+            type: Sequelize.STRING
+        },
+        role: {
+            type: Sequelize.INTEGER
         }
-
-
     });
 
 };
