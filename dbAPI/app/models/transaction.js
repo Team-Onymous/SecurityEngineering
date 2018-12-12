@@ -18,6 +18,9 @@ module.exports = function (sequelize, Sequelize) {
         incoming: {
             type: Sequelize.BOOLEAN
         },
+        order: {
+            type: Sequelize.JSON
+        },
         user_id: {
             type: Sequelize.INTEGER,
             references: {

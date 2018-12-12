@@ -26,34 +26,52 @@ module.exports = function (app, passport, models) {
             });
         });
 
-    app.put('/api/users/orderCard', isLoggedIn, passport.authenticate('orderCard', {failureRedirect: '/login'}),
+    app.put('/api/users/orderCard', isLoggedIn,
         function (req, res) {
-            // If this function gets called, authentication was successful.
-            // `req.user` contains the authenticated user.
-            res.send({
-                message: 'Card successfully ordered',
-            });
 
+            User.findOne({where: {id: req.user.id}}).then(user => {
+                let makeID = function () {
+                    var text = "";
+                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                    for (var i = 0; i < 10; i++)
+                        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+                    return text; // TODO: check of pass_id al bestaat
+                };
+
+                let data =
+                    {
+                        pass_id: makeID(),
+                        street: req.body.street,
+                        postal_code: req.body.postal_code,
+                        city: req.body.city
+                    };
+
+                User.update(data, {where: {id: user.id}}).then(function () {
+                    res.json(user);
+                }).catch(err => res.json(err));
+            }).catch(err => res.json(err));
         });
 
-    // get all users
+// get all users
     app.get('/api/users', isLoggedIn, (req, res) => {
         User.findAll().then(users => res.json(users)).catch(err => res.json(err));
     });
 
-    // find current logged in user
+// find current logged in user
     app.get('/api/users/currentUser', isLoggedIn, (req, res) => {
         //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {id: req.user.id}}).then(user => res.json(user)).catch(err => res.json(err));
     });
 
-    //find specific user by ID
+//find specific user by ID
     app.get('/api/users/:id', isLoggedIn, (req, res) => {
         //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {id: req.params.id}}).then(user => res.json(user)).catch(err => res.json(err));
     });
 
-    //find transactions per specific user
+//find transactions per specific user
     app.get('/api/transactions/currentUser', isLoggedIn, (req, res) => {
         // TODO: aantal consumables koppelen aan de transactie
         Transaction.findAll({where: {user_id: req.user.id}}).then(user => {
@@ -62,13 +80,13 @@ module.exports = function (app, passport, models) {
         }).catch(err => res.json(err));
     });
 
-    //find transactions per specific user
+//find transactions per specific user
     app.get('/api/transactions/:user_id', isLoggedIn, (req, res) => {
         // TODO: aantal consumables koppelen aan de transactie
         Transaction.findAll({where: {user_id: req.params.user_id}}).then(user => res.json(user)).catch(err => res.json(err));
     });
 
-    //find all consumables
+//find all consumables
     app.get('/api/consumables', isLoggedIn, (req, res) => {
         Consumable.findAll().then(user => res.json(user)).catch(err => res.json(err));
     });
@@ -87,4 +105,5 @@ module.exports = function (app, passport, models) {
         res.redirect('/login');
 
     }
-};
+}
+;
