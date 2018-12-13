@@ -1,2 +1,4 @@
 .idea
+node_modules
 dApp/node_modules
+dbAPI/node_modules
