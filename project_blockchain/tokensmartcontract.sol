@@ -23,14 +23,17 @@ contract SafeMath {
         c = a + b;
         require(c >= a);
     }
+
     function safeSub(uint a, uint b) public pure returns (uint c) {
         require(b <= a);
         c = a - b;
     }
+
     function safeMul(uint a, uint b) public pure returns (uint c) {
         c = a * b;
         require(a == 0 || c / a == b);
     }
+
     function safeDiv(uint a, uint b) public pure returns (uint c) {
         require(b > 0);
         c = a / b;
@@ -44,10 +47,15 @@ contract SafeMath {
 // ----------------------------------------------------------------------------
 contract ERC20Interface {
     function totalSupply() public constant returns (uint);
+
     function balanceOf(address tokenOwner) public constant returns (uint balance);
+
     function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
+
     function transfer(address to, uint tokens) public returns (bool success);
+
     function approve(address spender, uint tokens) public returns (bool success);
+
     function transferFrom(address from, address to, uint tokens) public returns (bool success);
 
     event Transfer(address indexed from, address indexed to, uint tokens);
@@ -86,6 +94,7 @@ contract Owned {
     function transferOwnership(address _newOwner) public onlyOwner {
         newOwner = _newOwner;
     }
+
     function acceptOwnership() public {
         require(msg.sender == newOwner);
         emit OwnershipTransferred(owner, newOwner);
@@ -116,7 +125,7 @@ contract oNy is ERC20Interface, Owned, SafeMath {
         symbol = "oNy";
         name = "oNyCoin";
         decimals = 0;
-        _totalSupply = 10000;
+        _totalSupply = 100000000000000000;
         balances[0x4fa6878443A39305A2749a71815575C16c60DbCb] = _totalSupply;
         emit Transfer(address(0), 0x4fa6878443A39305A2749a71815575C16c60DbCb, _totalSupply);
     }
@@ -126,7 +135,7 @@ contract oNy is ERC20Interface, Owned, SafeMath {
     // Total supply
     // ------------------------------------------------------------------------
     function totalSupply() public constant returns (uint) {
-        return _totalSupply  - balances[address(0)];
+        return _totalSupply - balances[address(0)];
     }
 
 
@@ -209,7 +218,7 @@ contract oNy is ERC20Interface, Owned, SafeMath {
     // ------------------------------------------------------------------------
     // Don't accept ETH
     // ------------------------------------------------------------------------
-    function () public payable {
+    function() public payable {
         revert();
     }
 
