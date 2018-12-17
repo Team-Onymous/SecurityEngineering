@@ -1,10 +1,7 @@
 import {Injectable} from '@angular/core';
 
 import Web3 from 'web3';
-
-
-declare let require: any;
-declare let window: any;
+import {BigNumber} from 'bignumber.js';
 
 let tokenAbi = [
   {
@@ -461,13 +458,10 @@ let tokenAbi = [
 
 @Injectable()
 export class Web3Service {
-  private _account: string = null;
+
   private web3;
   private oNyCoin;
-  private contractInstance;
-  private oNyCoinInstance
 
-  // private oNyCoin = new this.web3.eth.Contract(tokenAbi, address, {gasPrice: '12345678', from: fromAddress});
 
   constructor() {
     if (typeof this.web3 !== 'undefined') {
@@ -477,36 +471,20 @@ export class Web3Service {
       this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
 
-    this.oNyCoin = this.web3.eth.contract(tokenAbi);
-    // instantiate by address
-    this.oNyCoinInstance = this.oNyCoin.at('0x84782d7e711ded73ec3d5d045e9c3029d7f5aa40');
+    this.instantiateContract();
 
-    console.log(this.oNyCoinInstance);
+    this.getBalance('0x41e8c3d9112fc109bad38e8b7c8b3f1350e18bff')
+  }
 
-    let result = this.oNyCoinInstance.balanceOf('0x41e8c3d9112fc109bad38e8b7c8b3f1350e18bff');
-    console.log(result); // '0x25434534534'
+  private instantiateContract() {
+    this.oNyCoin = this.web3.eth.contract(tokenAbi).at('0x84782d7e711ded73ec3d5d045e9c3029d7f5aa40');
+    //log the contract to show all methods available
+    console.log(this.oNyCoin);
+  }
 
-
-// // send a transaction to a function
-//     myContractInstance.myStateChangingMethod('someParam1', 23, {value: 200, gas: 2000});
-// // short hand style
-//     this.web3.eth.contract(tokenAbi).at(address).myAwesomeMethod(...);
-// // create filter
-//     var filter = myContractInstance.myEvent({a: 5}, function (error, result) {
-//       if (!error)
-//         console.log(result);
-//       /*
-//       {
-//           address: '0x8718986382264244252fc4abd0339eb8d5708727',
-//           topics: "0x12345678901234567890123456789012", "0x0000000000000000000000000000000000000000000000000000000000000005",
-//           data: "0x0000000000000000000000000000000000000000000000000000000000000001",
-//           ...
-//       }
-//       */
-//     });
-
-    // this.getAllAccounts();
-    // this.getBalance('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff')
+  private getBalance(address) {
+    let result = this.oNyCoin.balanceOf(address);
+    console.log(result.toString(10))
   }
 
   private getAllAccounts() {
@@ -518,16 +496,6 @@ export class Web3Service {
     })
   }
 
-  private getBalance(address) {
-
-    this.web3.eth.getBalance(address, function (error, result,) {
-      if (!error) {
-        console.log('The balance of ' + address + ' is: ' + result.plus(21).toString(10)); // toString(10) converts it to a number string)
-      } else {
-        console.error(error);
-      }
-    });
-  }
 
   private transferToken(addressFrom, addressTo) {
     // this.web3.eth.getBalance(address, function (error, result,) {
