@@ -473,18 +473,45 @@ export class Web3Service {
 
     this.instantiateContract();
 
-    this.getBalance('0x41e8c3d9112fc109bad38e8b7c8b3f1350e18bff')
+    this.getBalance('0x41e8c3d9112fc109bad38e8b7c8b3f1350e18bff');
+
+    this.transferTokens("0x24e77503d2C5D7f7f28E05E20fD57bE7957bE968", 10000)
   }
 
   private instantiateContract() {
-    this.oNyCoin = this.web3.eth.contract(tokenAbi).at('0x84782d7e711ded73ec3d5d045e9c3029d7f5aa40');
+    this.oNyCoin = this.web3.eth.contract(tokenAbi).at('0x84782d7e711ded73ec3d5d045e9c3029d7f5aa40', function (error, result) {
+      if (!error) {
+        return result
+      } else {
+        console.error(error)
+      }
+    });
+
+    this.web3.eth.defaultAccount = this.web3.eth.accounts[0];
+
     //log the contract to show all methods available
     console.log(this.oNyCoin);
   }
 
+  private transferTokens(address, amount) {
+    this.oNyCoin.transfer(address, amount, function (error, result) {
+      if (!error) {
+        return result
+        // console.log(result.toString(10));
+      } else {
+        console.error(error)
+      }
+    });
+  }
+
   private getBalance(address) {
-    let result = this.oNyCoin.balanceOf(address);
-    console.log(result.toString(10))
+    let result = this.oNyCoin.balanceOf(address, function (error, result) {
+      if (!error) {
+        console.log(result.toString(10));
+      } else {
+        console.error(error)
+      }
+    });
   }
 
   private getAllAccounts() {
@@ -494,16 +521,5 @@ export class Web3Service {
       else
         console.error(error);
     })
-  }
-
-
-  private transferToken(addressFrom, addressTo) {
-    // this.web3.eth.getBalance(address, function (error, result,) {
-    //   if (!error) {
-    //     console.log('The balance of ' + address + ' is: ' + result.plus(21).toString(10)); // toString(10) converts it to a number string)
-    //   } else {
-    //     console.error(error);
-    //   }
-    // });
   }
 }

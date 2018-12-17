@@ -29,7 +29,9 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import {BarComponent} from "./bar/bar.component";
-import {Web3Service} from "./services/web3.service";
+import {Web3Service} from "./util/web3.service";
+
+
 
 @NgModule({
   declarations: [

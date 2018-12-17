@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {UserService} from './services/user.service'
-import {Web3Service} from "./services/web3.service";
+import {Web3Service} from "./util/web3.service";
+
 
 @Component({
   selector: 'app-root',
