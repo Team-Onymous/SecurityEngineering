@@ -29,6 +29,7 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import {BarComponent} from "./bar/bar.component";
+import {Web3Service} from "./services/web3.service";
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import {BarComponent} from "./bar/bar.component";
   ],
   providers: [
     AuthGuard,
-    UserService
+    UserService,
+    Web3Service
   ],
   bootstrap: [AppComponent]
 })

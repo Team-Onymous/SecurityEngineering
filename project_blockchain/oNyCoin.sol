@@ -126,8 +126,8 @@ contract oNy is ERC20Interface, Owned, SafeMath {
         name = "oNyCoin";
         decimals = 0;
         _totalSupply = 100000000000000000;
-        balances[0x4fa6878443A39305A2749a71815575C16c60DbCb] = _totalSupply;
-        emit Transfer(address(0), 0x4fa6878443A39305A2749a71815575C16c60DbCb, _totalSupply);
+        balances[0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff] = _totalSupply;
+        emit Transfer(address(0), 0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff, _totalSupply);
     }
 
 
