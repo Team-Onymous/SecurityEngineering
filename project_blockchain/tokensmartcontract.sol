@@ -1,13 +1,13 @@
 pragma solidity ^0.4.24;
 
 // ----------------------------------------------------------------------------
-// '0Fucks' token contract
+// 'oNy' token contract
 //
-// Deployed to : 0x643a84806db2af8600617929450b1ac9fa892a62 TODO Specify Actual address
-// Symbol      : ONYX
-// Name        : OnyCoin
-// Total supply: 10000000000000000000000000000000000000000000000000000000
-// Decimals    : 18
+// Deployed to : 0x4fa6878443A39305A2749a71815575C16c60DbCb
+// Symbol      : oNy
+// Name        : oNyCoin
+// Total supply: 10000
+// Decimals    : 0
 //
 // Enjoy.
 //
@@ -92,11 +92,33 @@ contract Owned {
         owner = newOwner;
         newOwner = address(0);
     }
-    
-    function sell_onycoins(address investor, uint onycoins_sold) external {
-        equity_onycoins[investor] -= onycoins_sold;
-        equity_eur[investor] = equity_onycoins[investor] / 1000;
-        total_onycoins_bought -= onycoins_sold;
+}
+
+
+// ----------------------------------------------------------------------------
+// ERC20 Token, with the addition of symbol, name and decimals and assisted
+// token transfers
+// ----------------------------------------------------------------------------
+contract oNy is ERC20Interface, Owned, SafeMath {
+    string public symbol;
+    string public  name;
+    uint8 public decimals;
+    uint public _totalSupply;
+
+    mapping(address => uint) balances;
+    mapping(address => mapping(address => uint)) allowed;
+
+
+    // ------------------------------------------------------------------------
+    // Constructor
+    // ------------------------------------------------------------------------
+    constructor() public {
+        symbol = "oNy";
+        name = "oNyCoin";
+        decimals = 0;
+        _totalSupply = 10000;
+        balances[0x4fa6878443A39305A2749a71815575C16c60DbCb] = _totalSupply;
+        emit Transfer(address(0), 0x4fa6878443A39305A2749a71815575C16c60DbCb, _totalSupply);
     }
 
 
@@ -107,12 +129,14 @@ contract Owned {
         return _totalSupply  - balances[address(0)];
     }
 
+
     // ------------------------------------------------------------------------
     // Get the token balance for account tokenOwner
     // ------------------------------------------------------------------------
     function balanceOf(address tokenOwner) public constant returns (uint balance) {
         return balances[tokenOwner];
     }
+
 
     // ------------------------------------------------------------------------
     // Transfer the balance from token owner's account to to account
@@ -126,13 +150,14 @@ contract Owned {
         return true;
     }
 
+
     // ------------------------------------------------------------------------
     // Token owner can approve for spender to transferFrom(...) tokens
     // from the token owner's account
     //
     // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20-token-standard.md
     // recommends that there are no checks for the approval double-spend attack
-    // as this should be implemented in user interfaces
+    // as this should be implemented in user interfaces 
     // ------------------------------------------------------------------------
     function approve(address spender, uint tokens) public returns (bool success) {
         allowed[msg.sender][spender] = tokens;
@@ -140,9 +165,10 @@ contract Owned {
         return true;
     }
 
+
     // ------------------------------------------------------------------------
     // Transfer tokens from the from account to the to account
-    //
+    // 
     // The calling account must already have sufficient tokens approve(...)-d
     // for spending from the from account and
     // - From account must have sufficient balance to transfer
@@ -157,6 +183,7 @@ contract Owned {
         return true;
     }
 
+
     // ------------------------------------------------------------------------
     // Returns the amount of tokens approved by the owner that can be
     // transferred to the spender's account
@@ -164,6 +191,7 @@ contract Owned {
     function allowance(address tokenOwner, address spender) public constant returns (uint remaining) {
         return allowed[tokenOwner][spender];
     }
+
 
     // ------------------------------------------------------------------------
     // Token owner can approve for spender to transferFrom(...) tokens
@@ -177,12 +205,14 @@ contract Owned {
         return true;
     }
 
+
     // ------------------------------------------------------------------------
     // Don't accept ETH
     // ------------------------------------------------------------------------
     function () public payable {
         revert();
     }
+
 
     // ------------------------------------------------------------------------
     // Owner can transfer out any accidentally sent ERC20 tokens
