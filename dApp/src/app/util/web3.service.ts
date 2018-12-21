@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as contract from 'truffle-contract';
-import {Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
+import {map} from "rxjs/operators";
 
 declare let require: any;
 const Web3 = require('web3');
@@ -460,11 +461,12 @@ let tokenAbi = [
 
 declare let window: any;
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class Web3Service {
 
   public web3;
-  private oNyCoin;
+  public oNyCoin;
+  public balance;
 
   private accounts: string[];
   public ready = false;
@@ -472,6 +474,11 @@ export class Web3Service {
 
 
   constructor() {
+    this.loadContract();
+  }
+
+
+  public loadContract() {
     window.addEventListener('load', async () => {
 
       if (typeof window.web3 !== 'undefined') {
@@ -481,24 +488,25 @@ export class Web3Service {
         try {
           // Request account access if needed
           await window.ethereum.enable();
+          this.instantiateContract();
+          // this.getBalance('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff')
+          this.balance = this.getBalance(this.web3.eth.defaultAccount);
+
+          // console.log(this.balance)
         } catch (error) {
           console.error(error)
           // User denied account access...
         }
       } else {
-
         console.log('No web3? You should consider trying MetaMask!');
-
-        this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-
+        this.web3 = new Web3(new Web3.providers.HttpProvider('http://172.16.0.5:7676'));
       }
-      this.instantiateContract();
-      this.getBalance('0x41e8c3d9112fc109bad38e8b7c8b3f1350e18bff');
-
-      // setInterval(() => this.refreshAccounts(), 100);
     });
   }
 
+  public createWallet() {
+    this.web3.eth.accounts.wallet.create(1);
+  }
 
   public async artifactsToContract(artifacts) {
     if (!this.web3) {
@@ -537,8 +545,8 @@ export class Web3Service {
     });
   }
 
-  private instantiateContract() {
-    this.oNyCoin = this.web3.eth.contract(tokenAbi).at('0x84782d7e711ded73ec3d5d045e9c3029d7f5aa40', function (error, result) {
+  public instantiateContract() {
+    this.oNyCoin = this.web3.eth.contract(tokenAbi).at('0xc6151008736f1abcb9a1a5c53323291fefe6cea7', function (error, result) {
       if (!error) {
         return result
       } else {
@@ -547,6 +555,7 @@ export class Web3Service {
     });
     //set the default account, linked to MetaMask
     this.web3.eth.defaultAccount = this.web3.eth.accounts[0];
+
   }
 
   public transferTokens(address, amount) {
@@ -560,15 +569,46 @@ export class Web3Service {
     });
   }
 
-  private getBalance(address) {
-
-    let result = this.oNyCoin.balanceOf(address, function (error, result) {
+  public buyTokens(address, amount) {
+    this.oNyCoin.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', address, amount, function (error, result) {
       if (!error) {
+        // return result
         console.log(result.toString(10));
       } else {
         console.error(error)
       }
     });
+  }
+  public getTransaction(txHash) {
+
+    this.web3.eth.getTransaction(txHash, function (error, result) {
+      if (!error) {
+        // return result
+        console.log(result.toString(10));
+      } else {
+        console.error(error)
+      }
+    });
+  }
+
+  public getBalance(address): string {
+
+    return this.oNyCoin.balanceOf(address, function (error, result) {
+      if (!error) {
+        // console.log(result.toString(10));
+        return result.toString(10);
+      } else {
+        console.error(error)
+      }
+    });
+    // return this.oNyCoin.balanceOf(address, function (error, result) {
+    //   if (!error) {
+    //     console.log(this)
+    //     return JSON.stringify(result)
+    //   } else {
+    //     console.error(error)
+    //   }
+    // })
   }
 
   private getAllAccounts() {
