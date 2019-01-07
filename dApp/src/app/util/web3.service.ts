@@ -503,11 +503,9 @@ export class Web3Service {
 
   public createWallet() {
     console.log(this.web3.eth.Contract);
-    // console.log(this.web3.eth.personal.newAccount('password'));
     let newAccount = this.web3.eth.accounts.create();
     console.log(newAccount.address);
     console.log(newAccount.privateKey);
-    // this.web3.eth.personal.newAccount('!@superpassword').then(console.log);
   };
 
   public async artifactsToContract(artifacts) {

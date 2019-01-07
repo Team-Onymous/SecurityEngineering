@@ -31,6 +31,7 @@ import {
 import {BarComponent} from "./bar/bar.component";
 import {Web3Service} from "./util/web3.service";
 import {BalanceComponent} from "./balance/balance.component";
+import {CreateWalletComponent} from "./createWallet/createWallet.component";
 
 
 
@@ -40,6 +41,7 @@ import {BalanceComponent} from "./balance/balance.component";
     ToolbarComponent,
     HomeComponent,
     BalanceComponent,
+    CreateWalletComponent,
     BlockComponent,
     RefundComponent,
     AddCoinsComponent,
