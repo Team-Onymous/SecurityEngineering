@@ -3,7 +3,7 @@
  */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { MetaSenderComponent } from './meta/meta-sender/meta-sender.component'
+// import { MetaSenderComponent } from './meta/meta-sender/meta-sender.component'
 import {HomeComponent} from "./home/home.component";
 import {AddCoinsComponent} from "./addCoins/add.coins.component";
 import {RefundComponent} from "./refund/refund.component";
@@ -24,8 +24,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'addcard', component: AddCardComponent},
   { path: 'bar', component: BarComponent},
-  { path: 'metaSender', component: MetaSenderComponent },
-  { path: 'metasender', component: MetaSenderComponent }
+  // { path: 'metaSender', component: MetaSenderComponent },
+  // { path: 'metasender', component: MetaSenderComponent }
 ];
 
 @NgModule({

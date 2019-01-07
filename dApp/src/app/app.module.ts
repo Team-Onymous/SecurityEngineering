@@ -60,12 +60,11 @@ import {Web3Service} from "./util/web3.service";
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    MetaModule
+    // MetaModule
   ],
   providers: [
     AuthGuard,
-    UserService,
-    Web3Service
+    UserService
   ],
   bootstrap: [AppComponent]
 })
