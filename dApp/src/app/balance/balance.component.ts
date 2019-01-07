@@ -1,5 +1,5 @@
 /**
- * Created by bryan on 4-12-2018.
+ * Created by Cas on 7-01-2019.
  */
 import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
@@ -7,13 +7,13 @@ import {Web3Service} from "../util/web3.service";
 
 @Component({
   moduleId: module.id,
-  selector: 'rg-home',
-  templateUrl: 'home.component.html',
-  styleUrls: ['home.component.css'],
+  selector: 'rg-balance',
+  templateUrl: 'balance.component.html',
+  styleUrls: ['balance.component.css'],
   providers: [Web3Service]
 })
 
-export class HomeComponent implements OnInit {
+export class BalanceComponent implements OnInit {
 
   public balance;
 

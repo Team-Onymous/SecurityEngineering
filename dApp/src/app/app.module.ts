@@ -30,6 +30,7 @@ import {
 } from '@angular/material';
 import {BarComponent} from "./bar/bar.component";
 import {Web3Service} from "./util/web3.service";
+import {BalanceComponent} from "./balance/balance.component";
 
 
 
@@ -38,6 +39,7 @@ import {Web3Service} from "./util/web3.service";
     NavbarComponent,
     ToolbarComponent,
     HomeComponent,
+    BalanceComponent,
     BlockComponent,
     RefundComponent,
     AddCoinsComponent,

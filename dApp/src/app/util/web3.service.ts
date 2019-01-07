@@ -489,10 +489,7 @@ export class Web3Service {
           // Request account access if needed
           await window.ethereum.enable();
           this.instantiateContract();
-          // this.getBalance('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff')
           this.balance = this.getBalance(this.web3.eth.defaultAccount);
-
-          // console.log(this.balance)
         } catch (error) {
           console.error(error)
           // User denied account access...
@@ -505,8 +502,13 @@ export class Web3Service {
   }
 
   public createWallet() {
-    this.web3.eth.accounts.wallet.create(1);
-  }
+    console.log(this.web3.eth.Contract);
+    // console.log(this.web3.eth.personal.newAccount('password'));
+    let newAccount = this.web3.eth.accounts.create();
+    console.log(newAccount.address);
+    console.log(newAccount.privateKey);
+    // this.web3.eth.personal.newAccount('!@superpassword').then(console.log);
+  };
 
   public async artifactsToContract(artifacts) {
     if (!this.web3) {
@@ -546,15 +548,12 @@ export class Web3Service {
   }
 
   public instantiateContract() {
-    this.oNyCoin = this.web3.eth.contract(tokenAbi).at('0xc6151008736f1abcb9a1a5c53323291fefe6cea7', function (error, result) {
-      if (!error) {
-        return result
-      } else {
-        console.error(error)
-      }
+    this.oNyCoin = new this.web3.eth.Contract(tokenAbi, '0xc6151008736f1abcb9a1a5c53323291fefe6cea7', {
+      from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', // default from address
+      // gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
     });
     //set the default account, linked to MetaMask
-    this.web3.eth.defaultAccount = this.web3.eth.accounts[0];
+    this.web3.eth.defaultAccount = this.web3.eth.accounts.currentProvider.selectedAddress;
 
   }
 
@@ -579,6 +578,7 @@ export class Web3Service {
       }
     });
   }
+
   public getTransaction(txHash) {
 
     this.web3.eth.getTransaction(txHash, function (error, result) {
@@ -591,24 +591,20 @@ export class Web3Service {
     });
   }
 
-  public getBalance(address): string {
-
-    return this.oNyCoin.balanceOf(address, function (error, result) {
+  public getBalance(address) {
+    this.oNyCoin.methods.balanceOf(address).call(async function (error, result) {
       if (!error) {
-        // console.log(result.toString(10));
-        return result.toString(10);
-      } else {
-        console.error(error)
-      }
+        // this updtaes the balance in the HTML card when it is loaded.
+        let divs = document.getElementsByClassName('balance');
+        for (let i = 0; i < divs.length; i++) {
+          document.getElementsByClassName('balance')[i].innerHTML = result;
+        }
+        
+
+        return await result;
+      } else
+        console.error(error);
     });
-    // return this.oNyCoin.balanceOf(address, function (error, result) {
-    //   if (!error) {
-    //     console.log(this)
-    //     return JSON.stringify(result)
-    //   } else {
-    //     console.error(error)
-    //   }
-    // })
   }
 
   private getAllAccounts() {
