@@ -1,0 +1,24 @@
+.padding-grid{
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.example-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.text-style {
+  font-size: 22px;
+  color: white;
+  font-family: 'tinymce', Arial;
+}
+
+.order-button {
+  height: 30px;
+  width: 30px;
+}

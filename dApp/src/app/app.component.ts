@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {UserService} from './services/user.service'
+import {Web3Service} from "./util/web3.service";
+
 
 @Component({
   selector: 'app-root',
@@ -7,4 +10,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app works!';
+
+  constructor(private userService: UserService,
+              private web3Service: Web3Service) {
+  }
+
+  isLoggedIn(): boolean {
+    return this.userService.isLoggedIn();
+  }
 }

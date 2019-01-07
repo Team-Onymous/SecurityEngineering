@@ -1,0 +1,98 @@
+.register-card-container {
+  padding-top: 0px;
+  margin-left: 50%;
+  margin-bottom: 35%;
+}
+.register-card-container-xs {
+  padding-top: 0px;
+  margin-left: 0%;
+  margin-bottom: 75%;
+}
+
+.register-card {
+  position: fixed;
+  width: 400px;
+}
+
+.register-form {
+  padding: 0;
+}
+
+.register-input {
+  font-size: 14px;
+  width: 300px;
+}
+
+.register-button {
+  font-size: 16px;
+  margin: 10px 10px 10px 0;
+  color: white;
+  background-color: #38817A;
+}
+.registerbg{
+  position: fixed;
+  margin-top: 5%;
+  margin-left: 5%;
+  width: 80%;
+  height: 80%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/logo_recht_transparant.png");
+}
+.registerbg-xs{
+  position: fixed;
+  margin-top: 0%;
+  margin-left: 30%;
+  width: 40%;
+  height: 40%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/logo_recht_transparant.png");
+}
+
+
+.outer {
+  display: table;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.inner {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+mat-icon.clear {
+  cursor: pointer;
+}
+
+.version-text {
+  color: #d3d3d3;
+  position: fixed;
+  bottom: 0;
+  right: 5px;
+}
+
+.lang-text {
+  position: absolute;
+  bottom: 0;
+  display: inline-block;
+}
+
+.lang-switch-button {
+  text-transform: capitalize;
+}
+
+.mat-form-field {
+  width: auto;
+}
+
+mat-form-field {
+  width: 300px !important;
+}

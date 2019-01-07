@@ -1,2 +1,11 @@
-<mat-toolbar color="primary">Angular Truffle Box</mat-toolbar>
-<app-meta-sender></app-meta-sender>
+
+<mat-sidenav-container >
+  <mat-sidenav #rgnavbar mode="side" opened="{{isLoggedIn()}}" color="primary" style="width:250px; height: 100%;">
+    <rg-navbar></rg-navbar>
+  </mat-sidenav>
+
+  <div class="rg-content">
+      <rg-toolbar [hidden]="!isLoggedIn()" [navbar]="rgnavbar"></rg-toolbar>
+    <router-outlet></router-outlet>
+  </div>
+</mat-sidenav-container>
