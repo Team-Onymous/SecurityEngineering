@@ -503,51 +503,19 @@ export class Web3Service {
 
   public createWallet() {
     console.log(this.web3.eth.Contract);
+    // using the web3 connection to create a new wallet
     let newAccount = this.web3.eth.accounts.create();
+    // public key
     console.log(newAccount.address);
+
+    // private key
     console.log(newAccount.privateKey);
   };
 
-  public async artifactsToContract(artifacts) {
-    if (!this.web3) {
-      const delay = new Promise(resolve => setTimeout(resolve, 100));
-      await delay;
-      return await this.artifactsToContract(artifacts);
-    }
-
-    const contractAbstraction = contract(artifacts);
-    contractAbstraction.setProvider(this.web3.currentProvider);
-    return contractAbstraction;
-  }
-
-  private refreshAccounts() {
-    this.web3.eth.getAccounts((err, accs) => {
-      console.log('Refreshing accounts');
-      if (err != null) {
-        console.warn('There was an error fetching your accounts.');
-        return;
-      }
-
-      // Get the initial account balance so it can be displayed.
-      if (accs.length === 0) {
-        console.warn('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-        return;
-      }
-
-      if (!this.accounts || this.accounts.length !== accs.length || this.accounts[0] !== accs[0]) {
-        console.log('Observed new accounts');
-
-        this.accountsObservable.next(accs);
-        this.accounts = accs;
-      }
-
-      this.ready = true;
-    });
-  }
-
   public instantiateContract() {
-    this.oNyCoin = new this.web3.eth.Contract(tokenAbi, '0xc6151008736f1abcb9a1a5c53323291fefe6cea7', {
-      from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', // default from address
+    // connect to smartcontract
+    this.oNyCoin = new this.web3.eth.Contract(tokenAbi, '0xc6151008736f1abcb9a1a5c53323291fefe6cea7', { // contract address
+      from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', // address where tokens are placed in
       // gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
     });
     //set the default account, linked to MetaMask
@@ -567,6 +535,7 @@ export class Web3Service {
   }
 
   public buyTokens(address, amount) {
+    // transfers tokens from base address to provided address
     this.oNyCoin.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', address, amount, function (error, result) {
       if (!error) {
         // return result
@@ -578,7 +547,7 @@ export class Web3Service {
   }
 
   public getTransaction(txHash) {
-
+    // find transaction with provided transactionHash
     this.web3.eth.getTransaction(txHash, function (error, result) {
       if (!error) {
         // return result
@@ -590,14 +559,15 @@ export class Web3Service {
   }
 
   public getBalance(address) {
+    // get the tokenbalance from provided address
     this.oNyCoin.methods.balanceOf(address).call(async function (error, result) {
       if (!error) {
-        // this updtaes the balance in the HTML card when it is loaded.
+        // this updates the balance in the HTML card when it is loaded. Dirty fuckin' hack though, should be refactored.
         let divs = document.getElementsByClassName('balance');
         for (let i = 0; i < divs.length; i++) {
           document.getElementsByClassName('balance')[i].innerHTML = result;
         }
-        
+
 
         return await result;
       } else
@@ -605,6 +575,7 @@ export class Web3Service {
     });
   }
 
+  // get all accounts on the blockchain
   private getAllAccounts() {
     this.web3.eth.getAccounts(function (error, result) {
       if (!error)
