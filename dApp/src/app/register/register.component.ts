@@ -1,6 +1,7 @@
 /**
  * Created by bryan on 6-12-2018.
  */
+import { UserService } from '../services/user.service';
 import { Component, HostListener, OnInit} from '@angular/core';
 
 
@@ -12,10 +13,14 @@ import { Component, HostListener, OnInit} from '@angular/core';
 })
 
 
-
 export class RegisterComponent{
   visible: boolean = true;
   breakpoint: number = 520;
+  date: Date;
+
+  constructor(public userService: UserService){
+
+  }
 
   ngOnInit() {
     const w = window.innerWidth;
@@ -38,6 +43,11 @@ export class RegisterComponent{
     }
   }
 
-  goToRegister(){}
+  goToRegister(){
+    this.userService.addUser('Bryan', 'ronde', 'bryan@testrtrt.nl', this.date ,'test').subscribe(
+      response => console.log(response),
+      err => console.log(err)
+    );
+  }
 
 }
