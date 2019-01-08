@@ -510,6 +510,9 @@ export class Web3Service {
 
     // private key
     console.log(newAccount.privateKey);
+
+
+    // TODO: http put to DB -> update wallet_address in DB
   };
 
   public instantiateContract() {
@@ -567,8 +570,6 @@ export class Web3Service {
         for (let i = 0; i < divs.length; i++) {
           document.getElementsByClassName('balance')[i].innerHTML = result;
         }
-
-
         return await result;
       } else
         console.error(error);
