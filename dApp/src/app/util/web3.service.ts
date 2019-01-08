@@ -512,7 +512,7 @@ export class Web3Service {
     console.log(newAccount.privateKey);
 
 
-    // TODO: http put to DB -> update wallet_address in DB
+    // TODO: use this in registration call, add wallet_address as param
   };
 
   public instantiateContract() {
