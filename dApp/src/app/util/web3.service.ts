@@ -505,10 +505,10 @@ export class Web3Service {
     console.log(this.web3.eth.Contract);
     // using the web3 connection to create a new wallet
     let newAccount = this.web3.eth.accounts.create();
-    // public key
+    // public key / wallet_address -> used to transfer tokens to
     console.log(newAccount.address);
 
-    // private key
+    // private key -> should be saved by teh user in order to make transactions
     console.log(newAccount.privateKey);
 
 
