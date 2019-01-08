@@ -6,7 +6,7 @@
       <mat-card class="register-card">
         <mat-card-title>OnyCoin Register</mat-card-title>
         <mat-card-content>
-          <form #registerForm="ngForm" class="register-form">
+          <form (ngSubmit)="goToRegister()" #registerForm="ngForm" class="register-form">
             <div>
               <mat-form-field>
                 <input matInput #FirstName name="FirstName" required class="register-input" placeholder="First Name"/>
@@ -33,7 +33,7 @@
                 <mat-icon class="clear" matSuffix (click)="RepeatPassword.value = ''">clear</mat-icon>
               </mat-form-field>
               <br />
-              <button mat-raised-button [disabled]="Email.value == ''|| DateOfBirth.value == '' || password.value == '' || RepeatPassword.value == '' || FirstName.value == '' || LastName.value == ''" type="submit" class="register-button">Register</button>
+              <button mat-raised-button [disabled]="Email.value == ''|| DateOfBirth.value == '' || password.value == '' || RepeatPassword.value == '' || FirstName.value == '' || LastName.value == ''" class="register-button">Register</button>
 
             </div>
           </form>

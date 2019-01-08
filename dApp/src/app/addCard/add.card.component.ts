@@ -1,7 +1,7 @@
 /**
  * Created by bryan on 6-12-2018.
  */
-import { Component, HostListener, OnInit} from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 
 
 @Component({

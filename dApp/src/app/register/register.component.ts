@@ -1,7 +1,9 @@
 /**
  * Created by bryan on 6-12-2018.
  */
+import { UserService } from '../services/user.service';
 import { Component, HostListener, OnInit} from '@angular/core';
+import {Web3Service} from "../util/web3.service";
 
 
 @Component({
@@ -12,10 +14,15 @@ import { Component, HostListener, OnInit} from '@angular/core';
 })
 
 
-
 export class RegisterComponent{
   visible: boolean = true;
   breakpoint: number = 520;
+  date: Date;
+
+  constructor(public userService: UserService,
+              private Web3Service:Web3Service){
+
+  }
 
   ngOnInit() {
     const w = window.innerWidth;
@@ -38,6 +45,16 @@ export class RegisterComponent{
     }
   }
 
-  goToRegister(){}
+  goToRegister(){
+    // this.Web3Service.createWallet();
+    console.log(this.Web3Service.createWallet());
+    let wallet_address = this.Web3Service.createWallet().address;
+    // console.log(this.Web3Service.createWallet().privateKey);
+    // console.log(this.Web3Service.createWallet().newAccount);
 
+    this.userService.addUser('Bryan', 'ronde', 'bryan@testrtrt.nl', this.date ,'test', wallet_address).subscribe(
+      response => console.log(response),
+      err => console.log(err)
+    );
+  }
 }
