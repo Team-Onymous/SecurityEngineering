@@ -4,6 +4,7 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {UserService} from "../services/user.service";
 import {Web3Service} from "../util/web3.service";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -18,7 +19,8 @@ export class LoginComponent {
   visible: boolean = true;
   breakpoint: number = 520;
 
-  constructor(public userService: UserService) {
+  constructor(public userService: UserService,
+              private router: Router) {
 
   }
 
@@ -45,8 +47,11 @@ export class LoginComponent {
 
   login(username, password) {
     this.userService.login(username, password).subscribe(
-      response => console.log(response),
-      err => console.log(err)
+      response => {
+        console.log(response)
+        this.router.navigate(['/addcard']);
+      },
+      err => console.log(err),
     );
   }
 
