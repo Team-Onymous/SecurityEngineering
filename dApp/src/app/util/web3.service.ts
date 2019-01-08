@@ -502,14 +502,16 @@ export class Web3Service {
   }
 
   public createWallet() {
-    console.log(this.web3.eth.Contract);
+    // console.log(this.web3.eth.Contract);
     // using the web3 connection to create a new wallet
     let newAccount = this.web3.eth.accounts.create();
     // public key / wallet_address -> used to transfer tokens to
-    console.log(newAccount.address);
+    // console.log(newAccount.address);
 
-    // private key -> should be saved by teh user in order to make transactions
-    console.log(newAccount.privateKey);
+    // private key -> should be saved by the user in order to make transactions
+    // console.log(newAccount.privateKey);
+
+    return newAccount
 
 
     // TODO: use this in registration call, add wallet_address as param
@@ -517,7 +519,7 @@ export class Web3Service {
 
   public instantiateContract() {
     // connect to smartcontract
-    this.oNyCoin = new this.web3.eth.Contract(tokenAbi, '0xc6151008736f1abcb9a1a5c53323291fefe6cea7', { // contract address
+    this.oNyCoin = new this.web3.eth.Contract(tokenAbi, '0xc6151008736f1aBcB9A1A5C53323291FEFE6CEA7', { // contract address
       from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', // address where tokens are placed in
       // gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
     });

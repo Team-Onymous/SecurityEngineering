@@ -25,9 +25,10 @@ export class UserService {
   }
 
 
-  addUser (firstName: string, lastName: string, email:string, dateOfBirth: Date, password: string): Observable<any> {
+  addUser (firstName: string, lastName: string, email:string, dateOfBirth: Date, password: string, wallet_address: string): Observable<any> {
     let date = Date().toString();
     const body = new HttpParams()
+      .set('wallet_address', wallet_address)
       .set('firstname', firstName)
       .set('lastname', lastName)
       .set('email', email)
