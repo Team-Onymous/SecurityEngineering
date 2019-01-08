@@ -61,6 +61,7 @@ module.exports = function (passport, user) {
                         {
                             email: email,
                             password: userPassword,
+                            wallet_address: req.body.wallet_address,
                             firstname: req.body.firstname,
                             lastname: req.body.lastname,
                             date_of_birth: req.body.date_of_birth,
