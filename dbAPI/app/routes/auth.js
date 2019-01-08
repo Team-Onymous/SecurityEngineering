@@ -18,7 +18,7 @@ module.exports = function (app, passport, models, flash) {
 
 
     app.post('/api/users/login', passport.authenticate('login', {failureFlash: true}),
-        function (req, res {
+        function (req, res) {
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.
             res.send({
