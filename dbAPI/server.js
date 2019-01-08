@@ -6,13 +6,15 @@ var bodyParser = require('body-parser');
 var env = require('dotenv').load();
 var exphbs = require('express-handlebars');
 const cors = require('cors');
-
+const flash = require('connect-flash');
 const corsOptions = {
     origin: 'http://localhost:4200',
     optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+
+app.use(flash());
 
 //For BodyParser
 app.use(bodyParser.urlencoded({
@@ -55,7 +57,7 @@ const authRoute = require('./app/routes/auth.js')(app, passport, models);
 
 //load passport strategies
 
-require('./app/config/passport/passport.js')(passport, models.user);
+require('./app/config/passport/passport.js')(passport, models.user, flash);
 
 
 //Sync Database
