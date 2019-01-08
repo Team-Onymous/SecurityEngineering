@@ -5,7 +5,14 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var env = require('dotenv').load();
 var exphbs = require('express-handlebars');
+const cors = require('cors');
 
+const corsOptions = {
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 
 //For BodyParser
 app.use(bodyParser.urlencoded({
