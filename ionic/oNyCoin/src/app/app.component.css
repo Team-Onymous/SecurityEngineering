@@ -1,0 +1,18 @@
+
+.mat-sidenav-container {
+  background-color: #fafafa;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-drawer {
+  background-color: #56BFb5;
+  color: white;
+}
+
+.mat-drawer-container {
+  background-color: #fafafa !important;
+  color: rgba(0, 0, 0, 0.87) !important;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
