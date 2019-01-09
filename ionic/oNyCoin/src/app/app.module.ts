@@ -60,7 +60,8 @@ import {UserService} from "./services/user.service";
         MatToolbarModule,
         BrowserModule,
         FormsModule,
-        HttpClientModule,],
+        HttpClientModule,
+    ],
     providers: [
         StatusBar,
         SplashScreen,
