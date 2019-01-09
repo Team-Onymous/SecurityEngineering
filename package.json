@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Team-Onymous/SecurityEngineering#readme",
   "dependencies": {
+    "@ionic-native/core": "^4.19.0",
     "async": "latest"
   }
 }
