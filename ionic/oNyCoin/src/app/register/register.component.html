@@ -1,0 +1,44 @@
+<div [ngClass]="visible ? 'registerbg' : 'registerbg-xs'"></div>
+
+<div class="outer">
+  <div class="middle">
+    <div [ngClass]="visible ? 'register-card-container' : 'register-card-container-xs'">
+      <mat-card class="register-card">
+        <mat-card-title>OnyCoin Register</mat-card-title>
+        <mat-card-content>
+          <form (ngSubmit)="goToRegister()" #registerForm="ngForm" class="register-form">
+            <div>
+              <mat-form-field>
+                <input matInput #FirstName name="FirstName" required class="register-input" placeholder="First Name"/>
+                <mat-icon class="clear" matSuffix (click)="FirstName.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #LastName name="LastName" required class="register-input" placeholder="Last Name"/>
+                <mat-icon class="clear" matSuffix (click)="LastName.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #Email name="Email" required class="register-input" placeholder="E-mail"/>
+                <mat-icon class="clear" matSuffix (click)="Email.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #DateOfBirth name="DateOfBirth" required class="register-input" placeholder="Date Of Birth"/>
+                <mat-icon class="clear" matSuffix (click)="DateOfBirth.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="password" #password name="password" required class="register-input" placeholder="Password">
+                <mat-icon class="clear" matSuffix (click)="password.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="password" #RepeatPassword name="RepeatPassword" required class="register-input" placeholder="Repeat Password">
+                <mat-icon class="clear" matSuffix (click)="RepeatPassword.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <br />
+              <button mat-raised-button [disabled]="Email.value == ''|| DateOfBirth.value == '' || password.value == '' || RepeatPassword.value == '' || FirstName.value == '' || LastName.value == ''" class="register-button">Register</button>
+
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
