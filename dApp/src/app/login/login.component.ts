@@ -1,7 +1,10 @@
 /**
  * Created by bryan on 5-12-2018.
  */
-import { Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {UserService} from "../services/user.service";
+import {Web3Service} from "../util/web3.service";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -12,10 +15,14 @@ import { Component, HostListener, OnInit} from '@angular/core';
 })
 
 
-
-export class LoginComponent{
+export class LoginComponent {
   visible: boolean = true;
   breakpoint: number = 520;
+
+  constructor(public userService: UserService,
+              private router: Router) {
+
+  }
 
   ngOnInit() {
     const w = window.innerWidth;
@@ -38,6 +45,17 @@ export class LoginComponent{
     }
   }
 
-  goToRegister(){}
+  login(username, password) {
+    this.userService.login(username, password).subscribe(
+      response => {
+        console.log(response)
+        this.router.navigate(['/addcard']);
+      },
+      err => console.log(err),
+    );
+  }
 
+  goToRegister() {
+
+  }
 }

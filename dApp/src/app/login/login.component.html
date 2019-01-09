@@ -17,7 +17,7 @@
                 <mat-icon class="clear" matSuffix (click)="password.value = ''">clear</mat-icon>
               </mat-form-field>
               <br />
-              <button mat-raised-button [disabled]="username.value == '' || password.value == ''" type="submit" class="login-button">Login</button>
+              <button mat-raised-button (click)="login(username.value, password.value)" [disabled]="username.value == '' || password.value == ''" type="submit" class="login-button">Login</button>
               <button mat-raised-button (click)="goToRegister()" class="register-button">Register</button>
 
             </div>

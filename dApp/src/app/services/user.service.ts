@@ -48,5 +48,16 @@ export class UserService {
     );
   }
 
+  login(email:string, password: string) {
+    const body = new HttpParams()
+      .set('email', email)
+      .set('password', password);
+    return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions)
+  }
+
+  getUser() {
+
+  }
+
 
 }

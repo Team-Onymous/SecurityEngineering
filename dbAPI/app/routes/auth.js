@@ -1,6 +1,6 @@
 const authController = require('../controllers/authcontroller.js');
 
-module.exports = function (app, passport, models) {
+module.exports = function (app, passport, models, flash) {
 
     let User = models.user;
     let Consumable = models.consumable;
@@ -16,13 +16,15 @@ module.exports = function (app, passport, models) {
             });
         });
 
-    app.post('/api/users/login', passport.authenticate('login', {failureRedirect: '/login'}),
+
+    app.post('/api/users/login', passport.authenticate('login', {failureFlash: true}),
         function (req, res) {
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.
             res.send({
                 message: 'Successfully logged in!',
                 id: req.user.id,
+                wallet_address: req.user.wallet_address,
                 firstname: req.user.firstname,
                 lastname: req.user.lastname
             });
