@@ -496,7 +496,7 @@ export class Web3Service {
         }
       } else {
         console.log('No web3? You should consider trying MetaMask!');
-        this.web3 = new Web3(new Web3.providers.HttpProvider('http://172.16.0.5:7676'));
+        this.web3 = new Web3(new Web3.providers.HttpProvider('http://10.5.0.3:7676'));
       }
     });
   }
