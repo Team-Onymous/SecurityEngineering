@@ -1,26 +1,21 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {UserService} from './services/user.service'
+import {Web3Service} from "./util/web3.service";
 
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar
-  ) {
-    this.initializeApp();
+  title = 'app works!';
+
+  constructor(private userService: UserService,
+              private web3Service: Web3Service) {
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
+  isLoggedIn(): boolean {
+    return this.userService.isLoggedIn();
   }
 }
