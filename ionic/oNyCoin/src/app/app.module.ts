@@ -7,7 +7,7 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 
 import {AppComponent} from './app.component';
-import {AppRoutingModule} from './app-routing.module';
+import {AppRoutingModule} from './app.routes.module';
 import {NavbarComponent} from "./navbar/navbar.component";
 import {ToolbarComponent} from "./toolbar/toolbar.component";
 import {HomeComponent} from "./home/home.component";
@@ -52,7 +52,6 @@ import {UserService} from "./services/user.service";
         AppRoutingModule,
         BrowserAnimationsModule,
         MaterialModule,
-        AppRoutingModule,
         CommonModule,
         MatButtonModule,
         MatCardModule,
@@ -66,8 +65,7 @@ import {UserService} from "./services/user.service";
         StatusBar,
         SplashScreen,
         AuthGuard,
-        UserService,
-        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+        UserService
     ],
     bootstrap: [AppComponent]
 })

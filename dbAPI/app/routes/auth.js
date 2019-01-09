@@ -6,7 +6,7 @@ module.exports = function (app, passport, models, flash) {
     let Consumable = models.consumable;
     let Transaction = models.transaction;
 
-    app.post('/api/users/register', passport.authenticate('register', {failureRedirect: '/register'}),
+    app.post('/api/users/register', passport.authenticate('register'),
         function (req, res) {
             // If this function gets called, authentication was successful.
             // `req.user` contains the authenticated user.

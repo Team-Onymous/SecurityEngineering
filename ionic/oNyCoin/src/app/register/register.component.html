@@ -6,7 +6,7 @@
       <mat-card class="register-card">
         <mat-card-title>OnyCoin Register</mat-card-title>
         <mat-card-content>
-          <form (ngSubmit)="goToRegister()" #registerForm="ngForm" class="register-form">
+          <form (ngSubmit)="goToRegister(FirstName.value, LastName.value, Email.value, DateOfBirth.value, password.value)" #registerForm="ngForm" class="register-form">
             <div>
               <mat-form-field>
                 <input matInput #FirstName name="FirstName" required class="register-input" placeholder="First Name"/>
@@ -26,7 +26,7 @@
               </mat-form-field>
               <mat-form-field>
                 <input matInput type="password" #password name="password" required class="register-input" placeholder="Password">
-                <mat-icon class="clear" matSuffix (click)="password.value = ''">clear</mat-icon>
+                <mat-icon class="clear" matSuffix (click)="Password.value = ''">clear</mat-icon>
               </mat-form-field>
               <mat-form-field>
                 <input matInput type="password" #RepeatPassword name="RepeatPassword" required class="register-input" placeholder="Repeat Password">

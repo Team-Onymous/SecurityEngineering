@@ -8,7 +8,7 @@ var exphbs = require('express-handlebars');
 const cors = require('cors');
 const flash = require('connect-flash');
 const corsOptions = {
-    origin: 'http://localhost:4200',
+    origin: 'http://localhost:8100',
     optionsSuccessStatus: 200
 };
 
