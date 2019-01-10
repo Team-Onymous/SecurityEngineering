@@ -164,8 +164,10 @@ module.exports = function (app, passport, models, flash) {
         if (req.isAuthenticated())
 
             return next();
-
-        res.redirect('/login');
+        res.status(401)
+        res.send({
+            message: 'You are currently not logged in, please log in before you continue'
+        });
 
     }
 }
