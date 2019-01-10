@@ -4,7 +4,7 @@
       <mat-card class="addCard-card">
         <mat-card-title>Refund OnyCoins</mat-card-title>
         <mat-card-content>
-          <form #addCoinsForm="ngForm" class="addCard-form">
+          <form #refundForm="ngForm" (submit)="refund(Coins.value)" class="addCard-form">
             <div>
               <mat-form-field>
                 <input matInput #Coins name="Coins" required class="addCard-input" placeholder="Amount of Coins"/>
@@ -14,7 +14,7 @@
                 <input matInput #CoinsInEuros name="CoinsInEuros" class="addCard-input" placeholder="Cost in Euros"/>
               </mat-form-field>
               <mat-form-field>
-                <input matInput #IbanNmber name="IbanNumber" required class="addCard-input" placeholder="IBAN Number"/>
+                <input matInput #IbanNumber name="IbanNumber" required class="addCard-input" placeholder="IBAN Number"/>
                 <mat-icon class="clear" matSuffix (click)="IbanNumber.value = ''">clear</mat-icon>
               </mat-form-field>
               <br />

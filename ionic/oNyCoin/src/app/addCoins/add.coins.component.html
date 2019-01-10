@@ -1,25 +1,33 @@
-
 <div class="outer">
-  <div class="middle">
-    <div [ngClass]="visible ? 'addCard-card-container' : 'addCard-card-container-xs'">
-      <mat-card class="addCard-card">
-        <mat-card-title>Add OnyCoins</mat-card-title>
-        <mat-card-content>
-          <form #addCoinsForm="ngForm" class="addCard-form">
-            <div>
-              <mat-form-field>
-                <input matInput #Coins name="Coins" required class="addCard-input" placeholder="Amount of Coins"/>
-                <mat-icon class="clear" matSuffix (click)="Coins.value = ''">clear</mat-icon>
-              </mat-form-field>
-              <mat-form-field>
-                <input matInput #CoinsInEuros name="CoinsInEuros" class="addCard-input" placeholder="Cost in Euros"/>
-              </mat-form-field>
-              <br />
-              <button mat-raised-button [disabled]="Coins.value == ''" type="submit" class="addCard-button">Add Coins</button>
-            </div>
-          </form>
-        </mat-card-content>
-      </mat-card>
+    <div class="middle">
+        <div [ngClass]="visible ? 'addCard-card-container' : 'addCard-card-container-xs'">
+            <mat-card class="addCard-card">
+                <mat-card-title>Add OnyCoins</mat-card-title>
+                <mat-card-content>
+                    <form #addCoinsForm="ngForm" (submit)="addCoins(Coins.value)" class="addCard-form">
+                        <div>
+                            <mat-form-field>
+                                <input matInput #Coins name="Coins"
+                                       required class="addCard-input"
+                                       placeholder="Amount of Coins"/>
+                                <mat-icon class="clear" matSuffix (click)="Coins.value = ''">clear</mat-icon>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput #CoinsInEuros
+                                       name="CoinsInEuros" class="addCard-input"
+                                       placeholder="Cost in Euros"/>
+                            </mat-form-field>
+                            <br/>
+                            <button mat-raised-button
+                                    [disabled]="Coins.value == ''"
+                                    type="submit"
+                                    class="addCard-button">
+                                Add Coins
+                            </button>
+                        </div>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
-  </div>
 </div>
