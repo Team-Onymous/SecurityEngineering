@@ -56,7 +56,7 @@ export class UserService {
   }
 
   logout(): Observable<any> {
-    return this.http.get(environment.API + 'api/users/logout', options.httpOptions)
+    return this.http.get(environment.API + 'logout', options.httpOptions)
   }
 
   getUser() {

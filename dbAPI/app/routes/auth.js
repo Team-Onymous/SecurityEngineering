@@ -27,7 +27,7 @@ module.exports = function (app, passport, models, flash) {
                 wallet_address: req.user.wallet_address,
                 firstname: req.user.firstname,
                 lastname: req.user.lastname
-            });
+            })
         });
 
     app.put('/api/users/orderCard', isLoggedIn,
