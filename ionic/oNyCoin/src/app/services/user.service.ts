@@ -55,6 +55,10 @@ export class UserService {
     return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions)
   }
 
+  logout(): Observable<any> {
+    return this.http.get(environment.API + 'logout', options.httpOptions)
+  }
+
   getUser() {
 
   }
