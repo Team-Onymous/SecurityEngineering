@@ -26,7 +26,8 @@ module.exports = function (app, passport, models, flash) {
                 id: req.user.id,
                 wallet_address: req.user.wallet_address,
                 firstname: req.user.firstname,
-                lastname: req.user.lastname
+                lastname: req.user.lastname,
+                request: req.session
             })
         });
 

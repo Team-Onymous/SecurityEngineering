@@ -8,54 +8,56 @@ import {Router} from "@angular/router";
 
 
 @Component({
-  moduleId: module.id,
-  selector: 'rg-login',
-  templateUrl: 'login.component.html',
-  styleUrls: ['login.component.css'],
+    moduleId: module.id,
+    selector: 'rg-login',
+    templateUrl: 'login.component.html',
+    styleUrls: ['login.component.css'],
 })
 
 
 export class LoginComponent {
-  visible: boolean = true;
-  breakpoint: number = 520;
+    visible: boolean = true;
+    breakpoint: number = 520;
 
-  constructor(public userService: UserService,
-              private router: Router) {
+    constructor(public userService: UserService,
+                private router: Router) {
 
-  }
-
-  ngOnInit() {
-    const w = window.innerWidth;
-    if (w >= this.breakpoint) {
-      this.visible = true;
-    } else {
-      // whenever the window is less than 520, hide this component.
-      this.visible = false;
     }
-  }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    const w = event.target.innerWidth;
-    if (w >= this.breakpoint) {
-      this.visible = true;
-    } else {
-      // whenever the window is less than 520, hide this component.
-      this.visible = false;
+    ngOnInit() {
+        const w = window.innerWidth;
+        if (w >= this.breakpoint) {
+            this.visible = true;
+        } else {
+            // whenever the window is less than 520, hide this component.
+            this.visible = false;
+        }
     }
-  }
 
-  login(username, password) {
-    this.userService.login(username, password).subscribe(
-      response => {
-        console.log(response)
-        this.router.navigate(['/addcard']);
-      },
-      err => console.log(err),
-    );
-  }
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        const w = event.target.innerWidth;
+        if (w >= this.breakpoint) {
+            this.visible = true;
+        } else {
+            // whenever the window is less than 520, hide this component.
+            this.visible = false;
+        }
+    }
 
-  goToRegister() {
+    login(username, password) {
+        this.userService.login(username, password).subscribe(
+            response => {
+                console.log(response)
+                localStorage.setItem('session', JSON.stringify(response['request']));
+                console.log(localStorage.getItem('session'));
+                this.router.navigate(['/addcard']);
+            },
+            err => console.log(err),
+        );
+    }
 
-  }
+    goToRegister() {
+
+    }
 }
