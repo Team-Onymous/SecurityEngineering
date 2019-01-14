@@ -13,7 +13,7 @@ module.exports = function (passport, user) {
 
         done(null, user.id);
     });
-
+        /*
     // deserialize user
     passport.deserializeUser(function (id, done) {
         User.findById(id).then(function (user) {
@@ -29,6 +29,7 @@ module.exports = function (passport, user) {
             }
         });
     });
+    */
 
 
     passport.use('register', new LocalStrategy(
