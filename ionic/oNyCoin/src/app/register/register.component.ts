@@ -5,6 +5,7 @@ import {UserService} from '../services/user.service';
 import {Component, HostListener, OnInit} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
 import {Router} from "@angular/router";
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 
 @Component({
@@ -16,13 +17,19 @@ import {Router} from "@angular/router";
 
 
 export class RegisterComponent {
+    Email = new FormControl();
+    EmailInput: string;
+    FirstNameInput: string;
+    LastNameInput: string;
+    passwordInput: string;
+    passwordRepeatInput: string;
+    dateOfBirthInput: string;
+
     visible: boolean = true;
     breakpoint: number = 520;
     date: Date;
 
-    constructor(public userService: UserService,
-                private Web3Service: Web3Service,
-                private router: Router) {
+    constructor(public userService: UserService, private Web3Service: Web3Service, private router: Router, private formBuilder: FormBuilder) {
 
     }
 
