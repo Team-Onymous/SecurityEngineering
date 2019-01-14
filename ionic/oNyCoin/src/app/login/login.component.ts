@@ -49,7 +49,7 @@ export class LoginComponent {
     this.userService.login(username, password).subscribe(
       response => {
         console.log(response)
-        this.router.navigate(['/addcard']);
+        this.router.navigate(['/bar']);
       },
       err => console.log(err),
     );
