@@ -31,10 +31,10 @@ module.exports = function (app, passport, models, flash) {
             })
         });
 
-    app.put('/api/users/orderCard',
+    app.put('/api/users/orderCard/:id',
         function (req, res) {
 
-            User.findOne({where: {id: req.user.id}}).then(user => {
+            User.findOne({where: {id: req.params.id}}).then(user => {
                 let makeID = function () {
                     var text = "";
                     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
