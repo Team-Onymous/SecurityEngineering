@@ -31,7 +31,7 @@ module.exports = function (app, passport, models, flash) {
             })
         });
 
-    app.put('/api/users/orderCard', isLoggedIn,
+    app.put('/api/users/orderCard',
         function (req, res) {
 
             User.findOne({where: {id: req.user.id}}).then(user => {
@@ -76,7 +76,7 @@ module.exports = function (app, passport, models, flash) {
 //     });
 
     // find current logged in user
-    app.get('/api/users/currentUser', isLoggedIn, (req, res) => {
+    app.get('/api/users/currentUser', (req, res) => {
         //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {id: req.user.id}}).then(user => res.json({
             id: user.id,
@@ -91,7 +91,7 @@ module.exports = function (app, passport, models, flash) {
     });
 
     //find specific user by ID
-    app.get('/api/users/:id', isLoggedIn, (req, res) => {
+    app.get('/api/users/:id', (req, res) => {
         //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {id: req.params.id}}).then(user => {
             console.log(user);
@@ -109,7 +109,7 @@ module.exports = function (app, passport, models, flash) {
     });
 
     //find transactions per specific user
-    app.get('/api/transactions/currentUser', isLoggedIn, (req, res) => {
+    app.get('/api/transactions/currentUser', (req, res) => {
         Transaction.findAll({where: {user_id: req.user.id}}).then(transactions => {
 
             let transactionsArray = [];
@@ -130,7 +130,7 @@ module.exports = function (app, passport, models, flash) {
     });
 
     //find transactions per specific user
-    app.get('/api/transactions/:id', isLoggedIn, (req, res) => {
+    app.get('/api/transactions/:id', (req, res) => {
         Transaction.findAll({where: {user_id: req.params.id}}).then(transactions => {
 
             let transactionsArray = [];
@@ -151,25 +151,25 @@ module.exports = function (app, passport, models, flash) {
     });
 
 //find all consumables
-    app.get('/api/consumables', isLoggedIn, (req, res) => {
+    app.get('/api/consumables', (req, res) => {
         Consumable.findAll().then(user => res.json(user)).catch(err => res.json(err));
     });
 
 
-    app.get('/dashboard', isLoggedIn, authController.dashboard);
+    app.get('/dashboard', authController.dashboard);
 
     app.get('/logout', authController.logout);
 
-    function isLoggedIn(req, res, next) {
-
-        if (req.isAuthenticated())
-
-            return next();
-        res.status(401)
-        res.send({
-            message: 'You are currently not logged in, please log in before you continue'
-        });
-
-    }
+    // function isLoggedIn(req, res, next) {
+    //
+    //     if (req.isAuthenticated())
+    //
+    //         return next();
+    //     res.status(401)
+    //     res.send({
+    //         message: 'You are currently not logged in, please log in before you continue'
+    //     });
+    //
+    // }
 }
 ;
