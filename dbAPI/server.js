@@ -27,17 +27,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-
-let dbAPI = new SequelizeStore({
-    db: models.sequelize,
-    table: 'session',
-    expiration: 6 * 60 * 60 * 1000
-});
-
 // For Passport
 app.use(session({
     secret: 'keyboard cat',
-    store: dbAPI,
     resave: false,
     proxy: true,
     saveUninitialized: true,

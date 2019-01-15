@@ -9,16 +9,16 @@
           <form (ngSubmit)="goToRegister(FirstName.value, LastName.value, Email.value, DateOfBirth.value, password.value)" #registerForm="ngForm" class="register-form">
             <div>
               <mat-form-field>
-                <input matInput #FirstName="ngModel" [(ngModel)]="firstNameInput" name="FirstName" pattern="[A-Za-z]{1,32}"
+                <input matInput #FirstName="ngModel" [(ngModel)]="firstNameInput" name="FirstName" pattern="[A-Za-z ]{1,32}"
                        required class="register-input" placeholder="First Name"/>
                 <mat-icon class="clear" matSuffix (click)="FirstName.value = ''">clear</mat-icon>
                 <mat-hint *ngIf="FirstName.invalid" [ngStyle]="warningStyle">
                   <span [hidden]="!FirstName.errors?.required">Field can't be emty</span>
-                  <span [hidden]="!Email.errors?.pattern">first name can only be letters</span>
+                  <span [hidden]="!FirstName.errors?.pattern">first name can only be letters</span>
                   </mat-hint>
               </mat-form-field>
               <mat-form-field>
-                <input matInput #LastName="ngModel" [(ngModel)]="lastNameInput"  name="LastName" pattern="[A-Za-z]{1,32}"
+                <input matInput #LastName="ngModel" [(ngModel)]="lastNameInput"  name="LastName" pattern="[A-Za-z ]{1,32}"
                        required class="register-input" placeholder="Last Name"/>
                 <mat-icon class="clear" matSuffix (click)="LastName.value = ''">clear</mat-icon>
                 <mat-hint *ngIf="LastName.invalid" [ngStyle]="warningStyle">
@@ -28,7 +28,7 @@
               </mat-form-field>
               <mat-form-field>
                 <input matInput #Email="ngModel" [(ngModel)]="emailInput" name="Email" required class="register-input" placeholder="E-mail"
-                       pattern="^[a-z0-9!#$%&'*+-\/=?^_`{|}~.-\.]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$"/>
+                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
                 <mat-icon class="clear" matSuffix (click)="Email.value = ''">clear</mat-icon>
                 <mat-hint *ngIf="Email.invalid" [ngStyle]="warningStyle">
                   <span [hidden]="!Email.errors?.required">Field can't be emty</span>
@@ -50,8 +50,8 @@
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
                 <mat-icon class="clear" matSuffix (click)="Password.value = ''">clear</mat-icon>
                 <mat-hint *ngIf="password.invalid && password.dirty" [ngStyle]="warningStyle">
-                  <span [hidden]="!DateOfBirth.errors?.required">Field can't be emty</span>
-                  <span [hidden]="!DateOfBirth.errors?.pattern">"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"</span>
+                  <span [hidden]="!password.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!password.errors?.pattern">"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"</span>
                 </mat-hint>
               </mat-form-field>
               <mat-form-field>
@@ -60,8 +60,8 @@
                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
                 <mat-icon class="clear" matSuffix (click)="RepeatPassword.value = ''">clear</mat-icon>
                 <mat-hint *ngIf="RepeatPassword.invalid" [ngStyle]="warningStyle">
-                  <span [hidden]="!DateOfBirth.errors?.required">Field can't be emty</span>
-                  <span [hidden]="!DateOfBirth.errors?.pattern">"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"</span>
+                  <span [hidden]="!RepeatPassword.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!RepeatPassword.errors?.pattern">"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"</span>
                 </mat-hint>
               </mat-form-field>
               <br />

@@ -6,26 +6,46 @@
       <mat-card class="addCard-card">
         <mat-card-title>OnyCoin Order Card</mat-card-title>
         <mat-card-content>
-          <form #addCardForm="ngForm" class="addCard-form">
+          <form (ngSubmit)="addCard(StreetName.value, HouseNumber.value, PostalCode.value, City.value)" #addCardForm="ngForm" class="addCard-form">
             <div>
               <mat-form-field>
-                <input matInput #StreetName name="StreetName" required class="addCard-input" placeholder="Street Name"/>
+                <input matInput #StreetName="ngModel" [(ngModel)]="StreetNameInput" name="StreetName" class="addCard-input"
+                       required pattern="[A-Za-z ]{1,64}" placeholder="Street Name"/>
                 <mat-icon class="clear" matSuffix (click)="StreetName.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="StreetName.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!StreetName.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!StreetName.errors?.pattern">Street name can only be letters</span>
+                </mat-hint>
               </mat-form-field>
               <mat-form-field>
-                <input matInput #HouseNumber name="HouseNumber" required class="addCard-input" placeholder="House Number"/>
+                <input matInput #HouseNumber="ngModel" [(ngModel)]="HouseNumberInput" name="HouseNumber" required
+                       class="addCard-input" pattern="[A-Za-z0-9 ]{1,4}" placeholder="House Number"/>
                 <mat-icon class="clear" matSuffix (click)="HouseNumber.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="HouseNumber.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!HouseNumber.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!HouseNumber.errors?.pattern">House number isn't correct</span>
+                </mat-hint>
               </mat-form-field>
               <mat-form-field>
-                <input matInput #PostalCode name="PostalCode" required class="addCard-input" placeholder="Postal Code"/>
+                <input matInput #PostalCode="ngModel" [(ngModel)]="PostalCodeInput" name="PostalCode" required
+                       pattern="[0-9]{4} ?([A-Za-z]{2})?" class="addCard-input" placeholder="Postal Code"/>
                 <mat-icon class="clear" matSuffix (click)="PostalCode.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="PostalCode.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!PostalCode.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!PostalCode.errors?.pattern">Postal code isn't correct</span>
+                </mat-hint>
               </mat-form-field>
               <mat-form-field>
-                <input matInput #City name="City" required class="addCard-input" placeholder="City"/>
+                <input matInput #City="ngModel" [(ngModel)]="CityInput" name="City" required class="addCard-input"
+                       pattern="[A-Za-z ]{1,64}" placeholder="City"/>
                 <mat-icon class="clear" matSuffix (click)="City.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="City.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!City.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!City.errors?.pattern">City can only be letters</span>
+                </mat-hint>
               </mat-form-field>
               <br />
-              <button mat-raised-button [disabled]="StreetName.value == ''|| HouseNumber.value == '' || PostalCode.value == '' || City.value == ''" type="submit" class="addCard-button">Order Card</button>
+              <button mat-raised-button [disabled]="!addCardForm.valid" class="addCard-button">Order Card</button>
             </div>
           </form>
         </mat-card-content>

@@ -2,6 +2,8 @@
  * Created by bryan on 6-12-2018.
  */
 import { Component, HostListener, OnInit } from '@angular/core';
+import { UserService } from '../services/user.service';
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -16,6 +18,12 @@ import { Component, HostListener, OnInit } from '@angular/core';
 export class AddCardComponent{
   visible: boolean = true;
   breakpoint: number = 520;
+  StreetNameInput: string;
+  HouseNumberInput: string;
+  PostalCodeInput: string;
+  CityRepeatInput: string;
+
+  constructor(private userService: UserService, private router: Router){}
 
   ngOnInit() {
     const w = window.innerWidth;
@@ -38,6 +46,17 @@ export class AddCardComponent{
     }
   }
 
-  goToRegister(){}
+  addCard(street, houseNumber, postalCode, city) {
+
+    let userId = JSON.parse(localStorage.getItem('user')).id;
+
+    this.userService.addCard(street, houseNumber, postalCode, city, userId).subscribe(
+      response => {
+        console.log(response);
+        this.router.navigate(['/home']);
+      },
+      err => console.log(err)
+    );
+  }
 
 }
