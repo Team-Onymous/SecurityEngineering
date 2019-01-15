@@ -49,20 +49,20 @@ export class UserService {
             );
     }
 
-  addCard (street: string, houseNumber: string, postalCode:string, city: string, userId): Observable<any> {
-    let date = Date().toString();
-    const body = new HttpParams()
-      .set('street', street)
-      .set('house_number', houseNumber)
-      .set('postal_code', postalCode)
-      .set('city', city);
-    // We got to build the data we send to the backend.
+    addCard(street: string, houseNumber: string, postalCode: string, city: string, userId): Observable<any> {
+        let date = Date().toString();
+        const body = new HttpParams()
+            .set('street', street)
+            .set('house_number', houseNumber)
+            .set('postal_code', postalCode)
+            .set('city', city);
+        // We got to build the data we send to the backend.
 
-    return this.http.put(environment.API + 'api/users/orderCard/' + userId, body.toString() , options.httpOptions)
-      .pipe(
+        return this.http.put(environment.API + 'api/users/orderCard/' + userId, body.toString(), options.httpOptions)
+            .pipe(
 
-      );
-  }
+            );
+    }
 
     login(email: string, password: string) {
         const body = new HttpParams()
