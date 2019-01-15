@@ -3,6 +3,8 @@ import * as contract from 'truffle-contract';
 import {Observable, Subject} from 'rxjs';
 import {map} from "rxjs/operators";
 
+const Tx = require('ethereumjs-tx')
+
 declare let require: any;
 const Web3 = require('web3');
 
@@ -482,7 +484,6 @@ export class Web3Service {
         window.addEventListener('load', async () => {
 
             if (typeof window.web3 !== 'undefined') {
-
                 // Use Mist/MetaMask's provider
                 this.web3 = new Web3(window.web3.currentProvider);
                 try {
@@ -520,7 +521,7 @@ export class Web3Service {
     public instantiateContract() {
         // connect to smartcontract
         this.oNyCoin = new this.web3.eth.Contract(tokenAbi, '0xc6151008736f1aBcB9A1A5C53323291FEFE6CEA7', { // contract address
-            from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', // address where tokens are placed in
+            from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', // address where tokens are placed in,
             gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
         });
         //set the default account, linked to MetaMask
@@ -556,23 +557,27 @@ export class Web3Service {
     }
 
     public async buyTokens(amount) {
-        console.log(this.oNyCoin.methods)
-        let transaction = this.oNyCoin.methods.transfer(this.web3.eth.defaultAccount, 5).send({
-            from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff'
-        }, async function (error, result) {
-            if (!error) {
-                return await result;
-            } else
-                await console.error(error);
-        });
+        let privateKey =
+            "1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38";
 
-        let options = {
-            to: transaction._parent._address,
-            data: transaction.encodeABI(),
-            gas: await transaction.estimateGas({from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff'}),
-        };
+        console.log(this.oNyCoin.methods);
+        let transaction = this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', '0xbB6F75Ef66f3eBc57D5C6595a1Ba94b4BbB3AB8d', 5)
+            .send({
+                from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff',
+                // gas: '2000000',
+                gasPrice: '20000000000', // default gas price in wei, 20 gwei in this case
+                nonce: '0x0'
+            }, async function (error, result) {
+                if (!error) {
+                    return await result;
+                } else
+                    await console.error(error);
+            });
 
-        let signedTransaction = await this.web3.eth.accounts.signTransaction(options, '1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
+        console.log(transaction);
+
+        let signedTransaction = await this.web3.eth.accounts.signTransaction(transaction, '1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38').then(console.log);
+        await this.web3.eth.sendSignedTransaction(signedTransaction).then(console.log);
         let transactionReceipt = await this.web3.eth.sendSignedTransaction(signedTransaction.rawTransaction);
 
     }

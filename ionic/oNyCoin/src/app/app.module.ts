@@ -23,11 +23,13 @@ import {BarComponent} from "./bar/bar.component";
 import {MaterialModule} from "./material.module";
 import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatToolbarModule} from "@angular/material";
 import {CommonModule} from "@angular/common";
-import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AuthGuard} from "./services/authguard.service";
 import {UserService} from "./services/user.service";
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {SharedModule} from "./services/services.module";
+import {BarService} from "./services/bar.services";
 
 @NgModule({
     declarations: [
@@ -52,12 +54,14 @@ import {UserService} from "./services/user.service";
         AppRoutingModule,
         BrowserAnimationsModule,
         MaterialModule,
+        ReactiveFormsModule,
         CommonModule,
         MatButtonModule,
         MatCardModule,
         MatFormFieldModule,
         MatInputModule,
         MatToolbarModule,
+        SharedModule.forRoot(),
         BrowserModule,
         FormsModule,
         HttpClientModule,
@@ -66,6 +70,7 @@ import {UserService} from "./services/user.service";
         StatusBar,
         SplashScreen,
         AuthGuard,
+        BarService,
         UserService
     ],
     bootstrap: [AppComponent]

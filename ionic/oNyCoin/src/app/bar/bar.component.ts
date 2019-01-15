@@ -2,6 +2,9 @@
  * Created by bryan on 10-12-2018.
  */
 import { Component, HostListener, OnInit} from '@angular/core';
+import { BarService } from '../services/bar.services';
+import { Observable } from 'rxjs';
+import { barConsumable } from '../services/barConsumable';
 
 export interface Tile {
   color: string;
@@ -25,8 +28,12 @@ export interface Drinks {
 })
 
 export class BarComponent {
+  constructor(public barService: BarService){}
+
   order: Drinks[] = [];
   hasOrder: boolean = false;
+
+  public loadedConsumable$: Observable<barConsumable>;
 
   tiles: Tile[] = [
     {text: 'Beer', cols: 2, rows: 1, color: '#38817A', coins: '1'},
@@ -51,8 +58,13 @@ export class BarComponent {
     {text: '6', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
   ];
 
-
   ngOnInit() {
+
+    this.loadedConsumable$ = this.barService.getConsumables();
+    this.loadedConsumable$.subscribe(
+      (consumables:barConsumable) => {
+        console.log(consumables);
+      });
   }
 
   Clicked(name: string, coins: string) {
