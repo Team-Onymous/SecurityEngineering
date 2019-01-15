@@ -94,7 +94,6 @@ module.exports = function (app, passport, models, flash) {
     app.get('/api/users/:id', (req, res) => {
         //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {id: req.params.id}}).then(user => {
-            console.log(user);
             res.json({
                 id: user.id,
                 wallet_address: user.wallet_address,
@@ -112,7 +111,6 @@ module.exports = function (app, passport, models, flash) {
     app.get('/api/users/:wallet_address', (req, res) => {
         //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {wallet_address: req.params.wallet_address}}).then(user => {
-            console.log(user);
             res.json({
                 id: user.id,
                 wallet_address: user.wallet_address,
