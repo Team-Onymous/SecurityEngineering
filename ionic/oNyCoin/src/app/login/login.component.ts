@@ -45,15 +45,14 @@ export class LoginComponent {
         }
     }
 
-  login(username, password) {
-    this.userService.login(username, password).subscribe(
-      response => {
-        console.log(response)
-        this.router.navigate(['/bar']);
-      },
-      err => console.log(err),
-    );
-  }
+    login(username, password) {
+        this.userService.login(username, password).subscribe(
+            response => {
+                this.router.navigate(['/bar']);
+            },
+            err => console.log(err),
+        );
+    }
 
     goToRegister() {
 

@@ -27,13 +27,15 @@ export class BalanceComponent implements OnInit {
 
     ngOnInit() {
         this.balance = this.Web3Service.balance;
-        this.getUser(1);
+        this.getUser();
     }
 
-    private getUser(id) {
-        this.userService.getUser(id).subscribe(
+    private getUser() {
+
+        let userId = JSON.parse(localStorage.getItem('user')).id;
+
+        this.userService.getUser(userId).subscribe(
             (user) => {
-                console.log(user);
                 this.user = user
             });
     }

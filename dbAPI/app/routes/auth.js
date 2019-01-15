@@ -27,7 +27,7 @@ module.exports = function (app, passport, models, flash) {
                 wallet_address: req.user.wallet_address,
                 firstname: req.user.firstname,
                 lastname: req.user.lastname,
-                request: req.session
+                // request: req.session
             })
         });
 

@@ -53,7 +53,10 @@ export class UserService {
         const body = new HttpParams()
             .set('email', email)
             .set('password', password);
-        return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions)
+        return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions).pipe(
+            map((response: any) => {
+                localStorage.setItem('user', JSON.stringify(response));
+            }));
     }
 
     logout(): Observable<any> {
@@ -77,6 +80,4 @@ export class UserService {
             })
         );
     }
-
-
 }
