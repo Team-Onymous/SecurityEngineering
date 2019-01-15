@@ -18,6 +18,8 @@ import {Router} from "@angular/router";
 export class LoginComponent {
     visible: boolean = true;
     breakpoint: number = 520;
+    emailInput: string;
+    passwordInput: string;
 
     constructor(public userService: UserService,
                 private router: Router) {
@@ -48,13 +50,13 @@ export class LoginComponent {
     login(username, password) {
         this.userService.login(username, password).subscribe(
             response => {
-                this.router.navigate(['/bar']);
+                this.router.navigate(['/addcard']);
             },
-            err => console.log(err),
+            err => console.log(err)
         );
     }
 
     goToRegister() {
-
+        this.router.navigate(['/register']);
     }
 }

@@ -57,11 +57,6 @@ export class RegisterComponent {
     goToRegister(FirstName, LastName, Email, DateOfBirth, Password) {
         console.log(this.Web3Service.createWallet());
         let wallet_address = this.Web3Service.createWallet().address;
-        console.log(FirstName);
-        console.log(LastName);
-        console.log(Email);
-        console.log(DateOfBirth);
-        console.log(Password);
 
         this.userService.addUser(FirstName, LastName, Email, this.date, Password, wallet_address).subscribe(
             response => {
