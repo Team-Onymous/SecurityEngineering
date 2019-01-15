@@ -85,7 +85,7 @@ export class UserService {
                     return []; // fallback to an empty result in case of 204
                 } else {
 
-                    // this updates the balance in the HTML card when it is loaded. Dirty fuckin' hack though, should be refactored.
+                    // this updates the username in the HTML card when it is loaded. Dirty fuckin' hack though, should be refactored.
                     let divs = document.getElementsByClassName('name');
                     for (let i = 0; i < divs.length; i++) {
                         document.getElementsByClassName('name')[i].innerHTML = data.firstname;

@@ -1,7 +1,7 @@
 /**
  * Created by bryan on 5-12-2018.
  */
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {UserService} from "../services/user.service";
 import {Web3Service} from "../util/web3.service";
 import {Router} from "@angular/router";
@@ -15,11 +15,12 @@ import {Router} from "@angular/router";
 })
 
 
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
     visible: boolean = true;
     breakpoint: number = 520;
     emailInput: string;
     passwordInput: string;
+    public balance;
 
     constructor(public userService: UserService,
                 private router: Router) {
@@ -34,6 +35,15 @@ export class LoginComponent {
             // whenever the window is less than 520, hide this component.
             this.visible = false;
         }
+
+
+        this.balance = document.getElementsByClassName('balanceBoxContainer')[0];
+        this.balance.style.display = 'none'
+    }
+
+    ngOnDestroy(): void {
+        this.balance = document.getElementsByClassName('balanceBoxContainer')[0];
+        this.balance.style.display = 'block'
     }
 
     @HostListener('window:resize', ['$event'])
