@@ -5,6 +5,7 @@ import { Component, HostListener, OnInit} from '@angular/core';
 import { BarService } from '../services/bar.services';
 import { Observable } from 'rxjs';
 import { barConsumable } from '../services/barConsumable';
+import {Web3Service} from "../util/web3.service";
 
 export interface Tile {
   color: string;
@@ -28,7 +29,8 @@ export interface Drinks {
 })
 
 export class BarComponent {
-  constructor(public barService: BarService){}
+  constructor(public barService: BarService,
+              private web3Service: Web3Service){}
 
   order: Drinks[] = [];
   hasOrder: boolean = false;
@@ -91,6 +93,12 @@ export class BarComponent {
     this.order = [...this.order];
     this.hasOrder = true;
     console.log(this.hasOrder);
+  }
+
+  buyConsumables(amount) {
+    console.log(amount);
+    amount = 5;
+    this.web3Service.buyConsumables(amount);
   }
 
 }
