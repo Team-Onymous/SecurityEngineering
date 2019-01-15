@@ -36,6 +36,7 @@ export class BalanceComponent implements OnInit {
 
         this.userService.getUser(userId).subscribe(
             (user) => {
+
                 this.user = user
             });
     }

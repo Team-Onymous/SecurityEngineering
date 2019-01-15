@@ -541,8 +541,6 @@ export class Web3Service {
     }
 
     public refund(amount) {
-        console.log(amount);
-        console.log(this.oNyCoin.methods);
         // console.log(this.web3.eth.defaultAccount);
         // transfers tokens from base address to provided address
         // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
@@ -560,7 +558,6 @@ export class Web3Service {
         let privateKey =
             "1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38";
 
-        console.log(this.oNyCoin.methods);
         let transaction = this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', '0xbB6F75Ef66f3eBc57D5C6595a1Ba94b4BbB3AB8d', 5)
             .send({
                 from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff',
@@ -598,6 +595,8 @@ export class Web3Service {
         // get the tokenbalance from provided address
         this.oNyCoin.methods.balanceOf(address).call(async function (error, result) {
             if (!error) {
+                // console.log(result)
+
                 // this updates the balance in the HTML card when it is loaded. Dirty fuckin' hack though, should be refactored.
                 let divs = document.getElementsByClassName('balance');
                 for (let i = 0; i < divs.length; i++) {
