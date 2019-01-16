@@ -580,24 +580,27 @@ export class Web3Service {
                     let serializedTx = tx.serialize();
 
                     //actually make the transaction here
-                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt', console.log);
+                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).then(transaction => {
+                        console.log(transaction)
+                        console.log(transaction.transactionHash)
+
+                        let user_id = JSON.parse(localStorage.getItem('user')).id;
+
+                        that.barService.addTransaction(transaction.transactionHash, amount, 'order', user_id).subscribe(
+                            response => {
+                                console.log(response);
+                                return response
+                            },
+                            err => console.log(err)
+                        );
+                    }).catch(err => console.error(err))
 
 
-                    // that.barService.addTransaction(result, amount, 'order', user_id).subscribe(
-                    //     response => {
-                    //         console.log(response);
-                    //         return response
-                    //     },
-                    //     err => console.log(err)
-                    // );
+
                 }
                 return res
             } else console.error(err)
         });
-
-
-
-
 
 
         // console.log(this.web3.eth.defaultAccount);
