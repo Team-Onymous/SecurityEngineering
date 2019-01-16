@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import * as contract from 'truffle-contract';
 import {Observable, Subject} from 'rxjs';
 import {map} from "rxjs/operators";
+import {BarService} from "../services/bar.services";
 
-const Tx = require('ethereumjs-tx')
+const Tx = require('ethereumjs-tx');
 
 declare let require: any;
 const Web3 = require('web3');
@@ -475,7 +476,7 @@ export class Web3Service {
     public accountsObservable = new Subject<string[]>();
 
 
-    constructor() {
+    constructor(private barService: BarService) {
         this.loadContract();
     }
 
@@ -513,9 +514,6 @@ export class Web3Service {
         // console.log(newAccount.privateKey);
 
         return newAccount
-
-
-        // TODO: use this in registration call, add wallet_address as param
     };
 
     public instantiateContract() {
@@ -540,13 +538,36 @@ export class Web3Service {
         });
     }
 
+    public buyConsumables(amount) {
+        // console.log(this.web3.eth.defaultAccount);
+        let that = this;
+        // transfers tokens from base address to provided address
+        // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
+        this.oNyCoin.methods.transfer('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', amount).send({
+            from: this.web3.eth.defaultAccount
+        }, async function (error, result) {
+            if (!error) {
+                let user_id = JSON.parse(localStorage.getItem('user')).id;
+                console.log(result)
+                that.barService.addTransaction(result, amount, 'order', user_id).subscribe(
+                    response => {
+                        console.log(response);
+                        return response
+                    },
+                    err => console.log(err)
+                );
+
+                return await result;
+            } else
+                await console.error(error);
+        });
+    }
+
     public refund(amount) {
-        console.log(amount);
-        console.log(this.oNyCoin.methods);
         // console.log(this.web3.eth.defaultAccount);
         // transfers tokens from base address to provided address
         // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
-        this.oNyCoin.methods.transfer('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', 5).send({
+        this.oNyCoin.methods.transfer('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', amount).send({
             from: this.web3.eth.defaultAccount
         }, async function (error, result) {
             if (!error) {
@@ -560,7 +581,6 @@ export class Web3Service {
         let privateKey =
             "1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38";
 
-        console.log(this.oNyCoin.methods);
         let transaction = this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', '0xbB6F75Ef66f3eBc57D5C6595a1Ba94b4BbB3AB8d', 5)
             .send({
                 from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff',
@@ -598,6 +618,8 @@ export class Web3Service {
         // get the tokenbalance from provided address
         this.oNyCoin.methods.balanceOf(address).call(async function (error, result) {
             if (!error) {
+                // console.log(result)
+
                 // this updates the balance in the HTML card when it is loaded. Dirty fuckin' hack though, should be refactored.
                 let divs = document.getElementsByClassName('balance');
                 for (let i = 0; i < divs.length; i++) {

@@ -31,6 +31,35 @@ module.exports = function (app, passport, models, flash) {
             })
         });
 
+    app.post('/api/users/createTransaction', function (req, res) {
+
+        let data = {
+            tx_id: req.body.tx_id,
+            token_amount: req.body.token_amount,
+            incoming: 0,
+            order: req.body.order,
+            user_id: req.body.user_id
+        };
+
+        Transaction.create(data).then((error, result) => {
+            if (!error) {
+                return result
+            } else console.error(error);
+
+            res.json({
+                message: "Created a transaction!",
+                tx_id: req.body.tx_id,
+                token_amount: req.body.token_amount,
+                incoming: 0,
+                order: req.body.order,
+                user_id: req.body.user_id
+            })
+
+        }).catch(err => console.error(err))
+
+
+    });
+
     app.put('/api/users/orderCard/:id',
         function (req, res) {
 
@@ -124,8 +153,6 @@ module.exports = function (app, passport, models, flash) {
         }).catch(err => res.json(err));
     });
 
-
-
     //find transactions per specific user
     app.get('/api/transactions/currentUser', (req, res) => {
         Transaction.findAll({where: {user_id: req.user.id}}).then(transactions => {
@@ -172,7 +199,6 @@ module.exports = function (app, passport, models, flash) {
     app.get('/api/consumables', (req, res) => {
         Consumable.findAll().then(user => res.json(user)).catch(err => res.json(err));
     });
-
 
     app.get('/dashboard', authController.dashboard);
 

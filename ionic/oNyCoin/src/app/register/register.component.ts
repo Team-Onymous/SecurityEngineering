@@ -2,10 +2,10 @@
  * Created by bryan on 6-12-2018.
  */
 import {UserService} from '../services/user.service';
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
 import {Router} from "@angular/router";
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 })
 
 
-export class RegisterComponent {
+export class RegisterComponent implements OnInit, OnDestroy {
     Email = new FormControl();
     EmailInput: string;
     FirstNameInput: string;
@@ -28,6 +28,7 @@ export class RegisterComponent {
     visible: boolean = true;
     breakpoint: number = 520;
     date: Date;
+    public balance;
 
     constructor(public userService: UserService, private Web3Service: Web3Service, private router: Router, private formBuilder: FormBuilder) {
 
@@ -41,6 +42,15 @@ export class RegisterComponent {
             // whenever the window is less than 520, hide this component.
             this.visible = false;
         }
+
+        this.balance = document.getElementsByClassName('balanceBoxContainer')[0];
+        this.balance.style.display = 'none';
+        this.balance = this.Web3Service.balance
+    }
+
+    ngOnDestroy(): void {
+        this.balance = document.getElementsByClassName('balanceBoxContainer')[0];
+        this.balance.style.display = 'block'
     }
 
     @HostListener('window:resize', ['$event'])
