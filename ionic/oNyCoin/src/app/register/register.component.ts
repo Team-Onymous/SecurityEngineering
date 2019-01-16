@@ -6,6 +6,7 @@ import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import {EncrDecrService} from "../services/EncrDecr.service";
 
 
 @Component({
@@ -30,7 +31,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     date: Date;
     public balance;
 
-    constructor(public userService: UserService, private Web3Service: Web3Service, private router: Router, private formBuilder: FormBuilder) {
+    constructor(public userService: UserService, private Web3Service: Web3Service, private router: Router, private formBuilder: FormBuilder, private EncrDecr: EncrDecrService) {
 
     }
 
@@ -66,9 +67,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     goToRegister(FirstName, LastName, Email, DateOfBirth, Password) {
         console.log(this.Web3Service.createWallet());
-        let wallet_address = this.Web3Service.createWallet().address;
 
-        this.userService.addUser(FirstName, LastName, Email, this.date, Password, wallet_address).subscribe(
+        let wallet_address = this.Web3Service.createWallet().address;
+        let wallet_key = this.EncrDecr.set(Email.substr(0, 3) + LastName.substr(0, 3), this.Web3Service.createWallet().privateKey);
+
+        this.userService.addUser(FirstName, LastName, Email, this.date, Password, wallet_address, wallet_key).subscribe(
             response => {
                 console.log(response);
                 this.router.navigate(['/addcard'])

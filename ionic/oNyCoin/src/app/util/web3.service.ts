@@ -3,6 +3,7 @@ import * as contract from 'truffle-contract';
 import {Observable, Subject} from 'rxjs';
 import {map} from "rxjs/operators";
 import {BarService} from "../services/bar.services";
+import {EncrDecrService} from "../services/EncrDecr.service";
 
 const Tx = require('ethereumjs-tx');
 
@@ -479,7 +480,8 @@ export class Web3Service {
     public accountsObservable = new Subject<string[]>();
 
 
-    constructor(private barService: BarService) {
+    constructor(private barService: BarService,
+                private EncrDecr: EncrDecrService) {
         this.loadContract();
     }
 
@@ -497,9 +499,15 @@ export class Web3Service {
 
                     this.instantiateContract();
 
+                    var encryptedPrivKey = this.EncrDecr.set('123456$#@$^@1ERF', '0x014EEB884572C49D7C79B512504DB0D4A705803D2A09699E3E4C39BE29AE74BF');
+                    var decryptedPrivKey = this.EncrDecr.get('123456$#@$^@1ERF', encryptedPrivKey);
+
+                    console.log('Encrypted :' + encryptedPrivKey);
+                    // console.log('Encrypted :' + decrypted);
 
                     //user account
-                    this.userAccount = this.web3.eth.accounts.privateKeyToAccount('0x014EEB884572C49D7C79B512504DB0D4A705803D2A09699E3E4C39BE29AE74BF');
+                    // this.userAccount = this.web3.eth.accounts.privateKeyToAccount('0x014EEB884572C49D7C79B512504DB0D4A705803D2A09699E3E4C39BE29AE74BF');
+                    this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
 
                     //token holder account
                     this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount('0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
@@ -594,7 +602,6 @@ export class Web3Service {
                             err => console.log(err)
                         );
                     }).catch(err => console.error(err))
-
 
 
                 }

@@ -26,23 +26,18 @@ export class UserService {
     }
 
 
-    addUser(firstName: string, lastName: string, email: string, dateOfBirth: Date, password: string, wallet_address: string): Observable<any> {
+    addUser(firstName: string, lastName: string, email: string, dateOfBirth: Date, password: string, wallet_address: string, wallet_key: string): Observable<any> {
         let date = Date().toString();
+        console.log(wallet_key);
         const body = new HttpParams()
             .set('wallet_address', wallet_address)
+            .set('wallet_key', wallet_key)
             .set('firstname', firstName)
             .set('lastname', lastName)
             .set('email', email)
             .set('date_of_birth', date)
             .set('password', password);
-        // We got to build the data we send to the backend.
-        let data = {
-            firstname: firstName,
-            lastname: lastName,
-            email: email,
-            date_of_birth: dateOfBirth,
-            password: password
-        };
+
         return this.http.post(environment.API + 'api/users/register', body.toString(), options.httpOptions)
             .pipe(
 
