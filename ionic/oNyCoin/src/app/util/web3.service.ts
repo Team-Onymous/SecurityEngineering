@@ -470,8 +470,9 @@ export class Web3Service {
     public web3;
     public oNyCoin;
     public balance;
-    public userAccount
-    public tokenholderAccount
+    public userAccount;
+    public tokenholderAccount;
+    private contractAddress = "0xc6151008736f1aBcB9A1A5C53323291FEFE6CEA7";
 
     private accounts: string[];
     public ready = false;
@@ -534,7 +535,7 @@ export class Web3Service {
 
     public instantiateContract() {
         // connect to smartcontract
-        this.oNyCoin = new this.web3.eth.Contract(tokenAbi, '0xc6151008736f1aBcB9A1A5C53323291FEFE6CEA7', { // contract address
+        this.oNyCoin = new this.web3.eth.Contract(tokenAbi, this.contractAddress, { // contract address
             from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', // address where tokens are placed in,
             gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
         });
@@ -552,28 +553,78 @@ export class Web3Service {
     }
 
     public buyConsumables(amount) {
-        // console.log(this.web3.eth.defaultAccount);
-        let that = this;
-        // transfers tokens from base address to provided address
-        // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
-        this.oNyCoin.methods.transfer(this.tokenholderAccount.address, amount).send({
-            from: this.web3.eth.defaultAccount
-        }, async function (error, result) {
-            if (!error) {
-                let user_id = JSON.parse(localStorage.getItem('user')).id;
-                console.log(result);
-                that.barService.addTransaction(result, amount, 'order', user_id).subscribe(
-                    response => {
-                        console.log(response);
-                        return response
-                    },
-                    err => console.log(err)
-                );
 
-                return await result;
-            } else
-                await console.error(error);
+        let key = new Buffer(this.userAccount.privateKey.substr(2), 'hex');
+
+        let that = this;
+
+        this.web3.eth.getTransactionCount(this.userAccount.address, async function (err, res) {
+            if (!err) {
+
+                if (res !== null || res !== undefined) {
+                    // calculating nonce here based on previous transactions
+                    let nonce = res;
+
+                    let txMethodData = that.oNyCoin.methods.transfer(that.tokenholderAccount.address, amount).encodeABI();
+
+                    let rawTx = {
+                        nonce: nonce,
+                        gasLimit: '2100',
+                        to: that.contractAddress, //contract address
+                        data: txMethodData
+                    };
+
+                    let tx = new Tx(rawTx);
+                    tx.sign(key);
+
+                    let serializedTx = tx.serialize();
+
+                    //actually make the transaction here
+                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).then(transaction => {
+                        console.log(transaction)
+                        console.log(transaction.transactionHash)
+
+                        let user_id = JSON.parse(localStorage.getItem('user')).id;
+
+                        that.barService.addTransaction(transaction.transactionHash, amount, 'order', user_id).subscribe(
+                            response => {
+                                console.log(response);
+                                return response
+                            },
+                            err => console.log(err)
+                        );
+                    }).catch(err => console.error(err))
+
+
+
+                }
+                return res
+            } else console.error(err)
         });
+
+
+        // console.log(this.web3.eth.defaultAccount);
+        // let that = this;
+        // // transfers tokens from base address to provided address
+        // // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
+        // this.oNyCoin.methods.transfer(this.tokenholderAccount.address, amount).send({
+        //     from: this.web3.eth.defaultAccount
+        // }, async function (error, result) {
+        //     if (!error) {
+        //         let user_id = JSON.parse(localStorage.getItem('user')).id;
+        //         console.log(result);
+        //         that.barService.addTransaction(result, amount, 'order', user_id).subscribe(
+        //             response => {
+        //                 console.log(response);
+        //                 return response
+        //             },
+        //             err => console.log(err)
+        //         );
+        //
+        //         return await result;
+        //     } else
+        //         await console.error(error);
+        // });
     }
 
     public refund(amount) {
@@ -591,23 +642,8 @@ export class Web3Service {
     }
 
     public async buyTokens(amount) {
-        // console.log(this.web3.eth.getTransactionCount());
 
-
-        console.log('buyTokens Function');
-        let privatekey = "0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38";
-        // let defaultAccount = this.tokenholderAccount.address;
-        // console.log(this.tokenholderAccount);
-        // console.log(this.userAccount);
-
-        let key = new Buffer("1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38", 'hex');
-
-
-        /**
-         * Function to signed and call function in solidity
-         * param data
-         * return (err, transactionhash)
-         */
+        let key = new Buffer(this.tokenholderAccount.privateKey.substr(2), 'hex');
 
         let that = this;
 
@@ -615,7 +651,7 @@ export class Web3Service {
             if (!err) {
 
                 if (res !== null || res !== undefined) {
-
+                    // calculating nonce here based on previous transactions
                     let nonce = res;
 
                     let txMethodData = that.oNyCoin.methods.transfer(that.userAccount.address, amount).encodeABI();
@@ -623,7 +659,7 @@ export class Web3Service {
                     let rawTx = {
                         nonce: nonce,
                         gasLimit: '2100',
-                        to: "0xc6151008736f1aBcB9A1A5C53323291FEFE6CEA7", //contract address
+                        to: that.contractAddress, //contract address
                         data: txMethodData
                     };
 
@@ -632,8 +668,8 @@ export class Web3Service {
 
                     let serializedTx = tx.serialize();
 
+                    //actually make the transaction here
                     that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt', console.log);
-
                 }
                 return res
             } else console.error(err)
