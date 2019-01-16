@@ -4,9 +4,9 @@
 
     "username": "root",
 
-    "password": "",
+    "password": "root",
 
-    "database": "db_onycoins",
+    "database": "test_db",
 
     "host": "localhost",
 

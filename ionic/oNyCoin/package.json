@@ -37,7 +37,7 @@
     "material-design-icons": "^3.0.1",
     "rxjs": "^6.3.3",
     "underscore": "^1.9.1",
-    "web3": "^0.20.0",
+    "web3": "^1.0.0-beta.24",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
