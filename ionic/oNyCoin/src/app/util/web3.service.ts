@@ -618,15 +618,13 @@ export class Web3Service {
 
                     let nonce = res;
 
-                    //taken from remix.ethereum.org after deploying contract. Basically the transfer function in hash with the address in the middle.
-                    // The substr(2) removes the 0x in the address.
-                    let code = "0xa9059cbb000000000000000000000000" + that.userAccount.address.substr(2) + "0000000000000000000000000000000000000000000000000000000000000005";
+                    let txMethodData = that.oNyCoin.methods.transfer(that.userAccount.address, amount).encodeABI();
 
                     let rawTx = {
                         nonce: nonce,
                         gasLimit: '2100',
                         to: "0xc6151008736f1aBcB9A1A5C53323291FEFE6CEA7", //contract address
-                        data: code
+                        data: txMethodData
                     };
 
                     let tx = new Tx(rawTx);
