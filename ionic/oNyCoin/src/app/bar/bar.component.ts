@@ -32,38 +32,37 @@ export class BarComponent {
 
   order: Drinks[] = [];
   hasOrder: boolean = false;
+  public totalCoins;
 
-  public loadedConsumable$: Observable<barConsumable>;
+  public loadedConsumable$: Observable<barConsumable[]>;
 
-  tiles: Tile[] = [
-    {text: 'Beer', cols: 2, rows: 1, color: '#38817A', coins: '1'},
-    {text: 'Wine', cols: 2, rows: 1, color: '#38817A', coins: '1.5'},
-    {text: 'Water', cols: 2, rows: 1, color: '#38817A', coins: '1'},
-    {text: 'Cola', cols: 2, rows: 1, color: '#38817A', coins: '1'},
-    {text: 'Two', cols: 2, rows: 1, color: '#38817A', coins: '1'},
-    {text: 'Three', cols: 2, rows: 1, color: '#38817A', coins: '1'},
-    {text: '5', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '6', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '5', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '6', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '5', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '6', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '5', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '6', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '5', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '6', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '5', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '6', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '5', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-    {text: '6', cols: 1, rows: 1, color: '#DDBDF1', coins: '1'},
-  ];
+  public tilesBar: Tile[] = [];
 
   ngOnInit() {
 
     this.loadedConsumable$ = this.barService.getConsumables();
     this.loadedConsumable$.subscribe(
-      (consumables:barConsumable) => {
-        console.log(consumables);
+      (consumables: barConsumable[]) => {
+        if (consumables.length >= 1) {
+          let numberOfCols = 1;
+          for (const consumable of consumables) {
+            let color: string = '';
+            let colsWidth: number = 0;
+            if(consumable.alcoholic)
+            {
+              color = '#38817A';
+            }else{
+              color = '#2d9ee0';
+            }
+            if(numberOfCols > 6){
+              colsWidth = 1;
+            }else{
+              colsWidth = 2;
+            }
+            numberOfCols ++;
+            this.tilesBar.push({text: consumable.name, cols: colsWidth, rows: 1, color: color, coins: consumable.cost});
+          }
+        }
       });
   }
 
@@ -73,24 +72,64 @@ export class BarComponent {
     this.hasOrder = false;
     if(this.order.length < 1) {
       this.order.push(tempOrder);
-      console.log(this.order);
     }else{
       this.order.forEach((drink: Drinks) => {
         if(drink.name == name){
           drink.value = drink.value + 1;
+          this.tilesBar.forEach((consumable: Tile) => {
+            if(drink.name == consumable.text){
+              drink.coins = drink.coins + consumable.coins;
+            }
+          });
           addDrink = true;
         }
       });
-      if(addDrink){
-        console.log(this.order);
-      }else {
+      if(!addDrink){
         this.order.push(tempOrder);
-        console.log(this.order);
       }
     }
     this.order = [...this.order];
     this.hasOrder = true;
-    console.log(this.hasOrder);
+    this.getTotalCoins();
+  }
+
+  minDrink(name: string, coins: string) {
+    {
+      let tempOrder: Drinks = {name: name, coins: coins, value: 1};
+      let minDrink = false;
+      this.hasOrder = false;
+      if(this.order.length < 1) {
+        this.order.push(tempOrder);
+      }else{
+        this.order.forEach((drink: Drinks) => {
+          if(drink.name == name){
+            drink.value = drink.value - 1;
+            this.tilesBar.forEach((consumable: Tile) => {
+              if(drink.name == consumable.text){
+                drink.coins = drink.coins - consumable.coins;
+              }
+            });
+            if(drink.value <= 0){
+              this.order.splice(this.order.indexOf(drink),1);
+            }
+            minDrink = true;
+          }
+        });
+        if(!minDrink){
+          this.order.push(tempOrder);
+        }
+      }
+      this.order = [...this.order];
+      this.hasOrder = true;
+      this.getTotalCoins();
+    }
+  }
+
+  getTotalCoins(){
+    this.totalCoins = 0;
+    this.order.forEach((drink: Drinks) => {
+      this.totalCoins = this.totalCoins + drink.coins;
+    });
   }
 
 }
