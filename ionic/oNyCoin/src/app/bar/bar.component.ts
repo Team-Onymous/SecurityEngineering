@@ -93,7 +93,7 @@ export class BarComponent {
     this.getTotalCoins();
   }
 
-  minDrink(name: string, coins: string) {
+  minDrink(name: string, coins: number) {
     {
       let tempOrder: Drinks = {name: name, coins: coins, value: 1};
       let minDrink = false;
