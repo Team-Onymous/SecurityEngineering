@@ -18,7 +18,13 @@
   font-family: 'tinymce', Arial;
 }
 
+.text-style-order {
+  font-size: 22px;
+  color: black;
+  font-family: 'tinymce', Arial;
+}
+
 .order-button {
   height: 30px;
-  width: 30px;
+  min-width: 10px;
 }

@@ -1,38 +1,52 @@
 <mat-sidenav-container class="example-container">
-    <mat-sidenav opened mode="side" position="end" style="width: 25%" class="padding-grid">
-        <table id="orderTable">
-            <tbody>
-            <tr *ngFor="let drink of order">
-                <td>
-                    {{drink.name}}
-                </td>
-                <td>
-                    {{drink.value}}
-                </td>
-                <td>
-                    <button mat-button class="order-button">
-                        <i class="material-icons app-input-icon menu-icon">add_box</i>
-                    </button>
-                </td>
-                <td>
-                    <button mat-button class="order-button">
-                        <i class="material-icons app-input-icon menu-icon">indeterminate_check_box</i>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </mat-sidenav>
-    <mat-grid-list cols="6" rowHeight="100px" gutterSize="10px" class="padding-grid">
-        <mat-grid-tile
-                *ngFor="let tile of tiles"
-                [colspan]="tile.cols"
-                [rowspan]="tile.rows"
-                [style.background]="tile.color"
-                (click)="Clicked(tile.text, tile.coins)">
-            <span class="text-style">{{tile.text}}</span>
-        </mat-grid-tile>
-    </mat-grid-list>
-    <!--<button (click)="buyConsumables(5)">test</button>-->
+  <mat-sidenav opened mode="side" position="end" style="width: 25%" class="padding-grid">
+    <table id="orderTable">
+      <tbody>
+      <tr *ngFor="let drink of order">
+        <td style="width: 60%">
+          <span class="text-style-order">{{drink.name}} </span>
+      </td>
+        <td style="width: 10%">
+          <span class="text-style-order"> {{drink.value}}</span>
+        </td>
+        <td style="width: 10%">
+          <button mat-button class="order-button">
+            <i class="material-icons app-input-icon menu-icon order-button" (click)="Clicked(drink.name, drink.coins)">add_box</i>
+          </button>
+        </td>
+        <td style="width: 10%">
+          <button mat-button class="order-button">
+            <i class="material-icons app-input-icon menu-icon order-button" (click)="minDrink(drink.name, drink.coins)">indeterminate_check_box</i>
+          </button>
+        </td>
+        <td style="width: 10%">
+          <span class="text-style-order"> {{drink.coins}}</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="width: 90%">
+         <span class="text-style-order"> total coins: </span>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="width: 10%">
+          <span class="text-style-order"> {{totalCoins}} </span>
+        </td>
+      </tr>
+      </tbody>
+      </table>
+  </mat-sidenav>
+
+<mat-grid-list cols="6" rowHeight="100px" gutterSize="10px" class="padding-grid">
+  <mat-grid-tile
+    *ngFor="let tile of tilesBar"
+    [colspan]="tile.cols"
+    [rowspan]="tile.rows"
+    [style.background]="tile.color"
+    (click)="Clicked(tile.text, tile.coins)">
+    <span class="text-style">{{tile.text}}</span>
+  </mat-grid-tile>
+</mat-grid-list>
 </mat-sidenav-container>
 
