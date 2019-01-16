@@ -8,12 +8,13 @@ import {Observable} from 'rxjs';
 import * as options from './http.options';
 import {environment} from '../../environments/environment';
 import * as _ from 'underscore';
+import {EncrDecrService} from "./EncrDecr.service";
 
 
 @Injectable()
 export class UserService {
 
-    constructor(public http: HttpClient) {
+    constructor(public http: HttpClient, private EncrDecr: EncrDecrService) {
 
     }
 
@@ -26,7 +27,7 @@ export class UserService {
     }
 
 
-    addUser(firstName: string, lastName: string, email: string, dateOfBirth: Date, password: string, wallet_address: string, wallet_key: string): Observable<any> {
+    addUser(firstName: string, lastName: string, email: string, dateOfBirth: Date, password: string, wallet_address: string, wallet_key: string,): Observable<any> {
         let date = Date().toString();
         console.log(wallet_key);
         const body = new HttpParams()
@@ -65,6 +66,15 @@ export class UserService {
             .set('password', password);
         return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions).pipe(
             map((response: any) => {
+                console.log(response)
+
+                console.log(response.wallet_key)
+                console.log(response.wallet_key.toString())
+                console.log(email.substr(0, 2))
+                console.log(response.lastname.substr(0, 2))
+
+                let decryptedPrivKey = this.EncrDecr.get(email.substr(0, 2).toString() + response.lastname.substr(0, 2).toString(), response.wallet_key.toString());
+                console.log(decryptedPrivKey)
                 localStorage.setItem('user', JSON.stringify(response));
             }));
     }

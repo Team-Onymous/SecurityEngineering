@@ -69,7 +69,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
         console.log(this.Web3Service.createWallet());
 
         let wallet_address = this.Web3Service.createWallet().address;
-        let wallet_key = this.EncrDecr.set(Email.substr(0, 3) + LastName.substr(0, 3), this.Web3Service.createWallet().privateKey);
+        let wallet_key = this.EncrDecr.set(Email.substr(0, 2).toString() + LastName.substr(0, 2).toString(), this.Web3Service.createWallet().privateKey.toString());
+        console.log(wallet_key)
 
         this.userService.addUser(FirstName, LastName, Email, this.date, Password, wallet_address, wallet_key).subscribe(
             response => {
