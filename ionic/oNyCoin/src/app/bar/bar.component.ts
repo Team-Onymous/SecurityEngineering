@@ -11,12 +11,12 @@ export interface Tile {
   cols: number;
   rows: number;
   text: string;
-  coins: string;
+  coins: number;
 }
 
 export interface Drinks {
   name: string;
-  coins: string;
+  coins: number;
   value: number;
 }
 
@@ -66,7 +66,7 @@ export class BarComponent {
       });
   }
 
-  Clicked(name: string, coins: string) {
+  Clicked(name: string, coins: number) {
     let tempOrder: Drinks = {name: name, coins: coins, value: 1};
     let addDrink = false;
     this.hasOrder = false;
