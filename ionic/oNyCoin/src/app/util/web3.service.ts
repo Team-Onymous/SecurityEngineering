@@ -470,6 +470,8 @@ export class Web3Service {
     public web3;
     public oNyCoin;
     public balance;
+    public userAccount
+    public tokenholderAccount
 
     private accounts: string[];
     public ready = false;
@@ -486,19 +488,33 @@ export class Web3Service {
 
             if (typeof window.web3 !== 'undefined') {
                 // Use Mist/MetaMask's provider
-                this.web3 = new Web3(window.web3.currentProvider);
+                // this.web3 = new Web3(window.web3.currentProvider);
+                this.web3 = new Web3(new Web3.providers.HttpProvider('http://107.178.245.173:8080'));
                 try {
                     // Request account access if needed
                     await window.ethereum.enable();
+
                     this.instantiateContract();
-                    this.balance = this.getBalance(this.web3.eth.defaultAccount);
+
+
+                    //user account
+                    this.userAccount = this.web3.eth.accounts.privateKeyToAccount('0x014EEB884572C49D7C79B512504DB0D4A705803D2A09699E3E4C39BE29AE74BF');
+
+                    //token holder account
+                    this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount('0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
+
+                    //set the default account
+                    this.web3.eth.defaultAccount = this.tokenholderAccount.address;
+
+                    this.balance = this.getBalance(this.userAccount.address);
+
                 } catch (error) {
                     console.error(error)
                     // User denied account access...
                 }
             } else {
                 console.log('No web3? You should consider trying MetaMask!');
-                this.web3 = new Web3(new Web3.providers.HttpProvider('http://10.5.0.3:7676'));
+                this.web3 = new Web3(new Web3.providers.HttpProvider('http://107.178.245.173:8080'));
             }
         });
     }
@@ -522,9 +538,6 @@ export class Web3Service {
             from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', // address where tokens are placed in,
             gasPrice: '20000000000' // default gas price in wei, 20 gwei in this case
         });
-        //set the default account, linked to MetaMask
-        this.web3.eth.defaultAccount = this.web3.eth.accounts.currentProvider.selectedAddress;
-
     }
 
     public transferTokens(address, amount) {
@@ -543,12 +556,12 @@ export class Web3Service {
         let that = this;
         // transfers tokens from base address to provided address
         // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
-        this.oNyCoin.methods.transfer('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', amount).send({
+        this.oNyCoin.methods.transfer(this.tokenholderAccount.address, amount).send({
             from: this.web3.eth.defaultAccount
         }, async function (error, result) {
             if (!error) {
                 let user_id = JSON.parse(localStorage.getItem('user')).id;
-                console.log(result)
+                console.log(result);
                 that.barService.addTransaction(result, amount, 'order', user_id).subscribe(
                     response => {
                         console.log(response);
@@ -578,28 +591,53 @@ export class Web3Service {
     }
 
     public async buyTokens(amount) {
-        let privateKey =
-            "1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38";
+        // console.log(this.web3.eth.getTransactionCount());
 
-        let transaction = this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', '0xbB6F75Ef66f3eBc57D5C6595a1Ba94b4BbB3AB8d', 5)
-            .send({
-                from: '0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff',
-                // gas: '2000000',
-                gasPrice: '20000000000', // default gas price in wei, 20 gwei in this case
-                nonce: '0x0'
-            }, async function (error, result) {
-                if (!error) {
-                    return await result;
-                } else
-                    await console.error(error);
-            });
 
-        console.log(transaction);
+        console.log('buyTokens Function');
+        let privatekey = "0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38";
+        // let defaultAccount = this.tokenholderAccount.address;
+        // console.log(this.tokenholderAccount);
+        // console.log(this.userAccount);
 
-        let signedTransaction = await this.web3.eth.accounts.signTransaction(transaction, '1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38').then(console.log);
-        await this.web3.eth.sendSignedTransaction(signedTransaction).then(console.log);
-        let transactionReceipt = await this.web3.eth.sendSignedTransaction(signedTransaction.rawTransaction);
+        let key = new Buffer("1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38", 'hex');
 
+
+        /**
+         * Function to signed and call function in solidity
+         * param data
+         * return (err, transactionhash)
+         */
+
+        let that = this;
+
+        this.web3.eth.getTransactionCount(this.tokenholderAccount.address, async function (err, res) {
+            if (!err) {
+
+                if (res !== null || res !== undefined) {
+
+                    let nonce = res;
+
+                    let txMethodData = that.oNyCoin.methods.transfer(that.userAccount.address, amount).encodeABI();
+
+                    let rawTx = {
+                        nonce: nonce,
+                        gasLimit: '2100',
+                        to: "0xc6151008736f1aBcB9A1A5C53323291FEFE6CEA7", //contract address
+                        data: txMethodData
+                    };
+
+                    let tx = new Tx(rawTx);
+                    tx.sign(key);
+
+                    let serializedTx = tx.serialize();
+
+                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt', console.log);
+
+                }
+                return res
+            } else console.error(err)
+        });
     }
 
     public getTransaction(txHash) {
@@ -618,8 +656,6 @@ export class Web3Service {
         // get the tokenbalance from provided address
         this.oNyCoin.methods.balanceOf(address).call(async function (error, result) {
             if (!error) {
-                // console.log(result)
-
                 // this updates the balance in the HTML card when it is loaded. Dirty fuckin' hack though, should be refactored.
                 let divs = document.getElementsByClassName('balance');
                 for (let i = 0; i < divs.length; i++) {
