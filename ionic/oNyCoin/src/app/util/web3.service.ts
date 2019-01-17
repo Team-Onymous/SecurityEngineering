@@ -539,11 +539,6 @@ export class Web3Service {
     public createWallet() {
         // using the web3 connection to create a new wallet
         let newAccount = this.web3.eth.accounts.create();
-        // public key / wallet_address -> used to transfer tokens to
-        // console.log(newAccount.address);
-
-        // private key -> should be saved by the user in order to make transactions
-        // console.log(newAccount.privateKey);
 
         return newAccount
     };
@@ -605,7 +600,7 @@ export class Web3Service {
 
                         let user_id = JSON.parse(localStorage.getItem('user')).id;
 
-                        that.barService.addTransaction(transaction.transactionHash, amount, 'order', user_id).subscribe(
+                        that.barService.addTransaction(transaction.transactionHash, amount, 'order', user_id, "0").subscribe(
                             response => {
                                 console.log(response);
                                 return response
@@ -626,7 +621,6 @@ export class Web3Service {
 
         let userAccount = JSON.parse(localStorage.getItem('user'));
         let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
-        console.log("Decrypted Privkey: " + decryptedPrivKey);
 
         // User account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -666,6 +660,17 @@ export class Web3Service {
                                 console.log('receipt token Tx: ');
                                 console.log(transaction);
                                 that.getBalance(that.userAccount.address)
+
+                                let user_id = JSON.parse(localStorage.getItem('user')).id;
+
+                                that.barService.addTransaction(transaction.transactionHash, amount, 'Refunded oNyCoins', user_id, "0").subscribe(
+                                    response => {
+                                        console.log(response);
+                                        return response
+                                    },
+                                    err => console.log(err)
+                                );
+
                             }).catch(err => console.error(err))
                     });
                 }
@@ -675,7 +680,6 @@ export class Web3Service {
     }
 
     public async buyTokens(amount) {
-
 
         let userAccount = JSON.parse(localStorage.getItem('user'));
         let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
@@ -760,6 +764,16 @@ export class Web3Service {
                                             console.log('receipt token Tx: ');
                                             console.log(transaction);
                                             that.getBalance(that.userAccount.address)
+
+                                            let user_id = JSON.parse(localStorage.getItem('user')).id;
+
+                                            that.barService.addTransaction(transaction.transactionHash, amount, 'Bought oNyCoins', user_id, "1").subscribe(
+                                                response => {
+                                                    console.log(response);
+                                                    return response
+                                                },
+                                                err => console.log(err)
+                                            );
                                         })
 
                                 });
