@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     login(username, password) {
         this.userService.login(username, password).subscribe(
             response => {
-                this.router.navigate(['/addcard']);
+                this.router.navigate(['/home']);
             },
             err => console.log(err)
         );

@@ -30,6 +30,7 @@ import {UserService} from "./services/user.service";
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from "./services/services.module";
 import {BarService} from "./services/bar.services";
+import {TransactionService} from "./services/transaction.service";
 
 @NgModule({
     declarations: [
@@ -71,6 +72,7 @@ import {BarService} from "./services/bar.services";
         SplashScreen,
         AuthGuard,
         BarService,
+        TransactionService,
         UserService
     ],
     bootstrap: [AppComponent]
