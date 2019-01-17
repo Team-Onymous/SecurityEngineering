@@ -31,6 +31,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from "./services/services.module";
 import {BarService} from "./services/bar.services";
 import {TransactionService} from "./services/transaction.service";
+import {EncrDecrService} from "./services/EncrDecr.service";
 
 @NgModule({
     declarations: [
@@ -73,7 +74,8 @@ import {TransactionService} from "./services/transaction.service";
         AuthGuard,
         BarService,
         TransactionService,
-        UserService
+        UserService,
+        EncrDecrService
     ],
     bootstrap: [AppComponent]
 })

@@ -3,6 +3,7 @@ import * as contract from 'truffle-contract';
 import {Observable, Subject} from 'rxjs';
 import {map} from "rxjs/operators";
 import {BarService} from "../services/bar.services";
+import {EncrDecrService} from "../services/EncrDecr.service";
 
 const Tx = require('ethereumjs-tx');
 
@@ -479,7 +480,8 @@ export class Web3Service {
     public accountsObservable = new Subject<string[]>();
 
 
-    constructor(private barService: BarService) {
+    constructor(private barService: BarService,
+                private EncrDecr: EncrDecrService) {
         this.loadContract();
     }
 
@@ -498,9 +500,20 @@ export class Web3Service {
                     this.instantiateContract();
 
 
-                    //user account
-                    this.userAccount = this.web3.eth.accounts.privateKeyToAccount('0x014EEB884572C49D7C79B512504DB0D4A705803D2A09699E3E4C39BE29AE74BF');
+                    let first = "ca";
+                    let second = "di";
+                    let string = "0x773977df7399bd027f27811c5a50ae38c905b63b08a7e00b7d63e8acb4b17527";
 
+                    let encryptedPrivKey = this.EncrDecr.set(first + second, string);
+
+                    let userAccount = JSON.parse(localStorage.getItem('user'));
+                    let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+                    console.log("Decrypted Privkey: " + decryptedPrivKey);
+
+                    //user account
+                    this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
+
+                    let key = new Buffer(decryptedPrivKey.substr(2), 'hex');
                     //token holder account
                     this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount('0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
 
@@ -553,12 +566,18 @@ export class Web3Service {
     }
 
     public buyConsumables(amount) {
+        let userAccount = JSON.parse(localStorage.getItem('user'));
+        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        console.log("Decrypted Privkey: " + decryptedPrivKey);
 
-        let key = new Buffer(this.userAccount.privateKey.substr(2), 'hex');
+        //user account
+        this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
+
+        let key = new Buffer(decryptedPrivKey.substr(2), 'hex');
 
         let that = this;
 
-        this.web3.eth.getTransactionCount(this.userAccount.address, async function (err, res) {
+        this.web3.eth.getTransactionCount(userAccount.wallet_address, async function (err, res) {
             if (!err) {
 
                 if (res !== null || res !== undefined) {
@@ -582,7 +601,7 @@ export class Web3Service {
                     //actually make the transaction here
                     that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).then(transaction => {
                         console.log(transaction)
-                        console.log(transaction.transactionHash)
+                        console.log(transaction.transactionHash);
 
                         let user_id = JSON.parse(localStorage.getItem('user')).id;
 
@@ -594,7 +613,6 @@ export class Web3Service {
                             err => console.log(err)
                         );
                     }).catch(err => console.error(err))
-
 
 
                 }
@@ -643,6 +661,15 @@ export class Web3Service {
 
     public async buyTokens(amount) {
 
+
+        let userAccount = JSON.parse(localStorage.getItem('user'));
+        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        console.log("Decrypted Privkey: " + decryptedPrivKey);
+
+        //user account
+        this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
+
+
         let key = new Buffer(this.tokenholderAccount.privateKey.substr(2), 'hex');
 
         let that = this;
@@ -658,10 +685,17 @@ export class Web3Service {
 
                     let rawTx = {
                         nonce: nonce,
-                        gasLimit: '2100',
-                        to: that.contractAddress, //contract address
+                        gasLimit: '210',
+                        to: that.contractAddress, //contract address,
                         data: txMethodData
                     };
+
+                    // let rawTx = {
+                    //     nonce: nonce,
+                    //     gasLimit: '2100',
+                    //     to: that.userAccount.address, //contract address,
+                    //     value: "11000000"
+                    // };
 
                     let tx = new Tx(rawTx);
                     tx.sign(key);
@@ -669,7 +703,12 @@ export class Web3Service {
                     let serializedTx = tx.serialize();
 
                     //actually make the transaction here
-                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).on('receipt', console.log);
+                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+                        .then(transaction => {
+                            console.log('receipt: ');
+                            console.log(transaction);
+                            that.getBalance(that.userAccount.address)
+                        })
                 }
                 return res
             } else console.error(err)
