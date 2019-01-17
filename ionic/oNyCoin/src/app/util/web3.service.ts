@@ -623,16 +623,54 @@ export class Web3Service {
     }
 
     public refund(amount) {
-        // console.log(this.web3.eth.defaultAccount);
-        // transfers tokens from base address to provided address
-        // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
-        this.oNyCoin.methods.transfer('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', amount).send({
-            from: this.web3.eth.defaultAccount
-        }, async function (error, result) {
-            if (!error) {
-                return await result;
-            } else
-                await console.error(error);
+
+        let userAccount = JSON.parse(localStorage.getItem('user'));
+        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        console.log("Decrypted Privkey: " + decryptedPrivKey);
+
+        // User account
+        this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
+
+        let key = new Buffer(this.userAccount.privateKey.substr(2), 'hex');
+
+        let that = this;
+
+        this.web3.eth.getTransactionCount(that.userAccount.address, async function (err, res) {
+            if (!err) {
+                if (res !== null || res !== undefined) {
+                    let nonce = res;
+                    let txMethodData = that.oNyCoin.methods.transfer(that.tokenholderAccount.address, amount).encodeABI();
+
+                    //calculate the required Gas for the coming transaction
+                    that.web3.eth.estimateGas({
+                        "from": that.userAccount.address,
+                        "nonce": nonce,
+                        "to": that.contractAddress,
+                        "data": txMethodData
+                    }).then(gas => {
+                        let rawTx = {
+                            nonce: nonce,
+                            gasLimit: gas,
+                            to: that.contractAddress, //contract address
+                            data: txMethodData
+                        };
+
+                        let tx = new Tx(rawTx);
+                        tx.sign(key);
+
+                        let serializedTx = tx.serialize();
+
+                        // actually make the transaction here
+                        that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+                            .then(transaction => {
+                                console.log('receipt token Tx: ');
+                                console.log(transaction);
+                                that.getBalance(that.userAccount.address)
+                            }).catch(err => console.error(err))
+                    });
+                }
+                return res
+            } else console.error(err)
         });
     }
 
