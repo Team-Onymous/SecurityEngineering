@@ -141,6 +141,15 @@ export class BarComponent {
       order = order + (', ' + drink.value + ' ' + drink.name + '');
     });
     this.buyConsumables(amount, order);
+    this.order = [];
+    this.order = [...this.order];
+    this.getTotalCoins();
+  }
+
+  cancelOrder(){
+    this.order = [];
+    this.order = [...this.order];
+    this.getTotalCoins();
   }
 
   buyConsumables(amount, order) {
