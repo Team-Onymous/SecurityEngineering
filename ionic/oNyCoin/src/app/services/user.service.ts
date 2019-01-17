@@ -66,15 +66,6 @@ export class UserService {
             .set('password', password);
         return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions).pipe(
             map((response: any) => {
-                console.log(response)
-
-                console.log(response.wallet_key)
-                console.log(response.wallet_key.toString())
-                console.log(email.substr(0, 2))
-                console.log(response.lastname.substr(0, 2))
-
-                let decryptedPrivKey = this.EncrDecr.get(email.substr(0, 2).toString() + response.lastname.substr(0, 2).toString(), response.wallet_key.toString());
-                console.log(decryptedPrivKey)
                 localStorage.setItem('user', JSON.stringify(response));
             }));
     }

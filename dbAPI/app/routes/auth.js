@@ -26,6 +26,7 @@ module.exports = function (app, passport, models, flash) {
                 id: req.user.id,
                 wallet_address: req.user.wallet_address,
                 wallet_key: req.user.wallet_key,
+                email: req.user.email,
                 firstname: req.user.firstname,
                 lastname: req.user.lastname,
                 // request: req.session

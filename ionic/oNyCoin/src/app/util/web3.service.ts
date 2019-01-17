@@ -499,8 +499,13 @@ export class Web3Service {
 
                     this.instantiateContract();
 
-                    var encryptedPrivKey = this.EncrDecr.set('123456$#@$^@1ERF', '0x014EEB884572C49D7C79B512504DB0D4A705803D2A09699E3E4C39BE29AE74BF');
-                    var decryptedPrivKey = this.EncrDecr.get('123456$#@$^@1ERF', encryptedPrivKey);
+
+                    let first = "ca";
+                    let second = "di";
+                    let string = "0x773977df7399bd027f27811c5a50ae38c905b63b08a7e00b7d63e8acb4b17527";
+
+                    let encryptedPrivKey = this.EncrDecr.set(first + second, string);
+                    let decryptedPrivKey = this.EncrDecr.get(first + second, encryptedPrivKey);
 
                     //user account
                     // this.userAccount = this.web3.eth.accounts.privateKeyToAccount('0x014EEB884572C49D7C79B512504DB0D4A705803D2A09699E3E4C39BE29AE74BF');
