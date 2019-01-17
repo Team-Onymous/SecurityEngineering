@@ -20,6 +20,7 @@ import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {AddCardComponent} from "./addCard/add.card.component";
 import {BarComponent} from "./bar/bar.component";
+import {BarBalanceComponent} from "./barBalance/barBalance.component";
 import {MaterialModule} from "./material.module";
 import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatToolbarModule} from "@angular/material";
 import {CommonModule} from "@angular/common";
@@ -48,7 +49,8 @@ import {EncrDecrService} from "./services/EncrDecr.service";
         RegisterComponent,
         AddCardComponent,
         BarComponent,
-        AppComponent],
+        AppComponent,
+        BarBalanceComponent],
     entryComponents: [],
     imports: [
         BrowserModule,
