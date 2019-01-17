@@ -32,13 +32,16 @@ export class BalanceComponent implements OnInit {
 
     private getUser() {
 
-        let userId = JSON.parse(localStorage.getItem('user')).id;
+        if (this.userService.isLoggedIn()) {
 
-        this.userService.getUser(userId).subscribe(
-            (user) => {
+            let userId = JSON.parse(localStorage.getItem('user')).id;
 
-                this.user = user
-            });
+            this.userService.getUser(userId).subscribe(
+                (user) => {
+
+                    this.user = user
+                });
+        }
     }
 
     private createWallet() {

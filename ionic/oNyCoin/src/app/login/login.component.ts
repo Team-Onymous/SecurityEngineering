@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public balance;
 
     constructor(public userService: UserService,
+                private web3Service: Web3Service,
                 private router: Router) {
 
     }
@@ -60,6 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     login(username, password) {
         this.userService.login(username, password).subscribe(
             response => {
+                this.web3Service.loadContract();
                 this.router.navigate(['/home']);
             },
             err => console.log(err)

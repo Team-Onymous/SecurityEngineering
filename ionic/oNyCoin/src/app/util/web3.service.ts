@@ -4,6 +4,7 @@ import {Observable, Subject} from 'rxjs';
 import {map} from "rxjs/operators";
 import {BarService} from "../services/bar.services";
 import {EncrDecrService} from "../services/EncrDecr.service";
+import {UserService} from "../services/user.service";
 
 const Tx = require('ethereumjs-tx');
 
@@ -481,8 +482,11 @@ export class Web3Service {
 
 
     constructor(private barService: BarService,
-                private EncrDecr: EncrDecrService) {
-        this.loadContract();
+                private EncrDecr: EncrDecrService,
+                private userService: UserService) {
+        if (this.userService.isLoggedIn()) {
+            this.loadContract();
+        }
     }
 
 
@@ -695,7 +699,7 @@ export class Web3Service {
                                 //calculate the required Gas for the coming transaction
                                 that.web3.eth.estimateGas({
                                     "from": that.tokenholderAccount.address,
-                                    "nonce": nonce ++,
+                                    "nonce": nonce++,
                                     "to": that.contractAddress,
                                     "data": txMethodData
                                 }).then(gas => {
