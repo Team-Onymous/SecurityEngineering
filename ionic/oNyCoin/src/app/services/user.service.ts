@@ -18,11 +18,39 @@ export class UserService {
     }
 
     public canActivate(url: string): boolean {
-        return true;
+        const resourceId = this.getResourceIdByURL(url);
+        if ('' === resourceId) {
+            return true; // allow access to resource if it's not registered for 'protection'
+        }
+        return this.hasPermission(resourceId);
+    }
+
+    public hasPermission(resourceId: string): boolean {
+        if(this.isLoggedIn()) {
+
+            return true;
+        }
+        return false;
     }
 
     isLoggedIn(): boolean {
-        return true;
+        return !!localStorage.getItem('user');
+    }
+    private getResourceIdByURL(url: string): string {
+        switch (url) {
+            case '/home':
+                return 'homePage';
+            case '/bar':
+                return 'barPage';
+            case '/refund':
+                return 'refundPage';
+            case '/addcoins':
+                return 'addcoinsPage';
+            case '/block':
+                return 'blockPage';
+            default:
+                return '';
+        }
     }
 
 
@@ -75,6 +103,7 @@ export class UserService {
     }
 
     logout(): Observable<any> {
+        localStorage.removeItem('user');
         return this.http.get(environment.API + 'logout', options.httpOptions);
     }
 

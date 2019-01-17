@@ -12,18 +12,18 @@ import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {AddCardComponent} from "./addCard/add.card.component";
 import {BarComponent} from "./bar/bar.component";
+import {AuthGuard} from "./services/authguard.service";
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard',  component: HomeComponent },
-  { path: 'home',  component: HomeComponent },
-  { path: 'addcoins',  component: AddCoinsComponent },
-  { path: 'refund',  component: RefundComponent },
-  { path: 'block',  component: BlockComponent },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'home',  component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'addcoins',  component: AddCoinsComponent, canActivate: [AuthGuard] },
+  { path: 'refund',  component: RefundComponent, canActivate: [AuthGuard] },
+  { path: 'block',  component: BlockComponent, canActivate: [AuthGuard] },
   { path: 'login',  component: LoginComponent },
   { path: 'register', component: RegisterComponent},
-  { path: 'addcard', component: AddCardComponent},
-  { path: 'bar', component: BarComponent},
+  { path: 'addcard', component: AddCardComponent, canActivate: [AuthGuard]},
+  { path: 'bar', component: BarComponent, canActivate: [AuthGuard]}
   // { path: 'metaSender', component: MetaSenderComponent },
   // { path: 'metasender', component: MetaSenderComponent }
 ];
