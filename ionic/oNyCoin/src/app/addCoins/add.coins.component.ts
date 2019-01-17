@@ -3,6 +3,7 @@
  */
 import {Component, HostListener, OnInit} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
+import {EncrDecrService} from "../services/EncrDecr.service";
 
 
 @Component({
@@ -17,7 +18,8 @@ export class AddCoinsComponent {
     visible: boolean = true;
     breakpoint: number = 520;
 
-    constructor(private web3Service: Web3Service) {
+    constructor(private web3Service: Web3Service,
+                private EncrDecr: EncrDecrService) {
 
     }
 
@@ -29,6 +31,14 @@ export class AddCoinsComponent {
             // whenever the window is less than 520, hide this component.
             this.visible = false;
         }
+        //
+        // let userAccount = JSON.parse(localStorage.getItem('user'));
+        // let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        // console.log("Decrypted Privkey: " + decryptedPrivKey);
+        //
+        // //user account
+        // this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
+
     }
 
 

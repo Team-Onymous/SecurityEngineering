@@ -11,6 +11,11 @@ module.exports = function (sequelize, Sequelize) {
                 type: Sequelize.STRING,
                 notEmpty: true
             },
+            wallet_key: {
+                type: Sequelize.STRING,
+                notEmpty: true
+            },
+
             pass_id: {
                 type: Sequelize.STRING,
                 notEmpty: true
