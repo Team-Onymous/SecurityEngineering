@@ -651,7 +651,7 @@ export class Web3Service {
                         let rawTx = {
                             nonce: nonce,
                             gasLimit: gas,
-                            to: that.contractAddress, //contract address,
+                            to: that.contractAddress, //contract address
                             data: txMethodData
                         };
 
@@ -667,10 +667,7 @@ export class Web3Service {
                                 console.log(transaction);
                                 that.getBalance(that.userAccount.address)
                             }).catch(err => console.error(err))
-
                     });
-
-
                 }
                 return res
             } else console.error(err)
