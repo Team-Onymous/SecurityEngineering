@@ -6,6 +6,8 @@ import { BarService } from '../services/bar.services';
 import { Observable } from 'rxjs';
 import { barConsumable } from '../services/barConsumable';
 import {Web3Service} from "../util/web3.service";
+import {BarBalanceComponent} from "../barBalance/barBalance.component";
+import {WebSocketService} from "../services/webSocket.service";
 
 export interface Tile {
   color: string;
@@ -26,11 +28,13 @@ export interface Drinks {
   selector: 'rg-bar',
   templateUrl: 'bar.component.html',
   styleUrls: ['bar.component.css'],
+  providers: [BarBalanceComponent]
 })
 
 export class BarComponent {
   constructor(public barService: BarService,
-              private web3Service: Web3Service){}
+              private web3Service: Web3Service,
+              private barBalanceComponent: BarBalanceComponent) {}
 
   order: Drinks[] = [];
   hasOrder: boolean = false;
@@ -134,10 +138,27 @@ export class BarComponent {
     });
   }
 
-  buyConsumables(amount) {
-    console.log(amount);
-    amount = 5;
-    this.web3Service.buyConsumables(amount);
+  confirmOrder(){
+    let amount = this.totalCoins;
+    let order = '';
+    this.order.forEach((drink: Drinks) => {
+      order = order + (', ' + drink.value + ' ' + drink.name + '');
+    });
+    this.buyConsumables(amount, order);
+    this.order = [];
+    this.order = [...this.order];
+    this.getTotalCoins();
+    this.barBalanceComponent.listen();
+  }
+
+  cancelOrder() {
+    this.order = [];
+    this.order = [...this.order];
+    this.getTotalCoins();
+  }
+
+  buyConsumables(amount, order) {
+    this.web3Service.buyConsumables(amount, order);
   }
 
 }

@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public balance;
 
     constructor(public userService: UserService,
+                private web3Service: Web3Service,
                 private router: Router) {
 
     }
@@ -43,7 +44,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.balance = document.getElementsByClassName('balanceBoxContainer')[0];
-        this.balance.style.display = 'block'
+        this.balance.style.display = 'block';
+
+        window.location.reload();
     }
 
     @HostListener('window:resize', ['$event'])
@@ -60,6 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     login(username, password) {
         this.userService.login(username, password).subscribe(
             response => {
+                this.web3Service.loadContract();
                 this.router.navigate(['/home']);
             },
             err => console.log(err)

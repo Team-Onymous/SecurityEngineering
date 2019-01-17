@@ -4,6 +4,7 @@ import {Observable, Subject} from 'rxjs';
 import {map} from "rxjs/operators";
 import {BarService} from "../services/bar.services";
 import {EncrDecrService} from "../services/EncrDecr.service";
+import {UserService} from "../services/user.service";
 
 const Tx = require('ethereumjs-tx');
 
@@ -481,8 +482,11 @@ export class Web3Service {
 
 
     constructor(private barService: BarService,
-                private EncrDecr: EncrDecrService) {
-        this.loadContract();
+                private EncrDecr: EncrDecrService,
+                private userService: UserService) {
+        if (this.userService.isLoggedIn()) {
+            this.loadContract();
+        }
     }
 
 
@@ -508,7 +512,6 @@ export class Web3Service {
 
                     let userAccount = JSON.parse(localStorage.getItem('user'));
                     let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
-                    console.log("Decrypted Privkey: " + decryptedPrivKey);
 
                     //user account
                     this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -534,14 +537,8 @@ export class Web3Service {
     }
 
     public createWallet() {
-        // console.log(this.web3.eth.Contract);
         // using the web3 connection to create a new wallet
         let newAccount = this.web3.eth.accounts.create();
-        // public key / wallet_address -> used to transfer tokens to
-        // console.log(newAccount.address);
-
-        // private key -> should be saved by the user in order to make transactions
-        // console.log(newAccount.privateKey);
 
         return newAccount
     };
@@ -565,10 +562,9 @@ export class Web3Service {
         });
     }
 
-    public buyConsumables(amount) {
+    public buyConsumables(amount, order) {
         let userAccount = JSON.parse(localStorage.getItem('user'));
         let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
-        console.log("Decrypted Privkey: " + decryptedPrivKey);
 
         //user account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -577,7 +573,8 @@ export class Web3Service {
 
         let that = this;
 
-        this.web3.eth.getTransactionCount(userAccount.wallet_address, async function (err, res) {
+
+        this.web3.eth.getTransactionCount(that.userAccount.address, async function (err, res) {
             if (!err) {
 
                 if (res !== null || res !== undefined) {
@@ -586,85 +583,115 @@ export class Web3Service {
 
                     let txMethodData = that.oNyCoin.methods.transfer(that.tokenholderAccount.address, amount).encodeABI();
 
-                    let rawTx = {
-                        nonce: nonce,
-                        gasLimit: '2100',
-                        to: that.contractAddress, //contract address
-                        data: txMethodData
-                    };
 
-                    let tx = new Tx(rawTx);
-                    tx.sign(key);
+                    that.web3.eth.estimateGas({
+                        "from": that.userAccount.address,
+                        "nonce": nonce,
+                        "to": that.contractAddress,
+                        "data": txMethodData
+                    }).then(gas => {
 
-                    let serializedTx = tx.serialize();
+                        let rawTx = {
+                            nonce: nonce,
+                            gasLimit: gas,
+                            to: that.contractAddress, //contract address
+                            data: txMethodData
+                        };
 
-                    //actually make the transaction here
-                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).then(transaction => {
-                        console.log(transaction)
-                        console.log(transaction.transactionHash);
+                        let tx = new Tx(rawTx);
+                        tx.sign(key);
 
-                        let user_id = JSON.parse(localStorage.getItem('user')).id;
+                        let serializedTx = tx.serialize();
 
-                        that.barService.addTransaction(transaction.transactionHash, amount, 'order', user_id).subscribe(
-                            response => {
-                                console.log(response);
-                                return response
-                            },
-                            err => console.log(err)
-                        );
-                    }).catch(err => console.error(err))
+                        // actually make the transaction here
+                        that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).then(transaction => {
+                            console.log("Receipt buyConsumables Tx: ");
+                            console.log(transaction);
+                            let user_id = JSON.parse(localStorage.getItem('user')).id;
 
-
+                            that.barService.addTransaction(transaction.transactionHash, amount, order, user_id, "0").subscribe(
+                                response => {
+                                    that.getBalance(that.userAccount.address);
+                                    return response
+                                },
+                                err => console.log(err)
+                            );
+                        }).catch(err => console.error(err))
+                    })
                 }
                 return res
             } else console.error(err)
         });
 
-
-        // console.log(this.web3.eth.defaultAccount);
-        // let that = this;
-        // // transfers tokens from base address to provided address
-        // // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
-        // this.oNyCoin.methods.transfer(this.tokenholderAccount.address, amount).send({
-        //     from: this.web3.eth.defaultAccount
-        // }, async function (error, result) {
-        //     if (!error) {
-        //         let user_id = JSON.parse(localStorage.getItem('user')).id;
-        //         console.log(result);
-        //         that.barService.addTransaction(result, amount, 'order', user_id).subscribe(
-        //             response => {
-        //                 console.log(response);
-        //                 return response
-        //             },
-        //             err => console.log(err)
-        //         );
-        //
-        //         return await result;
-        //     } else
-        //         await console.error(error);
-        // });
     }
 
     public refund(amount) {
-        // console.log(this.web3.eth.defaultAccount);
-        // transfers tokens from base address to provided address
-        // this.oNyCoin.methods.transferFrom('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', this.web3.eth.defaultAccount, 100).call(async function (error, result) {
-        this.oNyCoin.methods.transfer('0x41E8C3d9112fc109BAd38E8b7c8B3f1350e18Bff', amount).send({
-            from: this.web3.eth.defaultAccount
-        }, async function (error, result) {
-            if (!error) {
-                return await result;
-            } else
-                await console.error(error);
+
+        let userAccount = JSON.parse(localStorage.getItem('user'));
+        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+
+        // User account
+        this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
+
+        let key = new Buffer(this.userAccount.privateKey.substr(2), 'hex');
+
+        let that = this;
+
+        this.web3.eth.getTransactionCount(that.userAccount.address, async function (err, res) {
+            if (!err) {
+                if (res !== null || res !== undefined) {
+                    let nonce = res;
+                    let txMethodData = that.oNyCoin.methods.transfer(that.tokenholderAccount.address, amount).encodeABI();
+
+                    //calculate the required Gas for the coming transaction
+                    that.web3.eth.estimateGas({
+                        "from": that.userAccount.address,
+                        "nonce": nonce,
+                        "to": that.contractAddress,
+                        "data": txMethodData
+                    }).then(gas => {
+                        let rawTx = {
+                            nonce: nonce,
+                            gasLimit: gas,
+                            to: that.contractAddress, //contract address
+                            data: txMethodData
+                        };
+
+                        let tx = new Tx(rawTx);
+                        tx.sign(key);
+
+                        let serializedTx = tx.serialize();
+
+                        // actually make the transaction here
+                        that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+                            .then(transaction => {
+                                console.log('receipt token Tx: ');
+                                console.log(transaction);
+                                that.getBalance(that.userAccount.address);
+
+                                let user_id = JSON.parse(localStorage.getItem('user')).id;
+
+                                that.barService.addTransaction(transaction.transactionHash, amount, 'Refunded oNyCoins', user_id, "0").subscribe(
+                                    response => {
+                                        console.log(response);
+                                        return response
+                                    },
+                                    err => console.log(err)
+                                );
+
+                            }).catch(err => console.error(err))
+                    });
+                }
+                return res
+            } else console.error(err)
         });
     }
 
     public async buyTokens(amount) {
 
-
         let userAccount = JSON.parse(localStorage.getItem('user'));
         let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
-        console.log("Decrypted Privkey: " + decryptedPrivKey);
+
 
         //user account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -674,45 +701,101 @@ export class Web3Service {
 
         let that = this;
 
+        // calculating nonce here based on previous transactions --> Raw Ether TX
         this.web3.eth.getTransactionCount(this.tokenholderAccount.address, async function (err, res) {
             if (!err) {
-
                 if (res !== null || res !== undefined) {
-                    // calculating nonce here based on previous transactions
                     let nonce = res;
 
-                    let txMethodData = that.oNyCoin.methods.transfer(that.userAccount.address, amount).encodeABI();
+                    // let txMethodData = that.oNyCoin.methods.transfer(that.userAccount.address, amount).encodeABI();
 
-                    let rawTx = {
-                        nonce: nonce,
-                        gasLimit: '210',
-                        to: that.contractAddress, //contract address,
-                        data: txMethodData
-                    };
+                    //calculate the required Gas for the coming transaction
+                    that.web3.eth.estimateGas({
+                        "from": that.tokenholderAccount.address,
+                        "nonce": nonce,
+                        "to": that.userAccount.address,
+                        "value": "11000000"
+                    }).then(gas => {
 
-                    // let rawTx = {
-                    //     nonce: nonce,
-                    //     gasLimit: '2100',
-                    //     to: that.userAccount.address, //contract address,
-                    //     value: "11000000"
-                    // };
+                        let rawTx = {
+                            nonce: nonce,
+                            gasLimit: gas,
+                            to: that.userAccount.address, //user address,
+                            value: "11000000"
+                        };
 
-                    let tx = new Tx(rawTx);
-                    tx.sign(key);
+                        let tx = new Tx(rawTx);
+                        tx.sign(key);
 
-                    let serializedTx = tx.serialize();
+                        let serializedTx = tx.serialize();
 
-                    //actually make the transaction here
-                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
-                        .then(transaction => {
-                            console.log('receipt: ');
-                            console.log(transaction);
-                            that.getBalance(that.userAccount.address)
-                        })
+                        // actually make the transaction here
+                        that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+                            .then(transaction => {
+                                console.log('receipt raw Ether TX: ');
+                                console.log(transaction);
+                            })
+                    });
+
+
+                    // calculating nonce here based on previous transactions --> Actual token TX
+                    that.web3.eth.getTransactionCount(that.tokenholderAccount.address, async function (err, res) {
+                        if (!err) {
+                            if (res !== null || res !== undefined) {
+                                let nonce = res;
+
+                                let txMethodData = that.oNyCoin.methods.transfer(that.userAccount.address, amount).encodeABI();
+
+                                //calculate the required Gas for the coming transaction
+                                that.web3.eth.estimateGas({
+                                    "from": that.tokenholderAccount.address,
+                                    "nonce": nonce++,
+                                    "to": that.contractAddress,
+                                    "data": txMethodData
+                                }).then(gas => {
+
+                                    let rawTx = {
+                                        nonce: nonce,
+                                        gasLimit: gas,
+                                        to: that.contractAddress, //contract address,
+                                        data: txMethodData
+                                    };
+
+                                    let tx = new Tx(rawTx);
+                                    tx.sign(key);
+
+                                    let serializedTx = tx.serialize();
+
+                                    // actually make the transaction here
+                                    that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'))
+                                        .then(transaction => {
+                                            console.log('receipt token Tx: ');
+                                            console.log(transaction);
+                                            that.getBalance(that.userAccount.address)
+
+                                            let user_id = JSON.parse(localStorage.getItem('user')).id;
+
+                                            that.barService.addTransaction(transaction.transactionHash, amount, 'Bought oNyCoins', user_id, "1").subscribe(
+                                                response => {
+
+                                                    return response
+                                                },
+                                                err => console.error(err)
+                                            );
+                                        })
+
+                                });
+
+
+                            }
+                            return res
+                        } else console.error(err)
+                    });
                 }
                 return res
             } else console.error(err)
         });
+
     }
 
     public getTransaction(txHash) {

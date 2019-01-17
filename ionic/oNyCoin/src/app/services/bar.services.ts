@@ -30,11 +30,11 @@ export class BarService {
         );
     }
 
-    addTransaction(tx: string, amount: string, order: string, user_id: string): Observable<any> {
+    addTransaction(tx: string, amount: string, order: string, user_id: string, incoming: string): Observable<any> {
         const body = new HttpParams()
             .set('tx_id', tx)
             .set('token_amount', amount)
-            .set('incoming', "0")
+            .set('incoming', incoming)
             .set('order', order)
             .set('user_id', user_id);
         return this.http.post(environment.API + 'api/users/createTransaction', body.toString(), options.httpOptions)

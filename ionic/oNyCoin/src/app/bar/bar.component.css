@@ -28,3 +28,23 @@
   height: 30px;
   min-width: 10px;
 }
+
+.table-row-total {
+  position: absolute;
+  bottom: 50px;
+}
+.total-coins {
+  width: 1%;
+}
+.cancel-button {
+  right: 0;
+}
+
+.confirm-order-button {
+  position: absolute;
+  bottom: 0;
+  font-size: 16px;
+  margin: 10px 10px 10px 0;
+  color: white;
+  background-color: #38817A;
+}

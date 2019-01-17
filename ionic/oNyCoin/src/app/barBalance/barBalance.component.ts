@@ -29,7 +29,7 @@ export class BarBalanceComponent implements OnInit {
         this.listen();
     }
 
-    private listen() {
+    public listen() {
         this.webSocketService.createObservableSocket('ws://localhost:40510')
             .subscribe(data => {
                 this.passId = data;
