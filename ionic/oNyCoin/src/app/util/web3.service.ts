@@ -567,7 +567,7 @@ export class Web3Service {
         });
     }
 
-    public buyConsumables(amount) {
+    public buyConsumables(amount, order) {
         let userAccount = JSON.parse(localStorage.getItem('user'));
         let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
         console.log("Decrypted Privkey: " + decryptedPrivKey);
@@ -605,7 +605,7 @@ export class Web3Service {
 
                         let user_id = JSON.parse(localStorage.getItem('user')).id;
 
-                        that.barService.addTransaction(transaction.transactionHash, amount, 'order', user_id).subscribe(
+                        that.barService.addTransaction(transaction.transactionHash, amount, order, user_id).subscribe(
                             response => {
                                 console.log(response);
                                 return response
