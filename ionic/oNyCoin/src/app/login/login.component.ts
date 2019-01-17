@@ -44,7 +44,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.balance = document.getElementsByClassName('balanceBoxContainer')[0];
-        this.balance.style.display = 'block'
+        this.balance.style.display = 'block';
+
+        window.location.reload();
     }
 
     @HostListener('window:resize', ['$event'])
