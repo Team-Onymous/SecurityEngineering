@@ -134,10 +134,26 @@ export class BarComponent {
     });
   }
 
-  buyConsumables(amount) {
-    console.log(amount);
-    amount = 5;
-    this.web3Service.buyConsumables(amount);
+  confirmOrder(){
+    let amount = this.totalCoins;
+    let order = '';
+    this.order.forEach((drink: Drinks) => {
+      order = order + (', ' + drink.value + ' ' + drink.name + '');
+    });
+    this.buyConsumables(amount, order);
+    this.order = [];
+    this.order = [...this.order];
+    this.getTotalCoins();
+  }
+
+  cancelOrder(){
+    this.order = [];
+    this.order = [...this.order];
+    this.getTotalCoins();
+  }
+
+  buyConsumables(amount, order) {
+    this.web3Service.buyConsumables(amount, order);
   }
 
 }

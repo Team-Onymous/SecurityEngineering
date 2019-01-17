@@ -38,7 +38,7 @@ module.exports = function (app, passport, models, flash) {
         let data = {
             tx_id: req.body.tx_id,
             token_amount: req.body.token_amount,
-            incoming: 0,
+            incoming: req.body.incoming,
             order: req.body.order,
             user_id: req.body.user_id
         };
@@ -52,7 +52,7 @@ module.exports = function (app, passport, models, flash) {
                 message: "Created a transaction!",
                 tx_id: req.body.tx_id,
                 token_amount: req.body.token_amount,
-                incoming: 0,
+                incoming: req.body.incoming,
                 order: req.body.order,
                 user_id: req.body.user_id
             })
