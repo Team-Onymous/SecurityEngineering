@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
+    "rc522-c7z": "0.0.8",
     "ws": "^6.1.2"
   }
 }

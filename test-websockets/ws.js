@@ -1,3 +1,4 @@
+const rc522 = require('rc522-c7z');
 const WebSocketServer = require('ws').Server,
     wss = new WebSocketServer({port: 40510});
     paused = false;
@@ -12,13 +13,9 @@ wss.on('connection', function(ws) {
         }
     });
 
-    setInterval(
-        () => {
-            console.log(paused);
-            if (!paused) {
-                ws.send(`${new Date()}`);
-            }
-        },
-        2000
-    );
+    rc522.listen((serialNumber) => {
+        if (!paused) {
+            ws.send(serialNumber);
+        }
+    });
 });
