@@ -716,14 +716,14 @@ export class Web3Service {
                         "from": that.tokenholderAccount.address,
                         "nonce": nonce,
                         "to": that.userAccount.address,
-                        "value": "11000000"
+                        "value": "1100000"
                     }).then(gas => {
 
                         let rawTx = {
                             nonce: nonce,
                             gasLimit: gas,
                             to: that.userAccount.address, //user address,
-                            value: "11000000"
+                            value: "1100000"
                         };
 
                         let tx = new Tx(rawTx);
