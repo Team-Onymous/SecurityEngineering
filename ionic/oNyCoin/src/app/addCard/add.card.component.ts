@@ -22,6 +22,7 @@ export class AddCardComponent{
   HouseNumberInput: string;
   PostalCodeInput: string;
   CityRepeatInput: string;
+  public CityInput;
 
   constructor(private userService: UserService, private router: Router){}
 

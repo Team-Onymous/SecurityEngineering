@@ -23,7 +23,7 @@ export class CreateWalletComponent implements OnInit {
 
   }
 
-  private createWallet() {
+  public createWallet() {
 
     this.Web3Service.createWallet();
 

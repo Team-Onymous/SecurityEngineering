@@ -42,7 +42,6 @@ export class RefundComponent {
     }
 
     refund(amount) {
-        console.log(amount);
         this.web3Service.refund(amount);
     }
 }
