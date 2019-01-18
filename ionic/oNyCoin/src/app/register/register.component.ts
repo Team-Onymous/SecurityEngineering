@@ -31,7 +31,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     date: Date;
     public balance;
 
-    constructor(public userService: UserService, private Web3Service: Web3Service, private router: Router, private formBuilder: FormBuilder, private EncrDecr: EncrDecrService) {
+    constructor(public userService: UserService,
+                private Web3Service: Web3Service,
+                private router: Router,
+                private formBuilder: FormBuilder,
+                private EncrDecr: EncrDecrService) {
 
     }
 
@@ -46,12 +50,15 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
         this.balance = document.getElementsByClassName('balanceBoxContainer')[0];
         this.balance.style.display = 'none';
-        this.balance = this.Web3Service.balance;
+        // this.balance = this.Web3Service.balance;
+        this.Web3Service.loadContract()
     }
 
     ngOnDestroy(): void {
         this.balance = document.getElementsByClassName('balanceBoxContainer')[0];
-        this.balance.style.display = 'block'
+        this.balance.style.display = 'block';
+
+        window.location.reload();
     }
 
     @HostListener('window:resize', ['$event'])
@@ -80,6 +87,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.userService.addUser(FirstName, LastName, Email, this.date, Password, wallet_address, btoa(wallet_key)).subscribe(
             response => {
                 console.log(response);
+                this.login(Email, Password);
+            },
+            err => console.log(err)
+        );
+    }
+
+    login(username, password) {
+        this.userService.login(username, password).subscribe(
+            response => {
+                this.Web3Service.loadContract();
+                // this.router.navigate(['/home']);
                 this.router.navigate(['/addcard'])
             },
             err => console.log(err)
