@@ -148,13 +148,14 @@ export class BarComponent {
     this.order = [];
     this.order = [...this.order];
     this.getTotalCoins();
-    this.barBalanceComponent.listen();
+    this.barBalanceComponent.webSocketService.sendMessage('resume');
   }
 
   cancelOrder() {
     this.order = [];
     this.order = [...this.order];
     this.getTotalCoins();
+    this.barBalanceComponent.webSocketService.sendMessage('resume');
   }
 
   buyConsumables(amount, order) {

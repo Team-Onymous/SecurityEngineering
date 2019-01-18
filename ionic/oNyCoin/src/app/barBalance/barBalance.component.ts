@@ -21,7 +21,7 @@ export class BarBalanceComponent implements OnInit {
 
     constructor(private Web3Service: Web3Service,
                 private userService: UserService,
-                private webSocketService: WebSocketService) {
+                public webSocketService: WebSocketService) {
 
     }
 
@@ -33,6 +33,7 @@ export class BarBalanceComponent implements OnInit {
         this.webSocketService.createObservableSocket('ws://localhost:40510')
             .subscribe(data => {
                 this.passId = data;
+                this.webSocketService.sendMessage('pause');
             }, err => {
                 console.log(err);
             }, () => {
