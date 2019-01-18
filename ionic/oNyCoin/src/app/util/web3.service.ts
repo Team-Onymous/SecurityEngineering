@@ -484,7 +484,8 @@ export class Web3Service {
     constructor(private barService: BarService,
                 private EncrDecr: EncrDecrService,
                 private userService: UserService) {
-        if (this.userService.isLoggedIn()) {
+        if (this.userService.isLoggedIn() || window.location.pathname === '/register') {
+
             this.loadContract();
         }
     }
@@ -503,28 +504,29 @@ export class Web3Service {
 
                     this.instantiateContract();
 
+                    if (this.userService.isLoggedIn()) {
 
-                    let first = "ca";
-                    let second = "di";
-                    let string = "0x773977df7399bd027f27811c5a50ae38c905b63b08a7e00b7d63e8acb4b17527";
+                        let first = "ca";
+                        let second = "di";
+                        let string = "0x773977df7399bd027f27811c5a50ae38c905b63b08a7e00b7d63e8acb4b17527";
 
-                    let encryptedPrivKey = this.EncrDecr.set(first + second, string);
+                        let encryptedPrivKey = this.EncrDecr.set(first + second, string);
 
-                    let userAccount = JSON.parse(localStorage.getItem('user'));
-                    let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+                        let userAccount = JSON.parse(localStorage.getItem('user'));
+                        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
 
-                    //user account
-                    this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
+                        //user account
+                        this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
 
-                    let key = new Buffer(decryptedPrivKey.substr(2), 'hex');
-                    //token holder account
-                    this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount('0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
+                        let key = new Buffer(decryptedPrivKey.substr(2), 'hex');
+                        //token holder account
+                        this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount('0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
 
-                    //set the default account
-                    this.web3.eth.defaultAccount = this.tokenholderAccount.address;
+                        //set the default account
+                        this.web3.eth.defaultAccount = this.tokenholderAccount.address;
 
-                    this.balance = this.getBalance(this.userAccount.address);
-
+                        this.balance = this.getBalance(this.userAccount.address);
+                    }
                 } catch (error) {
                     console.error(error)
                     // User denied account access...
