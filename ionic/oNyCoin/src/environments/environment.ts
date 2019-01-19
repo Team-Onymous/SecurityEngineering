@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  API: 'http://localhost:5000/'
+  API: 'https://api.onycoin.nl:5000/'
 };

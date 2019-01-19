@@ -3,7 +3,6 @@ const http = require('http');
 const https = require('https');
 const privateKey  = fs.readFileSync('sslcert/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('sslcert/cert.pem', 'utf8');
-const config = require('./app/config/config.json')[env];
 
 const credentials = {key: privateKey, cert: certificate};
 
@@ -18,8 +17,13 @@ const cors = require('cors');
 const flash = require('connect-flash');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
+// const corsOptions = {
+//     origin: 'https://onycoin.nl',
+//     optionsSuccessStatus: 200
+// };
+
 const corsOptions = {
-    origin: 'https://onycoin.nl',
+    origin: ['http://localhost:8100', 'https://onycoin.nl'],
     optionsSuccessStatus: 200
 };
 

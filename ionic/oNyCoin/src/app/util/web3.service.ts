@@ -497,7 +497,7 @@ export class Web3Service {
             if (typeof window.web3 !== 'undefined') {
                 // Use Mist/MetaMask's provider
                 // this.web3 = new Web3(window.web3.currentProvider);
-                this.web3 = new Web3(new Web3.providers.HttpProvider('http://107.178.245.173:8080'));
+                this.web3 = new Web3(new Web3.providers.HttpProvider('https://blockchain.onycoin.nl:443'));
                 try {
                     // Request account access if needed
                     await window.ethereum.enable();

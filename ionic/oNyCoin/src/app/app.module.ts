@@ -33,7 +33,7 @@ import {SharedModule} from "./services/services.module";
 import {BarService} from "./services/bar.services";
 import {TransactionService} from "./services/transaction.service";
 import {EncrDecrService} from "./services/EncrDecr.service";
-import {WebSocketService} from "./services/webSocket.service";
+import {WebsocketService} from "./services/webSocket.service";
 
 @NgModule({
     declarations: [
@@ -79,7 +79,7 @@ import {WebSocketService} from "./services/webSocket.service";
         TransactionService,
         UserService,
         EncrDecrService,
-        WebSocketService
+        WebsocketService
     ],
     bootstrap: [AppComponent]
 })
