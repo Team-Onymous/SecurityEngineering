@@ -494,13 +494,13 @@ export class Web3Service {
     public loadContract() {
         window.addEventListener('load', async () => {
 
-            if (typeof window.web3 !== 'undefined') {
+            if (this.web3 !== 'undefined') {
                 // Use Mist/MetaMask's provider
                 // this.web3 = new Web3(window.web3.currentProvider);
                 this.web3 = new Web3(new Web3.providers.HttpProvider('https://blockchain.onycoin.nl:443'));
                 try {
                     // Request account access if needed
-                    await window.ethereum.enable();
+                    // await window.ethereum.enable();
 
                     this.instantiateContract();
 
@@ -531,9 +531,6 @@ export class Web3Service {
                     console.error(error)
                     // User denied account access...
                 }
-            } else {
-                console.log('No web3? You should consider trying MetaMask!');
-                this.web3 = new Web3(new Web3.providers.HttpProvider('http://107.178.245.173:8080'));
             }
         });
     }
