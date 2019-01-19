@@ -34,7 +34,7 @@ const data: TransactionData[] = [
 export class HomeComponent implements OnInit {
 
     public balance;
-    private loadedTransactions$: Observable<transaction[]>;
+    public loadedTransactions$: Observable<transaction[]>;
     private transactions: TransactionData[] = [];
     displayedColumns: string[] = ['coins', 'order', 'date'];
     dataSource : MatTableDataSource<TransactionData> = new MatTableDataSource([]);

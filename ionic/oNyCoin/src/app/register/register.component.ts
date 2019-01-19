@@ -19,9 +19,10 @@ import {EncrDecrService} from "../services/EncrDecr.service";
 
 export class RegisterComponent implements OnInit, OnDestroy {
     Email = new FormControl();
-    EmailInput: string;
-    FirstNameInput: string;
-    LastNameInput: string;
+    public EmailInput: string;
+    public FirstNameInput: string;
+    public LastNameInput: string;
+    public Password;
     passwordInput: string;
     passwordRepeatInput: string;
     dateOfBirthInput: string;

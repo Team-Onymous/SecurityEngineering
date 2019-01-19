@@ -1,3 +1,13 @@
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const privateKey  = fs.readFileSync('sslcert/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('sslcert/cert.pem', 'utf8');
+// const env = process.env.NODE_ENV || "development";
+const config = require('./app/config/config.json')[env];
+
+var credentials = {key: privateKey, cert: certificate};
+
 var express = require('express');
 var app = express();
 var passport = require('passport');
@@ -10,7 +20,7 @@ const flash = require('connect-flash');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 const corsOptions = {
-    origin: 'http://localhost:8100',
+    origin: 'https://onycoin.nl',
     optionsSuccessStatus: 200
 };
 
@@ -76,8 +86,10 @@ models.sequelize.sync().then(function () {
 
 });
 
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
-app.listen(5000, function (err) {
+httpsServer.listen(5000, function (err) {
 
     if (!err)
 
