@@ -20,6 +20,7 @@ import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
 import {AddCardComponent} from "./addCard/add.card.component";
 import {BarComponent} from "./bar/bar.component";
+import {BarBalanceComponent} from "./barBalance/barBalance.component";
 import {MaterialModule} from "./material.module";
 import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatToolbarModule} from "@angular/material";
 import {CommonModule} from "@angular/common";
@@ -32,6 +33,7 @@ import {SharedModule} from "./services/services.module";
 import {BarService} from "./services/bar.services";
 import {TransactionService} from "./services/transaction.service";
 import {EncrDecrService} from "./services/EncrDecr.service";
+import {WebsocketService} from "./services/webSocket.service";
 
 @NgModule({
     declarations: [
@@ -48,7 +50,8 @@ import {EncrDecrService} from "./services/EncrDecr.service";
         RegisterComponent,
         AddCardComponent,
         BarComponent,
-        AppComponent],
+        AppComponent,
+        BarBalanceComponent],
     entryComponents: [],
     imports: [
         BrowserModule,
@@ -75,7 +78,8 @@ import {EncrDecrService} from "./services/EncrDecr.service";
         BarService,
         TransactionService,
         UserService,
-        EncrDecrService
+        EncrDecrService,
+        WebsocketService
     ],
     bootstrap: [AppComponent]
 })
