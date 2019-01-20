@@ -5533,18 +5533,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /*!***************************************************************************************************************************!*\
   !*** multi ./src/polyfills.ts ./node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js ***!
   \***************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/Stefan/Documents/CMGT/Jaar-4/MINSLA01/SecurityEngineering/ionic/oNyCoin/src/polyfills.ts */"./src/polyfills.ts");
-module.exports = __webpack_require__(/*! /Users/Stefan/Documents/CMGT/Jaar-4/MINSLA01/SecurityEngineering/ionic/oNyCoin/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js */"./node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js");
+__webpack_require__(/*! /home/cas/Sites/SecurityEngineering/ionic/oNyCoin/src/polyfills.ts */"./src/polyfills.ts");
+module.exports = __webpack_require__(/*! /home/cas/Sites/SecurityEngineering/ionic/oNyCoin/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js */"./node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/jit-polyfills.js");
 
 
 /***/ })
 
-},[[5,"runtime"]]]);
+},[[6,"runtime"]]]);
 //# sourceMappingURL=polyfills.js.map

@@ -1203,6 +1203,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/user.service */ "./src/app/services/user.service.ts");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/EncrDecr.service */ "./src/app/services/EncrDecr.service.ts");
+/* harmony import */ var _services_respond_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/respond.service */ "./src/app/services/respond.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1218,14 +1221,20 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
+
 var AddCardComponent = /** @class */ (function () {
-    function AddCardComponent(userService, router) {
+    function AddCardComponent(userService, router, EncrDecr, respondService) {
         this.userService = userService;
         this.router = router;
+        this.EncrDecr = EncrDecr;
+        this.respondService = respondService;
         this.visible = true;
         this.breakpoint = 520;
     }
     AddCardComponent.prototype.ngOnInit = function () {
+        var _this = this;
         var w = window.innerWidth;
         if (w >= this.breakpoint) {
             this.visible = true;
@@ -1234,6 +1243,11 @@ var AddCardComponent = /** @class */ (function () {
             // whenever the window is less than 520, hide this component.
             this.visible = false;
         }
+        // this receives the information from the card.
+        this.respondService.messages.subscribe(function (msg) {
+            console.log(msg);
+            _this.pass_id = msg;
+        });
     };
     AddCardComponent.prototype.onResize = function (event) {
         var w = event.target.innerWidth;
@@ -1247,8 +1261,10 @@ var AddCardComponent = /** @class */ (function () {
     };
     AddCardComponent.prototype.addCard = function (street, houseNumber, postalCode, city) {
         var _this = this;
-        var userId = JSON.parse(localStorage.getItem('user')).id;
-        this.userService.addCard(street, houseNumber, postalCode, city, userId).subscribe(function (response) {
+        var userAccount = localStorage.getItem('user');
+        var decryptedUserAccount = JSON.parse(this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].secret, userAccount));
+        console.log(this.pass_id);
+        this.userService.addCard(this.pass_id, street, houseNumber, postalCode, city, decryptedUserAccount.id).subscribe(function (response) {
             console.log(response);
             _this.router.navigate(['/home']);
         }, function (err) { return console.log(err); });
@@ -1263,9 +1279,12 @@ var AddCardComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'rg-add.card',
             template: __webpack_require__(/*! ./add.card.component.html */ "./src/app/addCard/add.card.component.html"),
+            providers: [_services_respond_service__WEBPACK_IMPORTED_MODULE_5__["RespondService"]],
             styles: [__webpack_require__(/*! ./add.card.component.css */ "./src/app/addCard/add.card.component.css")]
         }),
-        __metadata("design:paramtypes", [_services_user_service__WEBPACK_IMPORTED_MODULE_1__["UserService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+        __metadata("design:paramtypes", [_services_user_service__WEBPACK_IMPORTED_MODULE_1__["UserService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
+            _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_4__["EncrDecrService"],
+            _services_respond_service__WEBPACK_IMPORTED_MODULE_5__["RespondService"]])
     ], AddCardComponent);
     return AddCardComponent;
 }());
@@ -1589,7 +1608,7 @@ var AppModule = /** @class */ (function () {
                 _services_transaction_service__WEBPACK_IMPORTED_MODULE_30__["TransactionService"],
                 _services_user_service__WEBPACK_IMPORTED_MODULE_26__["UserService"],
                 _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_31__["EncrDecrService"],
-                _services_webSocket_service__WEBPACK_IMPORTED_MODULE_32__["WebSocketService"]
+                _services_webSocket_service__WEBPACK_IMPORTED_MODULE_32__["WebsocketService"]
             ],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
         })
@@ -1707,6 +1726,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _util_web3_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/web3.service */ "./src/app/util/web3.service.ts");
 /* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/user.service */ "./src/app/services/user.service.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/EncrDecr.service */ "./src/app/services/EncrDecr.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1722,10 +1743,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
 var BalanceComponent = /** @class */ (function () {
-    function BalanceComponent(Web3Service, userService) {
+    function BalanceComponent(Web3Service, userService, EncrDecr) {
         this.Web3Service = Web3Service;
         this.userService = userService;
+        this.EncrDecr = EncrDecr;
     }
     BalanceComponent.prototype.ngOnInit = function () {
         this.balance = this.Web3Service.balance;
@@ -1734,8 +1758,9 @@ var BalanceComponent = /** @class */ (function () {
     BalanceComponent.prototype.getUser = function () {
         var _this = this;
         if (this.userService.isLoggedIn()) {
-            var userId = JSON.parse(localStorage.getItem('user')).id;
-            this.userService.getUser(userId).subscribe(function (user) {
+            var userAccount = localStorage.getItem('user');
+            var decryptedUserAccount = JSON.parse(this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].secret, userAccount));
+            this.userService.getUser(decryptedUserAccount.id).subscribe(function (user) {
                 _this.user = user;
             });
         }
@@ -1751,7 +1776,8 @@ var BalanceComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./balance.component.css */ "./src/app/balance/balance.component.css")]
         }),
         __metadata("design:paramtypes", [_util_web3_service__WEBPACK_IMPORTED_MODULE_1__["Web3Service"],
-            _services_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"]])
+            _services_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"],
+            _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_4__["EncrDecrService"]])
     ], BalanceComponent);
     return BalanceComponent;
 }());
@@ -1796,6 +1822,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_bar_services__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/bar.services */ "./src/app/services/bar.services.ts");
 /* harmony import */ var _util_web3_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util/web3.service */ "./src/app/util/web3.service.ts");
 /* harmony import */ var _barBalance_barBalance_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../barBalance/barBalance.component */ "./src/app/barBalance/barBalance.component.ts");
+/* harmony import */ var _services_respond_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/respond.service */ "./src/app/services/respond.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1812,11 +1839,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var BarComponent = /** @class */ (function () {
-    function BarComponent(barService, web3Service, barBalanceComponent) {
+    function BarComponent(barService, web3Service, barBalanceComponent, respondService) {
         this.barService = barService;
         this.web3Service = web3Service;
         this.barBalanceComponent = barBalanceComponent;
+        this.respondService = respondService;
         this.order = [];
         this.hasOrder = false;
         this.tilesBar = [];
@@ -1844,7 +1873,13 @@ var BarComponent = /** @class */ (function () {
                         colsWidth = 2;
                     }
                     numberOfCols++;
-                    _this.tilesBar.push({ text: consumable.name, cols: colsWidth, rows: 1, color: color, coins: consumable.cost });
+                    _this.tilesBar.push({
+                        text: consumable.name,
+                        cols: colsWidth,
+                        rows: 1,
+                        color: color,
+                        coins: consumable.cost
+                    });
                 }
             }
         });
@@ -1927,27 +1962,32 @@ var BarComponent = /** @class */ (function () {
         this.order = [];
         this.order = this.order.slice();
         this.getTotalCoins();
-        this.barBalanceComponent.webSocketService.sendMessage('resume');
+        // this.barBalanceComponent.webSocketService.sendMessage('resume');
     };
     BarComponent.prototype.cancelOrder = function () {
         this.order = [];
         this.order = this.order.slice();
         this.getTotalCoins();
-        this.barBalanceComponent.webSocketService.sendMessage('resume');
+        // this.barBalanceComponent.resume();
+        this.sendMessage();
     };
     BarComponent.prototype.buyConsumables = function (amount, order) {
         this.web3Service.buyConsumables(amount, order);
+    };
+    BarComponent.prototype.sendMessage = function () {
+        this.respondService.sendMsg("Test Message");
     };
     BarComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'rg-bar',
             template: __webpack_require__(/*! ./bar.component.html */ "./src/app/bar/bar.component.html"),
-            providers: [_barBalance_barBalance_component__WEBPACK_IMPORTED_MODULE_3__["BarBalanceComponent"]],
+            providers: [_barBalance_barBalance_component__WEBPACK_IMPORTED_MODULE_3__["BarBalanceComponent"], _services_respond_service__WEBPACK_IMPORTED_MODULE_4__["RespondService"]],
             styles: [__webpack_require__(/*! ./bar.component.css */ "./src/app/bar/bar.component.css")]
         }),
         __metadata("design:paramtypes", [_services_bar_services__WEBPACK_IMPORTED_MODULE_1__["BarService"],
             _util_web3_service__WEBPACK_IMPORTED_MODULE_2__["Web3Service"],
-            _barBalance_barBalance_component__WEBPACK_IMPORTED_MODULE_3__["BarBalanceComponent"]])
+            _barBalance_barBalance_component__WEBPACK_IMPORTED_MODULE_3__["BarBalanceComponent"],
+            _services_respond_service__WEBPACK_IMPORTED_MODULE_4__["RespondService"]])
     ], BarComponent);
     return BarComponent;
 }());
@@ -1974,7 +2014,7 @@ module.exports = "mat-card {\n    margin: 10px;\n    padding: 0;\n}\n.barBalance
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card class=\"barBalanceBoxContainer\">\n    <div class=\"barBalanceBoxLeft\">\n        <p style=\"display: inline-block\">{{passId}}</p>\n    </div>\n\n    <div class=\"barBalanceBoxRight\">\n        <p style=\"display: inline-block\">0</p>\n        oNyCoin\n    </div>\n</mat-card>\n\n\n"
+module.exports = "<mat-card class=\"barBalanceBoxContainer\">\n    <div class=\"barBalanceBoxLeft\">\n        <p style=\"display: inline-block\">{{username}}</p>\n    </div>\n\n    <div class=\"barBalanceBoxRight\">\n        <p class=\"barBalance\" style=\"display: inline-block\">0</p>\n        oNyCoin\n    </div>\n</mat-card>\n\n\n"
 
 /***/ }),
 
@@ -1992,6 +2032,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util_web3_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/web3.service */ "./src/app/util/web3.service.ts");
 /* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/user.service */ "./src/app/services/user.service.ts");
 /* harmony import */ var _services_webSocket_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/webSocket.service */ "./src/app/services/webSocket.service.ts");
+/* harmony import */ var _services_respond_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/respond.service */ "./src/app/services/respond.service.ts");
+/* harmony import */ var _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/EncrDecr.service */ "./src/app/services/EncrDecr.service.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2008,38 +2051,45 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
+
 var BarBalanceComponent = /** @class */ (function () {
-    function BarBalanceComponent(Web3Service, userService, webSocketService) {
+    function BarBalanceComponent(Web3Service, userService, webSocketService, respondService, encrDecrService) {
         this.Web3Service = Web3Service;
         this.userService = userService;
         this.webSocketService = webSocketService;
-        this.passId = "Hallo";
+        this.respondService = respondService;
+        this.encrDecrService = encrDecrService;
+        this.username = 'Waiting for customer...';
     }
     BarBalanceComponent.prototype.ngOnInit = function () {
-        this.listen();
-    };
-    BarBalanceComponent.prototype.listen = function () {
         var _this = this;
-        this.webSocketService.createObservableSocket('ws://localhost:40510')
-            .subscribe(function (data) {
-            _this.passId = data;
-            _this.webSocketService.sendMessage('pause');
-        }, function (err) {
-            console.log(err);
-        }, function () {
-            console.log('Stream complete.');
+        // this receives the information from the card.
+        this.respondService.messages.subscribe(function (msg) {
+            console.log(msg);
+            _this.userService.getBarUser(msg).subscribe(function (user) {
+                console.log(JSON.stringify(user));
+                _this.username = user.firstname;
+                // encrypting customers data
+                _this.user = _this.encrDecrService.set(_environments_environment__WEBPACK_IMPORTED_MODULE_6__["environment"].secret, JSON.stringify(user));
+                _this.Web3Service.getBarBalance(user.wallet_address);
+                localStorage.setItem('customer', _this.user);
+            });
         });
     };
     BarBalanceComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'rg-bar-balance',
             template: __webpack_require__(/*! ./barBalance.component.html */ "./src/app/barBalance/barBalance.component.html"),
-            providers: [_util_web3_service__WEBPACK_IMPORTED_MODULE_1__["Web3Service"], _services_webSocket_service__WEBPACK_IMPORTED_MODULE_3__["WebSocketService"]],
+            providers: [_util_web3_service__WEBPACK_IMPORTED_MODULE_1__["Web3Service"], _services_webSocket_service__WEBPACK_IMPORTED_MODULE_3__["WebsocketService"], _services_respond_service__WEBPACK_IMPORTED_MODULE_4__["RespondService"]],
             styles: [__webpack_require__(/*! ./barBalance.component.css */ "./src/app/barBalance/barBalance.component.css")]
         }),
         __metadata("design:paramtypes", [_util_web3_service__WEBPACK_IMPORTED_MODULE_1__["Web3Service"],
             _services_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"],
-            _services_webSocket_service__WEBPACK_IMPORTED_MODULE_3__["WebSocketService"]])
+            _services_webSocket_service__WEBPACK_IMPORTED_MODULE_3__["WebsocketService"],
+            _services_respond_service__WEBPACK_IMPORTED_MODULE_4__["RespondService"],
+            _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_5__["EncrDecrService"]])
     ], BarBalanceComponent);
     return BarBalanceComponent;
 }());
@@ -2258,6 +2308,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../services/EncrDecr.service */ "./src/app/services/EncrDecr.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2270,6 +2322,8 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 /**
  * Created by bryan on 4-12-2018.
  */
+
+
 
 
 
@@ -2288,9 +2342,10 @@ var data = [
     { coins: '20', order: 'beer', date: '20/09' },
 ];
 var HomeComponent = /** @class */ (function () {
-    function HomeComponent(Web3Service, transactionService) {
+    function HomeComponent(Web3Service, transactionService, EncrDecr) {
         this.Web3Service = Web3Service;
         this.transactionService = transactionService;
+        this.EncrDecr = EncrDecr;
         this.transactions = [];
         this.displayedColumns = ['coins', 'order', 'date'];
         this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTableDataSource"]([]);
@@ -2299,8 +2354,9 @@ var HomeComponent = /** @class */ (function () {
     };
     HomeComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
-        var userId = JSON.parse(localStorage.getItem('user')).id;
-        this.loadedTransactions$ = this.transactionService.getTransactions(userId);
+        var userAccount = localStorage.getItem('user');
+        var decryptedUserAccount = JSON.parse(this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, userAccount));
+        this.loadedTransactions$ = this.transactionService.getTransactions(decryptedUserAccount.id);
         this.loadedTransactions$.subscribe(function (transactions) {
             if (transactions.length >= 1) {
                 for (var _i = 0, transactions_1 = transactions; _i < transactions_1.length; _i++) {
@@ -2332,7 +2388,9 @@ var HomeComponent = /** @class */ (function () {
             providers: [_util_web3_service__WEBPACK_IMPORTED_MODULE_1__["Web3Service"]],
             styles: [__webpack_require__(/*! ./home.component.css */ "./src/app/home/home.component.css")]
         }),
-        __metadata("design:paramtypes", [_util_web3_service__WEBPACK_IMPORTED_MODULE_1__["Web3Service"], _services_transaction_service__WEBPACK_IMPORTED_MODULE_2__["TransactionService"]])
+        __metadata("design:paramtypes", [_util_web3_service__WEBPACK_IMPORTED_MODULE_1__["Web3Service"],
+            _services_transaction_service__WEBPACK_IMPORTED_MODULE_2__["TransactionService"],
+            _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_6__["EncrDecrService"]])
     ], HomeComponent);
     return HomeComponent;
 }());
@@ -2780,9 +2838,9 @@ var RegisterComponent = /** @class */ (function () {
     };
     RegisterComponent.prototype.goToRegister = function (FirstName, LastName, Email, DateOfBirth, Password) {
         var _this = this;
-        var wallet_address = this.Web3Service.createWallet().address;
-        var wallet_key = this.EncrDecr.set(Email.substr(0, 2).toString() + LastName.substr(0, 2).toString(), this.Web3Service.createWallet().privateKey);
-        this.userService.addUser(FirstName, LastName, Email, this.date, Password, wallet_address, btoa(wallet_key)).subscribe(function (response) {
+        var wallet = this.Web3Service.createWallet();
+        var wallet_key = this.EncrDecr.set(Email.substr(0, 2).toString() + LastName.substr(0, 2).toString(), wallet.privateKey);
+        this.userService.addUser(FirstName, LastName, Email, this.date, Password, wallet.address, btoa(wallet_key)).subscribe(function (response) {
             console.log(response);
             _this.login(Email, Password);
         }, function (err) { return console.log(err); });
@@ -3123,6 +3181,55 @@ var httpOptions = {
 
 /***/ }),
 
+/***/ "./src/app/services/respond.service.ts":
+/*!*********************************************!*\
+  !*** ./src/app/services/respond.service.ts ***!
+  \*********************************************/
+/*! exports provided: RespondService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RespondService", function() { return RespondService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _webSocket_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./webSocket.service */ "./src/app/services/webSocket.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var RespondService = /** @class */ (function () {
+    // Our constructor calls our wsService connect method
+    function RespondService(wsService) {
+        this.wsService = wsService;
+        this.messages = wsService
+            .connect()
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (response) { return response; }));
+    }
+    // Our simplified interface for sending
+    // messages back to our socket.io server
+    RespondService.prototype.sendMsg = function (msg) {
+        this.messages.next(msg);
+    };
+    RespondService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_webSocket_service__WEBPACK_IMPORTED_MODULE_2__["WebsocketService"]])
+    ], RespondService);
+    return RespondService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/services/services.module.ts":
 /*!*********************************************!*\
   !*** ./src/app/services/services.module.ts ***!
@@ -3290,7 +3397,13 @@ var UserService = /** @class */ (function () {
         return false;
     };
     UserService.prototype.isLoggedIn = function () {
-        return !!localStorage.getItem('user');
+        var userAccount = localStorage.getItem('user');
+        if (userAccount) {
+            var decryptedUserAccount = JSON.parse(this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].secret, userAccount));
+            return !!decryptedUserAccount;
+        }
+        else
+            return false;
     };
     UserService.prototype.getResourceIdByURL = function (url) {
         switch (url) {
@@ -3322,9 +3435,10 @@ var UserService = /** @class */ (function () {
         return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API + 'api/users/register', body.toString(), _http_options__WEBPACK_IMPORTED_MODULE_3__["httpOptions"])
             .pipe();
     };
-    UserService.prototype.addCard = function (street, houseNumber, postalCode, city, userId) {
+    UserService.prototype.addCard = function (pass_id, street, houseNumber, postalCode, city, userId) {
         var date = Date().toString();
         var body = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpParams"]()
+            .set('pass_id', pass_id)
             .set('street', street)
             .set('house_number', houseNumber)
             .set('postal_code', postalCode)
@@ -3334,15 +3448,18 @@ var UserService = /** @class */ (function () {
             .pipe();
     };
     UserService.prototype.login = function (email, password) {
+        var _this = this;
         var body = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpParams"]()
             .set('email', email)
             .set('password', password);
         return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API + 'api/users/login', body.toString(), _http_options__WEBPACK_IMPORTED_MODULE_3__["httpOptions"]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (response) {
-            localStorage.setItem('user', JSON.stringify(response));
+            // this.user = this.encrDecrService.set(environment.secret, JSON.stringify(user));
+            localStorage.setItem('user', _this.EncrDecr.set(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].secret, JSON.stringify(response)));
         }));
     };
     UserService.prototype.logout = function () {
         localStorage.removeItem('user');
+        localStorage.removeItem('customer');
         return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API + 'logout', _http_options__WEBPACK_IMPORTED_MODULE_3__["httpOptions"]);
     };
     UserService.prototype.getUser = function (id) {
@@ -3356,6 +3473,16 @@ var UserService = /** @class */ (function () {
                 for (var i = 0; i < divs.length; i++) {
                     document.getElementsByClassName('name')[i].innerHTML = data.firstname;
                 }
+                return data;
+            }
+        }));
+    };
+    UserService.prototype.getBarUser = function (pass_id) {
+        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].API + 'api/users/pass/' + pass_id, _http_options__WEBPACK_IMPORTED_MODULE_3__["httpOptions"]).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(function (data) {
+            if (underscore__WEBPACK_IMPORTED_MODULE_5__["isNull"](data)) {
+                return []; // fallback to an empty result in case of 204
+            }
+            else {
                 return data;
             }
         }));
@@ -3375,32 +3502,66 @@ var UserService = /** @class */ (function () {
 /*!***********************************************!*\
   !*** ./src/app/services/webSocket.service.ts ***!
   \***********************************************/
-/*! exports provided: WebSocketService */
+/*! exports provided: WebsocketService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebSocketService", function() { return WebSocketService; });
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WebsocketService", function() { return WebsocketService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 
-var WebSocketService = /** @class */ (function () {
-    function WebSocketService() {
+
+
+var WebsocketService = /** @class */ (function () {
+    function WebsocketService() {
     }
-    WebSocketService.prototype.createObservableSocket = function (url) {
+    WebsocketService.prototype.connect = function () {
         var _this = this;
-        this.ws = new WebSocket(url);
-        return new rxjs__WEBPACK_IMPORTED_MODULE_0__["Observable"](function (observer) {
-            _this.ws.onmessage = function (event) {
-                observer.next(event.data);
+        // If you aren't familiar with environment variables then
+        this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_1__('http://localhost:8080');
+        // We define our observable which will observe any incoming messages
+        // from our socket.io server.
+        var observable = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
+            _this.socket.on('connection', function (data) {
+                console.log(data);
+            });
+            _this.socket.on('message', function (data) {
+                console.log("Received message from Websocket Server");
+                observer.next(data);
+            });
+            return function () {
+                _this.socket.disconnect();
             };
-            _this.ws.onerror = function (event) { return observer.error(event); };
-            _this.ws.onclose = function () { return observer.complete(); };
         });
+        // We define our Observer which will listen to messages
+        // from our other components and send messages back to our
+        // socket server whenever the `next()` method is called.
+        var observer = {
+            next: function (data) {
+                _this.socket.emit('message', JSON.stringify(data));
+            },
+        };
+        // we return our Rx.Subject which is a combination
+        // of both an observer and observable.
+        return rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"].create(observer, observable);
     };
-    WebSocketService.prototype.sendMessage = function (message) {
-        this.ws.send(message);
-    };
-    return WebSocketService;
+    WebsocketService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [])
+    ], WebsocketService);
+    return WebsocketService;
 }());
 
 
@@ -3492,6 +3653,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_bar_services__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/bar.services */ "./src/app/services/bar.services.ts");
 /* harmony import */ var _services_EncrDecr_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/EncrDecr.service */ "./src/app/services/EncrDecr.service.ts");
 /* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/user.service */ "./src/app/services/user.service.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3536,6 +3698,7 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+
 
 
 
@@ -4010,51 +4173,37 @@ var Web3Service = /** @class */ (function () {
     Web3Service.prototype.loadContract = function () {
         var _this = this;
         window.addEventListener('load', function () { return __awaiter(_this, void 0, void 0, function () {
-            var first, second, string, encryptedPrivKey, userAccount, decryptedPrivKey, key, error_1;
+            var decryptedTokenholderPrivKey, userAccount, decryptedUserAccount, decryptedPrivKey, key;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!(typeof window.web3 !== 'undefined')) return [3 /*break*/, 5];
-                        // Use Mist/MetaMask's provider
-                        // this.web3 = new Web3(window.web3.currentProvider);
-                        this.web3 = new Web3(new Web3.providers.HttpProvider('http://107.178.245.173:8080'));
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                if (this.web3 !== 'undefined') {
+                    // Use Mist/MetaMask's provider
+                    // this.web3 = new Web3(window.web3.currentProvider);
+                    this.web3 = new Web3(new Web3.providers.HttpProvider('https://blockchain.onycoin.nl:443'));
+                    try {
                         // Request account access if needed
-                        return [4 /*yield*/, window.ethereum.enable()];
-                    case 2:
-                        // Request account access if needed
-                        _a.sent();
+                        // await window.ethereum.enable();
                         this.instantiateContract();
                         if (this.userService.isLoggedIn()) {
-                            first = "ca";
-                            second = "di";
-                            string = "0x773977df7399bd027f27811c5a50ae38c905b63b08a7e00b7d63e8acb4b17527";
-                            encryptedPrivKey = this.EncrDecr.set(first + second, string);
-                            userAccount = JSON.parse(localStorage.getItem('user'));
-                            decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+                            decryptedTokenholderPrivKey = this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, '+rmaVffOYN0kna66gEKTPNiN0gn7x1HYogXHbx4BoFn+0zkxcqM0ATvW1igq6LjDZt0o6Ug02M4QCjClJxQI0/rRVfc7/chPkSwvCCddYvk=');
+                            userAccount = localStorage.getItem('user');
+                            decryptedUserAccount = JSON.parse(this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, userAccount));
+                            decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
                             //user account
                             this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
                             key = new Buffer(decryptedPrivKey.substr(2), 'hex');
                             //token holder account
-                            this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount('0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
+                            this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedTokenholderPrivKey);
                             //set the default account
                             this.web3.eth.defaultAccount = this.tokenholderAccount.address;
                             this.balance = this.getBalance(this.userAccount.address);
                         }
-                        return [3 /*break*/, 4];
-                    case 3:
-                        error_1 = _a.sent();
-                        console.error(error_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [3 /*break*/, 6];
-                    case 5:
-                        console.log('No web3? You should consider trying MetaMask!');
-                        this.web3 = new Web3(new Web3.providers.HttpProvider('http://107.178.245.173:8080'));
-                        _a.label = 6;
-                    case 6: return [2 /*return*/];
+                    }
+                    catch (error) {
+                        console.error(error);
+                        // User denied account access...
+                    }
                 }
+                return [2 /*return*/];
             });
         }); });
     };
@@ -4083,8 +4232,9 @@ var Web3Service = /** @class */ (function () {
         });
     };
     Web3Service.prototype.buyConsumables = function (amount, order) {
-        var userAccount = JSON.parse(localStorage.getItem('user'));
-        var decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        var userAccount = localStorage.getItem('customer');
+        var decryptedUserAccount = JSON.parse(this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, userAccount));
+        var decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
         //user account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
         var key = new Buffer(decryptedPrivKey.substr(2), 'hex');
@@ -4116,9 +4266,10 @@ var Web3Service = /** @class */ (function () {
                                 that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).then(function (transaction) {
                                     console.log("Receipt buyConsumables Tx: ");
                                     console.log(transaction);
-                                    var user_id = JSON.parse(localStorage.getItem('user')).id;
-                                    that.barService.addTransaction(transaction.transactionHash, amount, order, user_id, "0").subscribe(function (response) {
-                                        that.getBalance(that.userAccount.address);
+                                    var userAccount = localStorage.getItem('user');
+                                    var decryptedUserAccount = JSON.parse(that.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, userAccount));
+                                    that.barService.addTransaction(transaction.transactionHash, amount, order, decryptedUserAccount.id, "0").subscribe(function (response) {
+                                        that.getBarBalance(that.userAccount.address);
                                         return response;
                                     }, function (err) { return console.log(err); });
                                 }).catch(function (err) { return console.error(err); });
@@ -4134,8 +4285,9 @@ var Web3Service = /** @class */ (function () {
         });
     };
     Web3Service.prototype.refund = function (amount) {
-        var userAccount = JSON.parse(localStorage.getItem('user'));
-        var decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        var userAccount = localStorage.getItem('user');
+        var decryptedUserAccount = JSON.parse(this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, userAccount));
+        var decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
         // User account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
         var key = new Buffer(this.userAccount.privateKey.substr(2), 'hex');
@@ -4170,8 +4322,9 @@ var Web3Service = /** @class */ (function () {
                                     console.log('receipt token Tx: ');
                                     console.log(transaction);
                                     that.getBalance(that.userAccount.address);
-                                    var user_id = JSON.parse(localStorage.getItem('user')).id;
-                                    that.barService.addTransaction(transaction.transactionHash, amount, 'Refunded oNyCoins', user_id, "0").subscribe(function (response) {
+                                    var userAccount = localStorage.getItem('user');
+                                    var decryptedUserAccount = JSON.parse(that.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, userAccount));
+                                    that.barService.addTransaction(transaction.transactionHash, amount, 'Refunded oNyCoins', decryptedUserAccount.id, "0").subscribe(function (response) {
                                         console.log(response);
                                         return response;
                                     }, function (err) { return console.log(err); });
@@ -4189,10 +4342,11 @@ var Web3Service = /** @class */ (function () {
     };
     Web3Service.prototype.buyTokens = function (amount) {
         return __awaiter(this, void 0, void 0, function () {
-            var userAccount, decryptedPrivKey, key, that;
+            var userAccount, decryptedUserAccount, decryptedPrivKey, key, that;
             return __generator(this, function (_a) {
-                userAccount = JSON.parse(localStorage.getItem('user'));
-                decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+                userAccount = localStorage.getItem('user');
+                decryptedUserAccount = JSON.parse(this.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, userAccount));
+                decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
                 //user account
                 this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
                 key = new Buffer(this.tokenholderAccount.privateKey.substr(2), 'hex');
@@ -4260,8 +4414,9 @@ var Web3Service = /** @class */ (function () {
                                                                 console.log('receipt token Tx: ');
                                                                 console.log(transaction);
                                                                 that.getBalance(that.userAccount.address);
-                                                                var user_id = JSON.parse(localStorage.getItem('user')).id;
-                                                                that.barService.addTransaction(transaction.transactionHash, amount, 'Bought oNyCoins', user_id, "1").subscribe(function (response) {
+                                                                var userAccount = localStorage.getItem('user');
+                                                                var decryptedUserAccount = JSON.parse(that.EncrDecr.get(_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].secret, userAccount));
+                                                                that.barService.addTransaction(transaction.transactionHash, amount, 'Bought oNyCoins', decryptedUserAccount.id, "1").subscribe(function (response) {
                                                                     return response;
                                                                 }, function (err) { return console.error(err); });
                                                             });
@@ -4324,6 +4479,30 @@ var Web3Service = /** @class */ (function () {
             });
         });
     };
+    Web3Service.prototype.getBarBalance = function (address) {
+        // get the tokenbalance from provided address
+        this.oNyCoin.methods.balanceOf(address).call(function (error, result) {
+            return __awaiter(this, void 0, void 0, function () {
+                var divs, i;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!!error) return [3 /*break*/, 2];
+                            divs = document.getElementsByClassName('barBalance');
+                            for (i = 0; i < divs.length; i++) {
+                                document.getElementsByClassName('barBalance')[i].innerHTML = result;
+                            }
+                            return [4 /*yield*/, result];
+                        case 1: return [2 /*return*/, _a.sent()];
+                        case 2:
+                            console.error(error);
+                            _a.label = 3;
+                        case 3: return [2 /*return*/];
+                    }
+                });
+            });
+        });
+    };
     // get all accounts on the blockchain
     Web3Service.prototype.getAllAccounts = function () {
         this.web3.eth.getAccounts(function (error, result) {
@@ -4363,7 +4542,8 @@ __webpack_require__.r(__webpack_exports__);
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 var environment = {
     production: false,
-    API: 'http://localhost:5000/'
+    API: 'http://localhost:5000/',
+    secret: 'KittyLuth3rKITTY'
 };
 
 
@@ -4402,7 +4582,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/Stefan/Documents/CMGT/Jaar-4/MINSLA01/SecurityEngineering/ionic/oNyCoin/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! /home/cas/Sites/SecurityEngineering/ionic/oNyCoin/src/main.ts */"./src/main.ts");
 
 
 /***/ }),
@@ -4444,6 +4624,17 @@ module.exports = __webpack_require__(/*! /Users/Stefan/Documents/CMGT/Jaar-4/MIN
 /*!************************!*\
   !*** crypto (ignored) ***!
   \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ 5:
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
