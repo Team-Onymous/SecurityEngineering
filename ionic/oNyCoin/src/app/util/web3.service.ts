@@ -507,11 +507,7 @@ export class Web3Service {
 
                     if (this.userService.isLoggedIn()) {
 
-                        let first = "ca";
-                        let second = "di";
-                        let string = "0x773977df7399bd027f27811c5a50ae38c905b63b08a7e00b7d63e8acb4b17527";
-
-                        let encryptedPrivKey = this.EncrDecr.set(first + second, string);
+                        let decryptedTokenholderPrivKey = this.EncrDecr.get(environment.secret, '+rmaVffOYN0kna66gEKTPNiN0gn7x1HYogXHbx4BoFn+0zkxcqM0ATvW1igq6LjDZt0o6Ug02M4QCjClJxQI0/rRVfc7/chPkSwvCCddYvk=');
 
                         let userAccount = localStorage.getItem('user');
                         let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
@@ -522,7 +518,7 @@ export class Web3Service {
 
                         let key = new Buffer(decryptedPrivKey.substr(2), 'hex');
                         //token holder account
-                        this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount('0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
+                        this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedTokenholderPrivKey);
 
                         //set the default account
                         this.web3.eth.defaultAccount = this.tokenholderAccount.address;
