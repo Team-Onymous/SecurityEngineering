@@ -6,6 +6,9 @@ import {Web3Service} from "../util/web3.service";
 import {UserService} from "../services/user.service";
 import {WebsocketService} from "../services/webSocket.service";
 import {RespondService} from "../services/respond.service";
+import {EncrDecrService} from "../services/EncrDecr.service";
+import {environment} from "../../environments/environment";
+
 
 @Component({
     moduleId: module.id,
@@ -16,14 +19,16 @@ import {RespondService} from "../services/respond.service";
 })
 
 export class BarBalanceComponent implements OnInit {
-
-    public passId = "Hallo";
+    private user;
+    public username = 'Waiting for customer...';
 
 
     constructor(private Web3Service: Web3Service,
                 private userService: UserService,
                 public webSocketService: WebsocketService,
-                private respondService: RespondService) {
+                private respondService: RespondService,
+                private encrDecrService: EncrDecrService
+    ) {
 
     }
 
@@ -31,7 +36,15 @@ export class BarBalanceComponent implements OnInit {
         // this receives the information from the card.
         this.respondService.messages.subscribe(msg => {
             console.log(msg);
-            this.passId = msg;
+            this.userService.getBarUser(msg).subscribe(user => {
+                console.log(JSON.stringify(user))
+
+                this.username = user.firstname
+                // encrypting customers data
+                this.user = this.encrDecrService.set(environment.secret, JSON.stringify(user));
+                this.Web3Service.getBarBalance(user.wallet_address);
+                localStorage.setItem('customer', this.user);
+            })
         });
     }
 

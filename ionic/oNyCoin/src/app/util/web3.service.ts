@@ -5,6 +5,7 @@ import {map} from "rxjs/operators";
 import {BarService} from "../services/bar.services";
 import {EncrDecrService} from "../services/EncrDecr.service";
 import {UserService} from "../services/user.service";
+import {environment} from "../../environments/environment";
 
 const Tx = require('ethereumjs-tx');
 
@@ -506,21 +507,18 @@ export class Web3Service {
 
                     if (this.userService.isLoggedIn()) {
 
-                        let first = "ca";
-                        let second = "di";
-                        let string = "0x773977df7399bd027f27811c5a50ae38c905b63b08a7e00b7d63e8acb4b17527";
+                        let decryptedTokenholderPrivKey = this.EncrDecr.get(environment.secret, '+rmaVffOYN0kna66gEKTPNiN0gn7x1HYogXHbx4BoFn+0zkxcqM0ATvW1igq6LjDZt0o6Ug02M4QCjClJxQI0/rRVfc7/chPkSwvCCddYvk=');
 
-                        let encryptedPrivKey = this.EncrDecr.set(first + second, string);
-
-                        let userAccount = JSON.parse(localStorage.getItem('user'));
-                        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+                        let userAccount = localStorage.getItem('user');
+                        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+                        let decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
 
                         //user account
                         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
 
                         let key = new Buffer(decryptedPrivKey.substr(2), 'hex');
                         //token holder account
-                        this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount('0x1ED7C19BA5E342B2730D8896B31D90E3B9BC7CE3A59939DC37AFD1FE4283AD38');
+                        this.tokenholderAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedTokenholderPrivKey);
 
                         //set the default account
                         this.web3.eth.defaultAccount = this.tokenholderAccount.address;
@@ -562,8 +560,13 @@ export class Web3Service {
     }
 
     public buyConsumables(amount, order) {
-        let userAccount = JSON.parse(localStorage.getItem('user'));
-        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+
+
+        let userAccount = localStorage.getItem('customer');
+        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+
+        let decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
+
 
         //user account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -606,11 +609,13 @@ export class Web3Service {
                         that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).then(transaction => {
                             console.log("Receipt buyConsumables Tx: ");
                             console.log(transaction);
-                            let user_id = JSON.parse(localStorage.getItem('user')).id;
 
-                            that.barService.addTransaction(transaction.transactionHash, amount, order, user_id, "0").subscribe(
+                            let userAccount = localStorage.getItem('user');
+                            let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
+
+                            that.barService.addTransaction(transaction.transactionHash, amount, order, decryptedUserAccount.id, "0").subscribe(
                                 response => {
-                                    that.getBalance(that.userAccount.address);
+                                    that.getBarBalance(that.userAccount.address);
                                     return response
                                 },
                                 err => console.log(err)
@@ -626,8 +631,9 @@ export class Web3Service {
 
     public refund(amount) {
 
-        let userAccount = JSON.parse(localStorage.getItem('user'));
-        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        let userAccount = localStorage.getItem('user');
+        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+        let decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
 
         // User account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -668,9 +674,10 @@ export class Web3Service {
                                 console.log(transaction);
                                 that.getBalance(that.userAccount.address);
 
-                                let user_id = JSON.parse(localStorage.getItem('user')).id;
+                                let userAccount = localStorage.getItem('user');
+                                let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
 
-                                that.barService.addTransaction(transaction.transactionHash, amount, 'Refunded oNyCoins', user_id, "0").subscribe(
+                                that.barService.addTransaction(transaction.transactionHash, amount, 'Refunded oNyCoins', decryptedUserAccount.id, "0").subscribe(
                                     response => {
                                         console.log(response);
                                         return response
@@ -688,8 +695,9 @@ export class Web3Service {
 
     public async buyTokens(amount) {
 
-        let userAccount = JSON.parse(localStorage.getItem('user'));
-        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        let userAccount = localStorage.getItem('user');
+        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+        let decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
 
 
         //user account
@@ -772,9 +780,10 @@ export class Web3Service {
                                             console.log(transaction);
                                             that.getBalance(that.userAccount.address)
 
-                                            let user_id = JSON.parse(localStorage.getItem('user')).id;
+                                            let userAccount = localStorage.getItem('user');
+                                            let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
 
-                                            that.barService.addTransaction(transaction.transactionHash, amount, 'Bought oNyCoins', user_id, "1").subscribe(
+                                            that.barService.addTransaction(transaction.transactionHash, amount, 'Bought oNyCoins', decryptedUserAccount.id, "1").subscribe(
                                                 response => {
 
                                                     return response
@@ -823,6 +832,22 @@ export class Web3Service {
                 console.error(error);
         });
     }
+
+    public getBarBalance(address) {
+        // get the tokenbalance from provided address
+        this.oNyCoin.methods.balanceOf(address).call(async function (error, result) {
+            if (!error) {
+                // this updates the balance in the HTML card when it is loaded. Dirty fuckin' hack though, should be refactored.
+                let divs = document.getElementsByClassName('barBalance');
+                for (let i = 0; i < divs.length; i++) {
+                    document.getElementsByClassName('barBalance')[i].innerHTML = result;
+                }
+                return await result;
+            } else
+                console.error(error);
+        });
+    }
+
 
     // get all accounts on the blockchain
     private getAllAccounts() {
