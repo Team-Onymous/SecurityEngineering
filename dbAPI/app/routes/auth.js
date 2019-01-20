@@ -139,7 +139,7 @@ module.exports = function (app, passport, models, flash) {
         }).catch(err => res.json(err));
     });
 
-    //find specific user by ID
+    //find specific user by pass_id
     app.get('/api/users/pass/:pass_id', (req, res) => {
         //TODO: web3.js wallet info ophalen en meesturen in response
         User.findOne({where: {pass_id: req.params.pass_id}}).then(user => {
