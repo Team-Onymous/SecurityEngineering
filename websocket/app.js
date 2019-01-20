@@ -14,7 +14,7 @@ io.on('connection', (socket) => {
        io.emit('connection', {type: 'the date is: ', text: Date()})
     });
 
-    io.send(Date())
+    io.send('ZugrwRVZZ7');
 
     rc522.listen((serialNumber) => {
         if (serialNumber) {

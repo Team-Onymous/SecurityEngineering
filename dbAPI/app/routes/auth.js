@@ -138,6 +138,23 @@ module.exports = function (app, passport, models, flash) {
         }).catch(err => res.json(err));
     });
 
+    //find specific user by ID
+    app.get('/api/users/pass/:pass_id', (req, res) => {
+        //TODO: web3.js wallet info ophalen en meesturen in response
+        User.findOne({where: {pass_id: req.params.pass_id}}).then(user => {
+            res.json({
+                id: user.id,
+                wallet_address: user.wallet_address,
+                pass_id: user.pass_id,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                email: user.email,
+                date_of_birth: user.date_of_birth,
+                role: user.role
+            })
+        }).catch(err => res.json(err));
+    });
+
     //find specific user by wallet address
     app.get('/api/users/:wallet_address', (req, res) => {
         //TODO: web3.js wallet info ophalen en meesturen in response

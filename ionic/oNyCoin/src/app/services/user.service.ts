@@ -120,4 +120,18 @@ export class UserService {
             })
         );
     }
+
+    getBarUser(pass_id): Observable<any> {
+        return this.http.get<any>(environment.API + 'api/users/pass/' + pass_id, options.httpOptions).pipe(
+            map((data: any) => {
+
+                if (_.isNull(data)) {
+                    return []; // fallback to an empty result in case of 204
+                } else {
+                    return data;
+                }
+            })
+        );
+    }
+
 }

@@ -17,7 +17,7 @@ import {RespondService} from "../services/respond.service";
 
 export class BarBalanceComponent implements OnInit {
 
-    public passId = "Hallo";
+    public user = "Hallo";
 
 
     constructor(private Web3Service: Web3Service,
@@ -31,8 +31,15 @@ export class BarBalanceComponent implements OnInit {
         // this receives the information from the card.
         this.respondService.messages.subscribe(msg => {
             console.log(msg);
-            this.passId = msg;
+            this.userService.getBarUser(msg).subscribe(user => {
+                this.user= user.firstname;
+                this.Web3Service.getBarBalance(user.wallet_address);
+
+
+            })
         });
+
+
     }
 
     // public listen() {

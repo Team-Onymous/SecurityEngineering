@@ -824,6 +824,22 @@ export class Web3Service {
         });
     }
 
+    public getBarBalance(address) {
+        // get the tokenbalance from provided address
+        this.oNyCoin.methods.balanceOf(address).call(async function (error, result) {
+            if (!error) {
+                // this updates the balance in the HTML card when it is loaded. Dirty fuckin' hack though, should be refactored.
+                let divs = document.getElementsByClassName('barBalance');
+                for (let i = 0; i < divs.length; i++) {
+                    document.getElementsByClassName('barBalance')[i].innerHTML = result;
+                }
+                return await result;
+            } else
+                console.error(error);
+        });
+    }
+
+
     // get all accounts on the blockchain
     private getAllAccounts() {
         this.web3.eth.getAccounts(function (error, result) {
