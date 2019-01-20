@@ -35,7 +35,11 @@ export class UserService {
     }
 
     isLoggedIn(): boolean {
-        return !!localStorage.getItem('user');
+
+        let userAccount = localStorage.getItem('user');
+        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+
+        return !!decryptedUserAccount;
     }
     private getResourceIdByURL(url: string): string {
         switch (url) {
@@ -94,7 +98,10 @@ export class UserService {
             .set('password', password);
         return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions).pipe(
             map((response: any) => {
-                localStorage.setItem('user', JSON.stringify(response));
+                // this.user = this.encrDecrService.set(environment.secret, JSON.stringify(user));
+
+
+                localStorage.setItem('user', this.EncrDecr.set(environment.secret, JSON.stringify(response)));
             }));
     }
 

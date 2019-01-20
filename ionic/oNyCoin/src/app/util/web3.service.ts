@@ -513,8 +513,9 @@ export class Web3Service {
 
                         let encryptedPrivKey = this.EncrDecr.set(first + second, string);
 
-                        let userAccount = JSON.parse(localStorage.getItem('user'));
-                        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+                        let userAccount = localStorage.getItem('user');
+                        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+                        let decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
 
                         //user account
                         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -612,9 +613,11 @@ export class Web3Service {
                         that.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex')).then(transaction => {
                             console.log("Receipt buyConsumables Tx: ");
                             console.log(transaction);
-                            let user_id = JSON.parse(localStorage.getItem('user')).id;
 
-                            that.barService.addTransaction(transaction.transactionHash, amount, order, user_id, "0").subscribe(
+                            let userAccount = localStorage.getItem('user');
+                            let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
+
+                            that.barService.addTransaction(transaction.transactionHash, amount, order, decryptedUserAccount.id, "0").subscribe(
                                 response => {
                                     that.getBarBalance(that.userAccount.address);
                                     return response
@@ -632,8 +635,9 @@ export class Web3Service {
 
     public refund(amount) {
 
-        let userAccount = JSON.parse(localStorage.getItem('user'));
-        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        let userAccount = localStorage.getItem('user');
+        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+        let decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
 
         // User account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -674,9 +678,10 @@ export class Web3Service {
                                 console.log(transaction);
                                 that.getBalance(that.userAccount.address);
 
-                                let user_id = JSON.parse(localStorage.getItem('user')).id;
+                                let userAccount = localStorage.getItem('user');
+                                let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
 
-                                that.barService.addTransaction(transaction.transactionHash, amount, 'Refunded oNyCoins', user_id, "0").subscribe(
+                                that.barService.addTransaction(transaction.transactionHash, amount, 'Refunded oNyCoins', decryptedUserAccount.id, "0").subscribe(
                                     response => {
                                         console.log(response);
                                         return response
@@ -694,8 +699,9 @@ export class Web3Service {
 
     public async buyTokens(amount) {
 
-        let userAccount = JSON.parse(localStorage.getItem('user'));
-        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+        let userAccount = localStorage.getItem('user');
+        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+        let decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
 
 
         //user account
@@ -778,9 +784,10 @@ export class Web3Service {
                                             console.log(transaction);
                                             that.getBalance(that.userAccount.address)
 
-                                            let user_id = JSON.parse(localStorage.getItem('user')).id;
+                                            let userAccount = localStorage.getItem('user');
+                                            let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
 
-                                            that.barService.addTransaction(transaction.transactionHash, amount, 'Bought oNyCoins', user_id, "1").subscribe(
+                                            that.barService.addTransaction(transaction.transactionHash, amount, 'Bought oNyCoins', decryptedUserAccount.id, "1").subscribe(
                                                 response => {
 
                                                     return response

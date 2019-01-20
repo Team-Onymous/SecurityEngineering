@@ -9,6 +9,8 @@ import {transaction} from "../services/transaction";
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import {MatTableDataSource} from '@angular/material';
+import {environment} from "../../environments/environment";
+import {EncrDecrService} from "../services/EncrDecr.service";
 
 export class TransactionData {
     coins: string;
@@ -39,7 +41,9 @@ export class HomeComponent implements OnInit {
     displayedColumns: string[] = ['coins', 'order', 'date'];
     dataSource : MatTableDataSource<TransactionData> = new MatTableDataSource([]);
 
-    constructor(private Web3Service: Web3Service, private transactionService: TransactionService) {
+    constructor(private Web3Service: Web3Service,
+                private transactionService: TransactionService,
+                private EncrDecr: EncrDecrService) {
 
     }
 
@@ -48,9 +52,11 @@ export class HomeComponent implements OnInit {
 
     }
     ngAfterViewInit () {
-        let userId = JSON.parse(localStorage.getItem('user')).id;
+        let userAccount = localStorage.getItem('user');
+        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
 
-        this.loadedTransactions$ = this.transactionService.getTransactions(userId);
+
+        this.loadedTransactions$ = this.transactionService.getTransactions(decryptedUserAccount.id);
         this.loadedTransactions$.subscribe(
           (transactions: transaction[]) => {
               if (transactions.length >= 1) {

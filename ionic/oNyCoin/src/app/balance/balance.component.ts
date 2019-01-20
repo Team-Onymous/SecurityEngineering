@@ -5,6 +5,8 @@ import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core'
 import {Web3Service} from "../util/web3.service";
 import {UserService} from "../services/user.service";
 import {barConsumable} from "../services/barConsumable";
+import {environment} from "../../environments/environment";
+import {EncrDecrService} from "../services/EncrDecr.service";
 
 
 @Component({
@@ -21,7 +23,8 @@ export class BalanceComponent implements OnInit {
     public user;
 
     constructor(private Web3Service: Web3Service,
-                private userService: UserService) {
+                private userService: UserService,
+                private EncrDecr: EncrDecrService) {
 
     }
 
@@ -34,9 +37,10 @@ export class BalanceComponent implements OnInit {
 
         if (this.userService.isLoggedIn()) {
 
-            let userId = JSON.parse(localStorage.getItem('user')).id;
+            let userAccount = localStorage.getItem('user');
+            let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
 
-            this.userService.getUser(userId).subscribe(
+            this.userService.getUser(decryptedUserAccount.id).subscribe(
                 (user) => {
 
                     this.user = user
