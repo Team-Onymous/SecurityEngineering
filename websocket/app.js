@@ -1,17 +1,30 @@
 let app = require('express')();
+
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
 const rc522 = require('rc522-c7z');
 
 paused = false;
 
-io.origins(['http://localhost:8100', 'https://onycoin.nl']);
+io.origins(['http://localhost:8100', 'https://onycoin.nl', 'http://localhost']);
+
+io.set('origins', ['http://localhost:8100', 'https://onycoin.nl:443', 'http://localhost:80']);
+//
+// if (origin) {
+//     // https://developer.mozilla.org/En/HTTP_Access_Control
+//     headers['Access-Control-Allow-Origin'] = '*';
+//
+//     if (req.headers.cookie) {
+//         headers['Access-Control-Allow-Credentials'] = 'true';
+//     }
+// }
+
 
 io.on('connection', (socket) => {
 
 
     socket.on('connection', message => {
-       io.emit('connection', {type: 'the date is: ', text: Date()})
+        io.emit('connection', {type: 'the date is: ', text: Date()})
     });
 
     rc522.listen((serialNumber) => {
@@ -24,7 +37,7 @@ io.on('connection', (socket) => {
     console.log('user connected');
 
     // Log whenever a client disconnects from our websocket server
-    socket.on('disconnect', function(){
+    socket.on('disconnect', function () {
         console.log('user disconnected');
     });
 
@@ -33,7 +46,7 @@ io.on('connection', (socket) => {
     // using `io.emit()`
     socket.on('message', (message) => {
         console.log("Message Received: " + message);
-        io.emit('message', {type:'new-message', text: message});
+        io.emit('message', {type: 'new-message', text: message});
     });
 });
 

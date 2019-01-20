@@ -23,7 +23,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 // };
 
 const corsOptions = {
-    origin: ['http://localhost:8100', 'https://onycoin.nl'],
+    origin: ['http://localhost:*', 'https://onycoin.nl'],
     optionsSuccessStatus: 200
 };
 
