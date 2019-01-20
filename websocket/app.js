@@ -22,8 +22,6 @@ io.on('connection', (socket) => {
         }
     });
 
-
-
     // Log whenever a user connects
     console.log('user connected');
 
