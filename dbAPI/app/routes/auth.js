@@ -128,6 +128,7 @@ module.exports = function (app, passport, models, flash) {
             res.json({
                 id: user.id,
                 wallet_address: user.wallet_address,
+                wallet_key: user.wallet_key,
                 pass_id: user.pass_id,
                 firstname: user.firstname,
                 lastname: user.lastname,
@@ -145,6 +146,7 @@ module.exports = function (app, passport, models, flash) {
             res.json({
                 id: user.id,
                 wallet_address: user.wallet_address,
+                wallet_key: user.wallet_key,
                 pass_id: user.pass_id,
                 firstname: user.firstname,
                 lastname: user.lastname,

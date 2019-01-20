@@ -5,6 +5,7 @@ import {map} from "rxjs/operators";
 import {BarService} from "../services/bar.services";
 import {EncrDecrService} from "../services/EncrDecr.service";
 import {UserService} from "../services/user.service";
+import {environment} from "../../environments/environment";
 
 const Tx = require('ethereumjs-tx');
 
@@ -562,8 +563,13 @@ export class Web3Service {
     }
 
     public buyConsumables(amount, order) {
-        let userAccount = JSON.parse(localStorage.getItem('user'));
-        let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
+
+
+        let userAccount = localStorage.getItem('customer');
+        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+
+        let decryptedPrivKey = this.EncrDecr.get(decryptedUserAccount.email.substr(0, 2) + decryptedUserAccount.lastname.substr(0, 2), atob(decryptedUserAccount.wallet_key));
+
 
         //user account
         this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
@@ -610,7 +616,7 @@ export class Web3Service {
 
                             that.barService.addTransaction(transaction.transactionHash, amount, order, user_id, "0").subscribe(
                                 response => {
-                                    that.getBalance(that.userAccount.address);
+                                    that.getBarBalance(that.userAccount.address);
                                     return response
                                 },
                                 err => console.log(err)
