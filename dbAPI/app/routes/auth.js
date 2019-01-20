@@ -66,19 +66,19 @@ module.exports = function (app, passport, models, flash) {
         function (req, res) {
 
             User.findOne({where: {id: req.params.id}}).then(user => {
-                let makeID = function () {
-                    var text = "";
-                    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-                    for (var i = 0; i < 10; i++)
-                        text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-                    return text; // TODO: check of pass_id al bestaat
-                };
+                // let makeID = function () {
+                //     var text = "";
+                //     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                //
+                //     for (var i = 0; i < 10; i++)
+                //         text += possible.charAt(Math.floor(Math.random() * possible.length));
+                //
+                //     return text; // TODO: check of pass_id al bestaat
+                // };
 
                 let data =
                     {
-                        pass_id: makeID(),
+                        pass_id: req.body.pass_id,
                         street: req.body.street,
                         house_number: req.body.house_number,
                         postal_code: req.body.postal_code,

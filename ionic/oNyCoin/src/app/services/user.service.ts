@@ -27,7 +27,7 @@ export class UserService {
     }
 
     public hasPermission(resourceId: string): boolean {
-        if(this.isLoggedIn()) {
+        if (this.isLoggedIn()) {
 
             return true;
         }
@@ -37,10 +37,13 @@ export class UserService {
     isLoggedIn(): boolean {
 
         let userAccount = localStorage.getItem('user');
-        let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+        if (userAccount) {
+            let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
 
-        return !!decryptedUserAccount;
+            return !!decryptedUserAccount;
+        } else return false
     }
+
     private getResourceIdByURL(url: string): string {
         switch (url) {
             case '/home':
@@ -77,9 +80,10 @@ export class UserService {
             );
     }
 
-    addCard(street: string, houseNumber: string, postalCode: string, city: string, userId): Observable<any> {
+    addCard(pass_id: string, street: string, houseNumber: string, postalCode: string, city: string, userId): Observable<any> {
         let date = Date().toString();
         const body = new HttpParams()
+            .set('pass_id', pass_id)
             .set('street', street)
             .set('house_number', houseNumber)
             .set('postal_code', postalCode)
@@ -107,6 +111,7 @@ export class UserService {
 
     logout(): Observable<any> {
         localStorage.removeItem('user');
+        localStorage.removeItem('customer');
         return this.http.get(environment.API + 'logout', options.httpOptions);
     }
 
