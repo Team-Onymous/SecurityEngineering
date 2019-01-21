@@ -29,6 +29,7 @@ module.exports = function (app, passport, models, flash) {
                 email: req.user.email,
                 firstname: req.user.firstname,
                 lastname: req.user.lastname,
+                role: req.user.role
                 // request: req.session
             })
         });

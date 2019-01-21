@@ -34,6 +34,7 @@ import {BarService} from "./services/bar.services";
 import {TransactionService} from "./services/transaction.service";
 import {EncrDecrService} from "./services/EncrDecr.service";
 import {WebsocketService} from "./services/webSocket.service";
+import {DialogComponent} from "./dialog/dialog.component";
 
 @NgModule({
     declarations: [
@@ -51,7 +52,8 @@ import {WebsocketService} from "./services/webSocket.service";
         AddCardComponent,
         BarComponent,
         AppComponent,
-        BarBalanceComponent],
+        BarBalanceComponent,
+        DialogComponent],
     entryComponents: [],
     imports: [
         BrowserModule,

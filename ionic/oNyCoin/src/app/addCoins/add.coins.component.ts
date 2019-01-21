@@ -4,6 +4,7 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
 import {EncrDecrService} from "../services/EncrDecr.service";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -17,6 +18,7 @@ export class AddCoinsComponent {
 
     visible: boolean = true;
     breakpoint: number = 520;
+    public showDialog;
 
     constructor(private web3Service: Web3Service,
                 private EncrDecr: EncrDecrService) {
@@ -57,8 +59,19 @@ export class AddCoinsComponent {
     }
 
     addCoins(amount) {
+
+        //to show modal
+        this.showDialog = !this.showDialog;
+
         console.log(amount);
         this.web3Service.buyTokens(amount);
     }
 
+    newTransaction() {
+
+        // this.sendMessage();
+        this.web3Service.transactionMade = false;
+        document.getElementById('transaction').innerHTML = "";
+        this.showDialog = !this.showDialog;
+    }
 }
