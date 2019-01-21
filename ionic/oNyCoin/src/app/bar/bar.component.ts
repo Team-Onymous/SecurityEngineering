@@ -53,7 +53,8 @@ export class BarComponent {
     public tilesBar: Tile[] = [];
 
     public showDialog;
-    public transactionMade = false;
+
+    public tx;
 
     ngOnInit() {
 
@@ -156,6 +157,10 @@ export class BarComponent {
     }
 
     confirmOrder() {
+
+        //to show modal
+        this.showDialog = !this.showDialog;
+
         let amount = this.totalCoins;
         let order = '';
         this.order.forEach((drink: Drinks) => {
@@ -165,6 +170,8 @@ export class BarComponent {
         this.order = [];
         this.order = [...this.order];
         this.getTotalCoins();
+
+
     }
 
     cancelOrder() {
@@ -172,13 +179,7 @@ export class BarComponent {
         this.order = [...this.order];
         this.getTotalCoins();
 
-        //to show modal
-        this.showDialog = !this.showDialog;
-
-        setTimeout(function () {
-            this.transactionMade = true;
-        }.bind(this), 3000)
-
+        this.newTransaction();
     }
 
     buyConsumables(amount, order) {
@@ -190,10 +191,11 @@ export class BarComponent {
     }
 
     newTransaction() {
-        this.showDialog = !this.showDialog;
-        // localStorage.removeItem('customer');
 
         this.sendMessage();
+        this.web3Service.transactionMade = false;
+        document.getElementById('transaction').innerHTML = "";
+        this.showDialog = !this.showDialog;
         this.router.navigate(['/bar'])
     }
 
