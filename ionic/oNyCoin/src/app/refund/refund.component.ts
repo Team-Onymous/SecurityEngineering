@@ -16,6 +16,8 @@ export class RefundComponent {
 
     visible: boolean = true;
     breakpoint: number = 520;
+    coinsInput: string;
+    ibanInput: string;
 
     constructor(private web3Service: Web3Service) {
     }

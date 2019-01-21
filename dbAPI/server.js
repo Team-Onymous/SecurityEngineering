@@ -23,7 +23,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 // };
 
 const corsOptions = {
-    origin: ['http://localhost:*', 'https://onycoin.nl'],
+    origin: ['http://localhost:8100', 'https://onycoin.nl'],
     optionsSuccessStatus: 200
 };
 
@@ -49,7 +49,7 @@ app.use(session({
     cookie: {
         maxAge: 3600000 // see below
     }
-},)); // session secret
+})); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 

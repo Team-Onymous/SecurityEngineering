@@ -29,6 +29,11 @@ module.exports = function (app, passport, models, flash) {
                 email: req.user.email,
                 firstname: req.user.firstname,
                 lastname: req.user.lastname,
+                role: req.user.role,
+                street: req.user.street,
+                house_number: req.user.house_number,
+                postal_code: req.user.postal_code,
+                city: req.user.city
                 // request: req.session
             })
         });

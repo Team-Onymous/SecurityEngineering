@@ -2,6 +2,11 @@
  * Created by bryan on 4-12-2018.
  */
 import { Component, HostListener, OnInit} from '@angular/core';
+import {UserService} from '../services/user.service';
+import {Router} from "@angular/router";
+import {environment} from "../../environments/environment";
+import {EncrDecrService} from "../services/EncrDecr.service";
+import {RespondService} from "../services/respond.service";
 
 export interface Option {
   value: string;
@@ -14,6 +19,7 @@ export interface Option {
   selector: 'rg-block',
   templateUrl: 'block.component.html',
   styleUrls: ['block.component.css'],
+  providers: [RespondService]
 })
 
 export class BlockComponent{
@@ -21,13 +27,19 @@ export class BlockComponent{
   checked = false;
   breakpoint: number = 520;
   selectedOption : string;
+  private pass_id;
 
 
   options: Option[] = [
     {value: 'lost', viewValue: 'Lost'},
     {value: 'stolen', viewValue: 'Stolen'},
-    {value: 'dontused', viewValue: 'Dont Used'}
+    {value: 'notused', viewValue: 'Not Used'},
+    {value: 'Other', viewValue: 'Other'}
   ];
+  constructor(private userService: UserService, private router: Router,
+              private EncrDecr: EncrDecrService,
+              private respondService: RespondService) {
+  }
 
   ngOnInit() {
     const w = window.innerWidth;
@@ -37,6 +49,10 @@ export class BlockComponent{
       // whenever the window is less than 520, hide this component.
       this.visible = false;
     }
+
+    this.respondService.messages.subscribe(msg => {
+      this.pass_id = msg
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -50,6 +66,30 @@ export class BlockComponent{
     }
   }
 
-  goToRegister(){}
+  blockCard(newPass) {
+
+    let userAccount = localStorage.getItem('user');
+    let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+    console.log(decryptedUserAccount);
+
+    if(newPass)
+    {
+      this.userService.removeCard(this.pass_id, decryptedUserAccount.street , decryptedUserAccount.house_number , decryptedUserAccount.postal_code, decryptedUserAccount.city , decryptedUserAccount.id).subscribe(
+        response => {
+          console.log(response);
+          this.router.navigate(['/home']);
+        },
+        err => console.log(err)
+      );
+    }else{
+      this.userService.removeCard('',  decryptedUserAccount.street , decryptedUserAccount.house_number , decryptedUserAccount.postal_code, decryptedUserAccount.city, decryptedUserAccount.id).subscribe(
+        response => {
+          console.log(response);
+          this.router.navigate(['/home']);
+        },
+        err => console.log(err)
+      );
+    }
+  }
 
 }

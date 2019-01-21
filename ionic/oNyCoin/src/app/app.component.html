@@ -1,5 +1,5 @@
 <mat-sidenav-container>
-    <mat-sidenav #rgnavbar mode="side" opened="{{isLoggedIn()}}" color="primary" style="width:250px; height: 100%;">
+    <mat-sidenav #rgnavbar mode="side" opened="{{isLoggedIn() && !getRole()}}" color="primary" style="width:250px; height: 100%;">
         <rg-navbar></rg-navbar>
     </mat-sidenav>
 

@@ -44,7 +44,6 @@ export class AddCardComponent {
 
         // this receives the information from the card.
         this.respondService.messages.subscribe(msg => {
-            console.log(msg);
             this.pass_id = msg
         });
     }
@@ -65,7 +64,6 @@ export class AddCardComponent {
         let userAccount = localStorage.getItem('user');
         let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
 
-        console.log(this.pass_id);
 
         this.userService.addCard(this.pass_id, street, houseNumber, postalCode, city, decryptedUserAccount.id).subscribe(
             response => {

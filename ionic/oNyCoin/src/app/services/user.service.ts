@@ -7,6 +7,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import * as options from './http.options';
 import {environment} from '../../environments/environment';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import * as _ from 'underscore';
 import {EncrDecrService} from "./EncrDecr.service";
 
@@ -14,7 +15,7 @@ import {EncrDecrService} from "./EncrDecr.service";
 @Injectable()
 export class UserService {
 
-    constructor(public http: HttpClient, private EncrDecr: EncrDecrService) {
+    constructor(public http: HttpClient, private EncrDecr: EncrDecrService, private router: Router) {
 
     }
 
@@ -28,7 +29,25 @@ export class UserService {
 
     public hasPermission(resourceId: string): boolean {
         if (this.isLoggedIn()) {
-
+            let userAccount = localStorage.getItem('user');
+            let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+            if(resourceId == 'barPage'){
+                if(decryptedUserAccount.role === 1){
+                    return true;
+                }else{
+                    this.router.navigate(['home']);
+                }
+            }
+            else if(resourceId == 'homePage' || 'refundPage' || 'addcoinsPage' || 'blockPage'){
+                if(decryptedUserAccount.role === 0){
+                    return true;
+                }else{
+                    this.router.navigate(['bar']);
+                }
+            }
+            else {
+                return false;
+            }
             return true;
         }
         return false;
@@ -42,6 +61,18 @@ export class UserService {
 
             return !!decryptedUserAccount;
         } else return false
+    }
+
+    isLoggedInAsBar() : boolean {
+        if(this.isLoggedIn()) {
+            let userAccount = localStorage.getItem('user');
+            if (userAccount) {
+                let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
+                if(decryptedUserAccount.role === 1){
+                    return true;
+                }else return false;
+            }
+        }else return false;
     }
 
     private getResourceIdByURL(url: string): string {
@@ -95,6 +126,21 @@ export class UserService {
 
             );
     }
+    removeCard(pass_id: string, street: string, houseNumber: string, postalCode: string, city: string, userId): Observable<any> {
+        let date = Date().toString();
+        const body = new HttpParams()
+          .set('pass_id', pass_id)
+          .set('street', street)
+          .set('house_number', houseNumber)
+          .set('postal_code', postalCode)
+          .set('city', city);
+        // We got to build the data we send to the backend.
+
+        return this.http.put(environment.API + 'api/users/orderCard/' + userId, body.toString(), options.httpOptions)
+          .pipe(
+
+          );
+    }
 
     login(email: string, password: string) {
         const body = new HttpParams()
@@ -103,7 +149,6 @@ export class UserService {
         return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions).pipe(
             map((response: any) => {
                 // this.user = this.encrDecrService.set(environment.secret, JSON.stringify(user));
-
 
                 localStorage.setItem('user', this.EncrDecr.set(environment.secret, JSON.stringify(response)));
             }));

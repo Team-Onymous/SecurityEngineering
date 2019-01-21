@@ -4,23 +4,35 @@
       <mat-card class="addCard-card">
         <mat-card-title>Refund OnyCoins</mat-card-title>
         <mat-card-content>
-          <form #refundForm="ngForm" (submit)="refund(Coins.value)" class="addCard-form">
+          <form #refundForm="ngForm" (ngSubmit)="refund(Coins.value)" class="addCard-form">
             <div>
               <mat-form-field>
-                <input matInput #Coins name="Coins" required class="addCard-input" placeholder="Amount of Coins"/>
+                <input matInput #Coins="ngModel" [(ngModel)]="coinsInput" name="Coins"
+                       required class="addCard-input" pattern="[0-9]{1,2}" placeholder="Amount of Coins"/>
                 <mat-icon class="clear" matSuffix (click)="Coins.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="Coins.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!Coins.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!Coins.errors?.pattern">The amount of coins can only be a number and the max is 99</span>
+                </mat-hint>
               </mat-form-field>
               <mat-form-field>
-                <input matInput #CoinsInEuros name="CoinsInEuros" class="addCard-input" placeholder="Cost in Euros"/>
+                <input matInput #CoinsInEuros disabled name="CoinsInEuros" class="addCard-input"
+                       placeholder="{{coinsInput}} euro"/>
               </mat-form-field>
               <mat-form-field>
-                <input matInput #IbanNumber name="IbanNumber" required class="addCard-input" placeholder="IBAN Number"/>
+                <input matInput #IbanNumber="ngModel" [(ngModel)]="ibanInput" name="IbanNumber" required class="addCard-input" placeholder="IBAN Number"
+                pattern="[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{9}([a-zA-Z0-9]?){0,16}"/>
                 <mat-icon class="clear" matSuffix (click)="IbanNumber.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="IbanNumber.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!IbanNumber.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!IbanNumber.errors?.pattern">It isn't a valid Iban Number</span>
+                </mat-hint>
               </mat-form-field>
               <br />
-              <button mat-raised-button [disabled]="Coins.value == '' || IbanNumber.value == ''" type="submit" class="addCard-button">Refund Coins</button>
+              <button mat-raised-button [disabled]="!refundForm.valid" class="addCard-button">Refund Coins</button>
             </div>
           </form>
+
         </mat-card-content>
       </mat-card>
     </div>

@@ -4,24 +4,24 @@
             <mat-card class="addCard-card">
                 <mat-card-title>Add OnyCoins</mat-card-title>
                 <mat-card-content>
-                    <form #addCoinsForm="ngForm" (submit)="addCoins(Coins.value)" class="addCard-form">
+                    <form #addCoinsForm="ngForm" (ngSubmit)="addCoins(Coins.value)" class="addCard-form">
                         <div>
                             <mat-form-field>
-                                <input matInput #Coins name="Coins"
-                                       required class="addCard-input"
-                                       placeholder="Amount of Coins"/>
+                                <input matInput #Coins="ngModel" [(ngModel)]="coinsInput" name="Coins"
+                                       required class="addCard-input" pattern="[0-9]{1,2}" placeholder="Amount of Coins"/>
                                 <mat-icon class="clear" matSuffix (click)="Coins.value = ''">clear</mat-icon>
+                                <mat-hint *ngIf="Coins.invalid" [ngStyle]="warningStyle">
+                                    <span [hidden]="!Coins.errors?.required">Field can't be emty</span>
+                                    <span [hidden]="!Coins.errors?.pattern">The amount of coins can only be a number and the max is 99</span>
+                                </mat-hint>
                             </mat-form-field>
                             <mat-form-field>
-                                <input matInput #CoinsInEuros
+                                <input matInput #CoinsInEuros disabled
                                        name="CoinsInEuros" class="addCard-input"
-                                       placeholder="Cost in Euros"/>
+                                       placeholder="{{coinsInput}} euro"/>
                             </mat-form-field>
                             <br/>
-                            <button mat-raised-button
-                                    [disabled]="Coins.value == ''"
-                                    type="submit"
-                                    class="addCard-button">
+                            <button mat-raised-button [disabled]="!addCoinsForm.valid" class="addCard-button">
                                 Add Coins
                             </button>
                         </div>

@@ -17,6 +17,7 @@ export class AddCoinsComponent {
 
     visible: boolean = true;
     breakpoint: number = 520;
+    coinsInput: string;
 
     constructor(private web3Service: Web3Service,
                 private EncrDecr: EncrDecrService) {
