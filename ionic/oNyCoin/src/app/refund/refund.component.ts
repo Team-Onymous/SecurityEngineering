@@ -47,7 +47,7 @@ export class RefundComponent {
 
         //to show modal
         this.showDialog = !this.showDialog;
-        
+
         this.web3Service.refund(amount);
     }
 
