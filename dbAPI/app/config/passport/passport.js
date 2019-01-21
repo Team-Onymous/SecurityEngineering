@@ -43,7 +43,7 @@ module.exports = function (passport, user) {
         function (req, email, password, done) {
 
             const generateHash = function (password) {
-                return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
+                return bCrypt.hashSync(password, bCrypt.genSaltSync(11), null);
             };
 
             User.findOne({
