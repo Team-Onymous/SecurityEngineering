@@ -6,6 +6,7 @@ import {BarService} from "../services/bar.services";
 import {EncrDecrService} from "../services/EncrDecr.service";
 import {UserService} from "../services/user.service";
 import {environment} from "../../environments/environment";
+import {BarComponent} from "../bar/bar.component";
 
 const Tx = require('ethereumjs-tx');
 
@@ -480,7 +481,7 @@ export class Web3Service {
     private accounts: string[];
     public ready = false;
     public accountsObservable = new Subject<string[]>();
-
+    public transactionMade = false;
 
     constructor(private barService: BarService,
                 private EncrDecr: EncrDecrService,
@@ -610,6 +611,10 @@ export class Web3Service {
                             console.log("Receipt buyConsumables Tx: ");
                             console.log(transaction);
 
+                            // show on screen
+                            document.getElementById('transaction').innerHTML = "TransactionID: " + transaction.transactionHash;
+                            that.transactionMade = true;
+
                             let userAccount = localStorage.getItem('user');
                             let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
 
@@ -673,6 +678,11 @@ export class Web3Service {
                                 console.log('receipt token Tx: ');
                                 console.log(transaction);
                                 that.getBalance(that.userAccount.address);
+
+                                // show on screen
+                                document.getElementById('transaction').innerHTML = "TransactionID: " + transaction.transactionHash;
+                                that.transactionMade = true;
+
 
                                 let userAccount = localStorage.getItem('user');
                                 let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
@@ -778,7 +788,11 @@ export class Web3Service {
                                         .then(transaction => {
                                             console.log('receipt token Tx: ');
                                             console.log(transaction);
-                                            that.getBalance(that.userAccount.address)
+                                            that.getBalance(that.userAccount.address);
+
+                                            // show on screen
+                                            document.getElementById('transaction').innerHTML = "TransactionID: " + transaction.transactionHash;
+                                            that.transactionMade = true;
 
                                             let userAccount = localStorage.getItem('user');
                                             let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));

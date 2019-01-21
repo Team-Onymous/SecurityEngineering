@@ -34,6 +34,7 @@ module.exports = function (app, passport, models, flash) {
                 house_number: req.user.house_number,
                 postal_code: req.user.postal_code,
                 city: req.user.city
+
                 // request: req.session
             })
         });

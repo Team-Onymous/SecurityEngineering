@@ -19,6 +19,8 @@ export class RefundComponent {
     coinsInput: string;
     ibanInput: string;
 
+    public showDialog;
+
     constructor(private web3Service: Web3Service) {
     }
 
@@ -44,6 +46,18 @@ export class RefundComponent {
     }
 
     refund(amount) {
+
+        //to show modal
+        this.showDialog = !this.showDialog;
+
         this.web3Service.refund(amount);
+    }
+
+    newTransaction() {
+
+        // this.sendMessage();
+        this.web3Service.transactionMade = false;
+        document.getElementById('transaction').innerHTML = "";
+        this.showDialog = !this.showDialog;
     }
 }

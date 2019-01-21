@@ -70,13 +70,11 @@ export class BlockComponent{
 
     let userAccount = localStorage.getItem('user');
     let decryptedUserAccount = JSON.parse(this.EncrDecr.get(environment.secret, userAccount));
-    console.log(decryptedUserAccount);
 
     if(newPass)
     {
       this.userService.removeCard(this.pass_id, decryptedUserAccount.street , decryptedUserAccount.house_number , decryptedUserAccount.postal_code, decryptedUserAccount.city , decryptedUserAccount.id).subscribe(
         response => {
-          console.log(response);
           this.router.navigate(['/home']);
         },
         err => console.log(err)
@@ -84,7 +82,6 @@ export class BlockComponent{
     }else{
       this.userService.removeCard('',  decryptedUserAccount.street , decryptedUserAccount.house_number , decryptedUserAccount.postal_code, decryptedUserAccount.city, decryptedUserAccount.id).subscribe(
         response => {
-          console.log(response);
           this.router.navigate(['/home']);
         },
         err => console.log(err)

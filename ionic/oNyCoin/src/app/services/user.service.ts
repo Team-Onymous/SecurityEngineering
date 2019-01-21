@@ -149,7 +149,6 @@ export class UserService {
         return this.http.post(environment.API + 'api/users/login', body.toString(), options.httpOptions).pipe(
             map((response: any) => {
                 // this.user = this.encrDecrService.set(environment.secret, JSON.stringify(user));
-
                 localStorage.setItem('user', this.EncrDecr.set(environment.secret, JSON.stringify(response)));
             }));
     }
@@ -181,7 +180,6 @@ export class UserService {
     getBarUser(pass_id): Observable<any> {
         return this.http.get<any>(environment.API + 'api/users/pass/' + pass_id, options.httpOptions).pipe(
             map((data: any) => {
-
                 if (_.isNull(data)) {
                     return []; // fallback to an empty result in case of 204
                 } else {

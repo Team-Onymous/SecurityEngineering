@@ -19,7 +19,8 @@ import {environment} from "../../environments/environment";
 })
 
 export class BarBalanceComponent implements OnInit {
-    private user;
+
+    public customer;
     public username = 'Waiting for customer...';
 
 
@@ -35,41 +36,17 @@ export class BarBalanceComponent implements OnInit {
     ngOnInit() {
         // this receives the information from the card.
         this.respondService.messages.subscribe(msg => {
-            console.log(msg);
             this.userService.getBarUser(msg).subscribe(user => {
-                console.log(JSON.stringify(user))
 
-                this.username = user.firstname
+                this.username = user.firstname;
                 // encrypting customers data
-                this.user = this.encrDecrService.set(environment.secret, JSON.stringify(user));
-                this.Web3Service.getBarBalance(user.wallet_address);
-                localStorage.setItem('customer', this.user);
+                this.customer = this.encrDecrService.set(environment.secret, JSON.stringify(user));
+                if (user.wallet_address) {
+                    this.Web3Service.getBarBalance(user.wallet_address);
+                    localStorage.setItem('customer', this.customer);
+                }
+
             })
         });
     }
-
-    // public listen() {
-    //     this.observer = this.webSocketService.createObservableSocket('ws://localhost:40510')
-    //         .subscribe(data => {
-    //             let that = this;
-    //
-    //             this.passId = data;
-    //
-    //             sendMessage('pause');
-    //
-    //             function sendMessage(state) {
-    //                 that.webSocketService.sendMessage(state);
-    //             }
-    //
-    //         }, err => {
-    //             console.log(err);
-    //         }, () => {
-    //             console.log('Stream complete.');
-    //         });
-    // }
-    //
-    // public resume() {
-    //     // this.listen();
-    //     this.observer.sendMessage('resume')
-    // }
 }

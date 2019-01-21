@@ -76,7 +76,6 @@ const authRoute = require('./app/routes/auth.js')(app, passport, models);
 //load passport strategies
 require('./app/config/passport/passport.js')(passport, models.user, flash);
 
-
 //Sync Database
 models.sequelize.sync().then(function () {
 

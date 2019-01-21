@@ -9,6 +9,10 @@ import {Web3Service} from "../util/web3.service";
 import {BarBalanceComponent} from "../barBalance/barBalance.component";
 import {WebsocketService} from "../services/webSocket.service";
 import {RespondService} from "../services/respond.service";
+import {UserService} from "../services/user.service";
+import {environment} from "../../environments/environment";
+import {EncrDecrService} from "../services/EncrDecr.service";
+import {Router} from "@angular/router";
 
 export interface Tile {
     color: string;
@@ -36,7 +40,8 @@ export class BarComponent {
     constructor(public barService: BarService,
                 private web3Service: Web3Service,
                 private barBalanceComponent: BarBalanceComponent,
-                private respondService: RespondService) {
+                private respondService: RespondService,
+                private router: Router) {
     }
 
     order: Drinks[] = [];
@@ -46,6 +51,10 @@ export class BarComponent {
     public loadedConsumable$: Observable<barConsumable[]>;
 
     public tilesBar: Tile[] = [];
+
+    public showDialog;
+
+    public tx;
 
     ngOnInit() {
 
@@ -148,6 +157,10 @@ export class BarComponent {
     }
 
     confirmOrder() {
+
+        //to show modal
+        this.showDialog = !this.showDialog;
+
         let amount = this.totalCoins;
         let order = '';
         this.order.forEach((drink: Drinks) => {
@@ -157,15 +170,16 @@ export class BarComponent {
         this.order = [];
         this.order = [...this.order];
         this.getTotalCoins();
-        // this.barBalanceComponent.webSocketService.sendMessage('resume');
+
+
     }
 
     cancelOrder() {
         this.order = [];
         this.order = [...this.order];
         this.getTotalCoins();
-        // this.barBalanceComponent.resume();
-        this.sendMessage();
+
+        this.newTransaction();
     }
 
     buyConsumables(amount, order) {
@@ -173,7 +187,17 @@ export class BarComponent {
     }
 
     sendMessage() {
-        this.respondService.sendMsg("Test Message");
+        this.respondService.sendMsg("reset");
     }
+
+    newTransaction() {
+
+        this.sendMessage();
+        this.web3Service.transactionMade = false;
+        document.getElementById('transaction').innerHTML = "";
+        this.showDialog = !this.showDialog;
+        this.router.navigate(['/bar'])
+    }
+
 
 }
