@@ -19,13 +19,13 @@ io.set('origins', ['http://localhost:8100', 'https://onycoin.nl:443', 'http://lo
 //     }
 // }
 
-
 io.on('connection', (socket) => {
-
 
     socket.on('connection', message => {
         io.emit('connection', {type: 'the date is: ', text: Date()})
     });
+
+    io.send('hg11LfR7s8');
 
     rc522.listen((serialNumber) => {
         if (serialNumber) {
@@ -47,6 +47,7 @@ io.on('connection', (socket) => {
     socket.on('message', (message) => {
         console.log("Message Received: " + message);
         io.emit('message', {type: 'new-message', text: message});
+        io.send('reset')
     });
 });
 

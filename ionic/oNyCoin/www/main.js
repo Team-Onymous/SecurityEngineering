@@ -1575,7 +1575,7 @@ var AppModule = /** @class */ (function () {
                 _refund_refund_component__WEBPACK_IMPORTED_MODULE_13__["RefundComponent"],
                 _addCoins_add_coins_component__WEBPACK_IMPORTED_MODULE_14__["AddCoinsComponent"],
                 _login_login_component__WEBPACK_IMPORTED_MODULE_15__["LoginComponent"],
-                _register_register_component__WEBPACK_IMPORTED_MODULE_16__["RegisterComponent"],
+                _register_register_component__WEBPACK_IMPORTED_MODULE_16__["DialogComponent"],
                 _addCard_add_card_component__WEBPACK_IMPORTED_MODULE_17__["AddCardComponent"],
                 _bar_bar_component__WEBPACK_IMPORTED_MODULE_18__["BarComponent"],
                 _app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"],
@@ -1669,7 +1669,7 @@ var routes = [
     { path: 'refund', component: _refund_refund_component__WEBPACK_IMPORTED_MODULE_4__["RefundComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_10__["AuthGuard"]] },
     { path: 'block', component: _block_block_component__WEBPACK_IMPORTED_MODULE_5__["BlockComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_10__["AuthGuard"]] },
     { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_6__["LoginComponent"] },
-    { path: 'register', component: _register_register_component__WEBPACK_IMPORTED_MODULE_7__["RegisterComponent"] },
+    { path: 'register', component: _register_register_component__WEBPACK_IMPORTED_MODULE_7__["DialogComponent"] },
     { path: 'addcard', component: _addCard_add_card_component__WEBPACK_IMPORTED_MODULE_8__["AddCardComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_10__["AuthGuard"]] },
     { path: 'bar', component: _bar_bar_component__WEBPACK_IMPORTED_MODULE_9__["BarComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_10__["AuthGuard"]] }
     // { path: 'metaSender', component: MetaSenderComponent },

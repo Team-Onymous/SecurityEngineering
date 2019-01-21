@@ -76,4 +76,7 @@ export class AddCardComponent {
         );
     }
 
+    sendMessage() {
+        this.respondService.sendMsg("Test Message");
+    }
 }
