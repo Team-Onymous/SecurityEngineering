@@ -9,15 +9,6 @@ paused = false;
 io.origins(['http://localhost:8100', 'https://onycoin.nl', 'http://localhost']);
 
 io.set('origins', ['http://localhost:8100', 'https://onycoin.nl:443', 'http://localhost:80']);
-//
-// if (origin) {
-//     // https://developer.mozilla.org/En/HTTP_Access_Control
-//     headers['Access-Control-Allow-Origin'] = '*';
-//
-//     if (req.headers.cookie) {
-//         headers['Access-Control-Allow-Credentials'] = 'true';
-//     }
-// }
 
 io.on('connection', (socket) => {
 
@@ -25,7 +16,7 @@ io.on('connection', (socket) => {
         io.emit('connection', {type: 'the date is: ', text: Date()})
     });
 
-    io.send('hg11LfR7s8');
+    io.send('12345');
 
     rc522.listen((serialNumber) => {
         if (serialNumber) {

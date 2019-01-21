@@ -614,6 +614,7 @@ export class Web3Service {
                             // show on screen
                             document.getElementById('transaction').innerHTML = "TransactionID: " + transaction.transactionHash;
                             that.transactionMade = true;
+
                             let userAccount = localStorage.getItem('user');
                             let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
 
@@ -677,6 +678,11 @@ export class Web3Service {
                                 console.log('receipt token Tx: ');
                                 console.log(transaction);
                                 that.getBalance(that.userAccount.address);
+
+                                // show on screen
+                                document.getElementById('transaction').innerHTML = "TransactionID: " + transaction.transactionHash;
+                                that.transactionMade = true;
+
 
                                 let userAccount = localStorage.getItem('user');
                                 let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
@@ -782,7 +788,11 @@ export class Web3Service {
                                         .then(transaction => {
                                             console.log('receipt token Tx: ');
                                             console.log(transaction);
-                                            that.getBalance(that.userAccount.address)
+                                            that.getBalance(that.userAccount.address);
+
+                                            // show on screen
+                                            document.getElementById('transaction').innerHTML = "TransactionID: " + transaction.transactionHash;
+                                            that.transactionMade = true;
 
                                             let userAccount = localStorage.getItem('user');
                                             let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
