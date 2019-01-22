@@ -22,7 +22,14 @@ import {AddCardComponent} from "./addCard/add.card.component";
 import {BarComponent} from "./bar/bar.component";
 import {BarBalanceComponent} from "./barBalance/barBalance.component";
 import {MaterialModule} from "./material.module";
-import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatToolbarModule} from "@angular/material";
+import {
+    MatButtonModule,
+    MatCardModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatToolbarModule
+} from "@angular/material";
 import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -54,7 +61,7 @@ import {DialogComponent} from "./dialog/dialog.component";
         AppComponent,
         BarBalanceComponent,
         DialogComponent],
-    entryComponents: [],
+    entryComponents: [DialogComponent],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),
@@ -72,6 +79,7 @@ import {DialogComponent} from "./dialog/dialog.component";
         BrowserModule,
         FormsModule,
         HttpClientModule,
+        MatDialogModule
     ],
     providers: [
         StatusBar,

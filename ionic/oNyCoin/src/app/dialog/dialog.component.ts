@@ -2,30 +2,35 @@
  * Created by bryan on 6-12-2018.
  */
 import {UserService} from '../services/user.service';
-import {Component, OnInit, Input, Output, OnChanges, EventEmitter, HostListener, OnDestroy} from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    OnChanges,
+    EventEmitter,
+    HostListener,
+    OnDestroy,
+    Inject
+} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 import {EncrDecrService} from "../services/EncrDecr.service";
 import {animate, style, transition, trigger} from "@angular/animations";
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
+
+export interface DialogData {
+    animal: string;
+    name: string;
+}
 
 @Component({
     moduleId: module.id,
     selector: 'rg-dialog',
     templateUrl: 'dialog.component.html',
-    styleUrls: ['dialog.component.css'],
-    animations: [
-        trigger('dialog', [
-            transition('void => *', [
-                style({transform: 'scale3d(.3, .3, .3)'}),
-                animate(100)
-            ]),
-            transition('* => void', [
-                animate(100, style({transform: 'scale3d(.0, .0, .0)'}))
-            ])
-        ])
-    ]
+    styleUrls: ['dialog.component.css']
 })
 
 
@@ -40,10 +45,12 @@ export class DialogComponent implements OnInit, OnDestroy {
     breakpoint: number = 520;
 
     constructor(public userService: UserService,
-                private Web3Service: Web3Service,
+                public web3Service: Web3Service,
                 private router: Router,
                 private formBuilder: FormBuilder,
-                private EncrDecr: EncrDecrService) {
+                private EncrDecr: EncrDecrService,
+                public dialogRef: MatDialogRef<DialogComponent>,
+                @Inject(MAT_DIALOG_DATA) public data: DialogData) {
 
     }
 
@@ -74,7 +81,15 @@ export class DialogComponent implements OnInit, OnDestroy {
     }
 
     close() {
-        this.modalVisible = false;
-        this.visibleChange.emit(this.modalVisible);
+        this.web3Service.transactionMade = false;
+        document.getElementById('transaction').innerHTML = "";
+        this.dialogRef.close();
+    }
+
+    newTransaction() {
+        // this.sendMessage();
+
+        // this.showDialog = !this.showDialog;
+
     }
 }
