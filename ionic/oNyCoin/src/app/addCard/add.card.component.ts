@@ -26,7 +26,8 @@ export class AddCardComponent {
     PostalCodeInput: string;
     CityRepeatInput: string;
     public CityInput;
-    private pass_id;
+    public pass_id;
+    public showDialog;
 
     constructor(private userService: UserService, private router: Router,
                 private EncrDecr: EncrDecrService,
