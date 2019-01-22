@@ -1,5 +1,28 @@
 /// <reference types="Cypress" />
 
+//Generate Random String
+function generateString() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 15; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+//Generate Random String
+function generateLowerCaseString() {
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+
 context('Actions', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8100/register')
@@ -17,8 +40,8 @@ context('Actions', () => {
         });
 
         // check inputfields
-        cy.get('#email')
-            .type('casvantwout@protonmail.com').should('have.value', 'casvantwout@protonmail.com')
+        cy.get('input[name="FirstName"]')
+            .type('Sjaak').should('have.value', 'Sjaak')
 
         // .type() with special character sequences
             .type('{leftarrow}{rightarrow}{uparrow}{downarrow}')
@@ -31,13 +54,13 @@ context('Actions', () => {
             .type('{shift}')
 
             // Delay each keypress by 0.1 sec
-            .type('casvantwout@protonmail.com', {delay: 100})
-            .should('have.value', 'casvantwout@protonmail.com');
+            .type('Sjaak', {delay: 100})
+            .should('have.value', 'Sjaak');
 
-        cy.get('#password')
-        // Ignore error checking prior to type
-        // like whether the input is visible or disabled
-            .type('ccoff64B@').should('have.value', 'ccoff64B@')
+        cy.get('input[name="LastName"]')
+            .type('Testgraag').should('have.value', 'Testgraag')
+
+        // .type() with special character sequences
             .type('{leftarrow}{rightarrow}{uparrow}{downarrow}')
             .type('{del}{selectall}{backspace}')
 
@@ -46,14 +69,111 @@ context('Actions', () => {
             .type('{ctrl}{control}') //these are equivalent
             .type('{meta}{command}{cmd}') //these are equivalent
             .type('{shift}')
-            .type('ccoff64B@', {delay: 100})
 
-            // .type('disabled error checking', { force: true })
-            .should('have.value', 'ccoff64B@');
+            // Delay each keypress by 0.1 sec
+            .type('Testgraag', {delay: 100})
+            .should('have.value', 'Testgraag');
 
-        cy.get('.login-form')
+        cy.get('input[name="Email"]')
+            .type(generateLowerCaseString() + '@testmail.com')
+
+            // .type() with special character sequences
+            .type('{leftarrow}{rightarrow}{uparrow}{downarrow}')
+            .type('{del}{selectall}{backspace}')
+
+            // .type() with key modifiers
+            .type('{alt}{option}') //these are equivalent
+            .type('{ctrl}{control}') //these are equivalent
+            .type('{meta}{command}{cmd}') //these are equivalent
+            .type('{shift}')
+
+            // Delay each keypress by 0.1 sec
+            .type(generateLowerCaseString() + '@testmail.com', {delay: 100});
+
+        cy.get('input[name="DateOfBirth"]')
+            .type('01/01/1900').should('be', '01/01/1900')
+
+        // .type() with special character sequences
+            .type('{leftarrow}{rightarrow}{uparrow}{downarrow}')
+            .type('{del}{selectall}{backspace}')
+
+            // .type() with key modifiers
+            .type('{alt}{option}') //these are equivalent
+            .type('{ctrl}{control}') //these are equivalent
+            .type('{meta}{command}{cmd}') //these are equivalent
+            .type('{shift}')
+
+            // Delay each keypress by 0.1 sec
+            .type('01/01/1900', {delay: 100}).should('be', '01/01/1900');
+
+        cy.get('input[name="password"]')
+            .type(generateString())
+
+        // .type() with special character sequences
+            .type('{leftarrow}{rightarrow}{uparrow}{downarrow}')
+            .type('{del}{selectall}{backspace}')
+
+            // .type() with key modifiers
+            .type('{alt}{option}') //these are equivalent
+            .type('{ctrl}{control}') //these are equivalent
+            .type('{meta}{command}{cmd}') //these are equivalent
+            .type('{shift}')
+
+            // Delay each keypress by 0.1 sec
+            .type(generateString(), {delay: 100});
+
+
+
+        cy.get('input[name="RepeatPassword"]')
+            .type(generateString())
+
+        // .type() with special character sequences
+            .type('{leftarrow}{rightarrow}{uparrow}{downarrow}')
+            .type('{del}{selectall}{backspace}')
+
+            // .type() with key modifiers
+            .type('{alt}{option}') //these are equivalent
+            .type('{ctrl}{control}') //these are equivalent
+            .type('{meta}{command}{cmd}') //these are equivalent
+            .type('{shift}')
+
+            // Delay each keypress by 0.1 sec
+            .type(generateString(), {delay: 100})
+
+        // Check if login works
+        cy.get('.register-form')
             .submit()   // Submit a form
-    });
+            .location().should((loc) => {
+
+            expect(loc.host).to.eq('localhost:8100');
+            expect(loc.pathname).to.eq('/addcard');
+        });
+
+
+
+
+
+        //     cy.get('#password')
+        //         // Ignore error checking prior to type
+        //         // like whether the input is visible or disabled
+        //         .type('ccoff64B@').should('have.value', 'ccoff64B@')
+        //         .type('{leftarrow}{rightarrow}{uparrow}{downarrow}')
+        //         .type('{del}{selectall}{backspace}')
+        //
+        //         // .type() with key modifiers
+        //         .type('{alt}{option}') //these are equivalent
+        //         .type('{ctrl}{control}') //these are equivalent
+        //         .type('{meta}{command}{cmd}') //these are equivalent
+        //         .type('{shift}')
+        //         .type('ccoff64B@', {delay: 100})
+        //
+        //         // .type('disabled error checking', { force: true })
+        //         .should('have.value', 'ccoff64B@');
+        //
+        //     cy.get('.login-form')
+        //         .submit()   // Submit a form
+        // });
+    })
 });
 
 //   it('.focus() - focus on a DOM element', () => {
