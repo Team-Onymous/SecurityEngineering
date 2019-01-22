@@ -21,7 +21,7 @@ export class RefundComponent {
 
     public showDialog;
 
-    constructor(private web3Service: Web3Service) {
+    constructor(public web3Service: Web3Service) {
     }
 
     ngOnInit() {
