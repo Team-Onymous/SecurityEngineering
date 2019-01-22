@@ -199,5 +199,10 @@ export class BarComponent {
         this.router.navigate(['/bar'])
     }
 
-
+    checkValue() {
+        if (this.totalCoins) {
+            let balance = document.getElementsByClassName('barBalance')[0].innerHTML;
+            return balance
+        } else return 0
+    }
 }

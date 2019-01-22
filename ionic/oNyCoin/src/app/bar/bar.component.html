@@ -36,7 +36,7 @@
       </tr>
       </tbody>
       </table>
-    <button mat-raised-button (click)="confirmOrder()"  class="confirm-order-button">Confirm Order</button>
+    <button mat-raised-button [disabled]="!totalCoins || totalCoins > checkValue()" (click)="confirmOrder()"  class="confirm-order-button">Confirm Order</button>
     <button mat-raised-button (click)="cancelOrder()" class="confirm-order-button cancel-button">Cancel Order</button>
   </mat-sidenav>
   <rg-bar-balance></rg-bar-balance>

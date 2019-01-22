@@ -855,6 +855,7 @@ export class Web3Service {
                 let divs = document.getElementsByClassName('barBalance');
                 for (let i = 0; i < divs.length; i++) {
                     document.getElementsByClassName('barBalance')[i].innerHTML = result;
+                    this.barComponenent
                 }
                 return await result;
             } else
