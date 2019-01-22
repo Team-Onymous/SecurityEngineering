@@ -7,6 +7,11 @@
       <i class="material-icons app-input-icon menu-icon">home</i> <span>Home</span>
     </button>
   </a>
+  <a [routerLink]="['addcard']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
+    <button mat-button class="menu-button">
+      <i class="material-icons app-input-icon menu-icon">credit_card</i> <span>Add Card</span>
+    </button>
+  </a>
   <a [routerLink]="['addcoins']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">
     <button mat-button class="menu-button">
       <i class="material-icons app-input-icon menu-icon">add</i> <span>Add OnyCoins</span>
