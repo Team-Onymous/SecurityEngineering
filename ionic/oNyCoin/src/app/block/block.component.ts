@@ -24,10 +24,11 @@ export interface Option {
 
 export class BlockComponent{
   visible: boolean = true;
-  checked = false;
+  public checked = false;
   breakpoint: number = 520;
   selectedOption : string;
   private pass_id;
+
 
 
   options: Option[] = [

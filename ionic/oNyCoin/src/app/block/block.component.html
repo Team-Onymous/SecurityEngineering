@@ -4,7 +4,7 @@
       <mat-card class="addCard-card">
         <mat-card-title>Block Card</mat-card-title>
         <mat-card-content>
-          <form #addCoinsForm="ngForm" (ngSubmit)="blockCard(checked.value)" class="addCard-form">
+          <form #addCoinsForm="ngForm" (ngSubmit)="blockCard(checked)" class="addCard-form">
             <div>
               <mat-form-field>
                 <mat-select matNativeControl #Options="ngModel" placeholder="Reason" [(ngModel)]="selectedOption" name="Options">

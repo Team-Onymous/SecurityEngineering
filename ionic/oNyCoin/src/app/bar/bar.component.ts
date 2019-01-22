@@ -38,7 +38,7 @@ export interface Drinks {
 
 export class BarComponent {
     constructor(public barService: BarService,
-                private web3Service: Web3Service,
+                public web3Service: Web3Service,
                 private barBalanceComponent: BarBalanceComponent,
                 private respondService: RespondService,
                 private router: Router) {
