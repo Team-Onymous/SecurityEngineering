@@ -9,7 +9,7 @@
           <form #loginForm="ngForm" (ngSubmit)="login(username.value, password.value)" class="login-form">
             <div>
               <mat-form-field>
-                <input matInput #username="ngModel" [(ngModel)]="emailInput" name="userName" required class="login-input"
+                <input id="email" matInput #username="ngModel" [(ngModel)]="emailInput" name="userName" required class="login-input"
                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="E-mail"/>
                 <mat-icon class="clear" matSuffix (click)="username.value = ''">clear</mat-icon>
                 <mat-hint *ngIf="username.invalid" [ngStyle]="warningStyle">
@@ -18,7 +18,7 @@
                 </mat-hint>
               </mat-form-field>
               <mat-form-field>
-                <input matInput type="password" #password="ngModel" [(ngModel)]="passwordInput" name="password"
+                <input id="password" matInput type="password" #password="ngModel" [(ngModel)]="passwordInput" name="password"
                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required class="login-input" placeholder="Password">
                 <mat-icon class="clear" matSuffix (click)="password.value = ''">clear</mat-icon>
                 <mat-hint *ngIf="password.invalid" [ngStyle]="warningStyle">
