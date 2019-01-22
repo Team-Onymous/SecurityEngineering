@@ -615,7 +615,7 @@ export class Web3Service {
                             document.getElementById('transaction').innerHTML = "TransactionID: " + transaction.transactionHash;
                             that.transactionMade = true;
 
-                            let userAccount = localStorage.getItem('user');
+                            let userAccount = localStorage.getItem('customer');
                             let decryptedUserAccount = JSON.parse(that.EncrDecr.get(environment.secret, userAccount));
 
                             that.barService.addTransaction(transaction.transactionHash, amount, order, decryptedUserAccount.id, "0").subscribe(
@@ -855,6 +855,7 @@ export class Web3Service {
                 let divs = document.getElementsByClassName('barBalance');
                 for (let i = 0; i < divs.length; i++) {
                     document.getElementsByClassName('barBalance')[i].innerHTML = result;
+                    this.barComponenent
                 }
                 return await result;
             } else

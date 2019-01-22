@@ -3,6 +3,8 @@
  */
 import {Component, HostListener, OnInit} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
+import {MatDialog} from "@angular/material";
+import {DialogComponent} from "../dialog/dialog.component";
 
 
 @Component({
@@ -21,7 +23,12 @@ export class RefundComponent {
 
     public showDialog;
 
-    constructor(public web3Service: Web3Service) {
+
+    animal: string = 'hallo!';
+    name: string = 'boe';
+
+    constructor(public web3Service: Web3Service,
+                public dialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -46,18 +53,24 @@ export class RefundComponent {
     }
 
     refund(amount) {
-
-        //to show modal
-        this.showDialog = !this.showDialog;
-
-        this.web3Service.refund(amount);
+        
     }
 
-    newTransaction() {
 
-        // this.sendMessage();
-        this.web3Service.transactionMade = false;
-        document.getElementById('transaction').innerHTML = "";
-        this.showDialog = !this.showDialog;
+
+    openDialog(amount): void {
+        const dialogRef = this.dialog.open(DialogComponent, {
+            width: '500px',
+            data: {name: this.name, animal: this.animal},
+            disableClose: true,
+        });
+
+
+        this.web3Service.refund(amount);
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+            this.animal = result;
+        });
     }
 }

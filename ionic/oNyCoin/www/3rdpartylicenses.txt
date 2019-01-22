@@ -4372,8 +4372,6 @@ THE SOFTWARE.
 
 @angular/material/table
 
-@angular/material/button
-
 @angular/material/card
 
 @angular/forms
@@ -4382,6 +4380,8 @@ MIT
 @angular/material/form-field
 
 @angular/material/icon
+
+@angular/material/button
 
 @angular/material/core
 

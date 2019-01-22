@@ -13,6 +13,8 @@ import {UserService} from "../services/user.service";
 import {environment} from "../../environments/environment";
 import {EncrDecrService} from "../services/EncrDecr.service";
 import {Router} from "@angular/router";
+import {DialogComponent} from "../dialog/dialog.component";
+import {MatDialog} from "@angular/material";
 
 export interface Tile {
     color: string;
@@ -41,7 +43,8 @@ export class BarComponent {
                 public web3Service: Web3Service,
                 private barBalanceComponent: BarBalanceComponent,
                 private respondService: RespondService,
-                private router: Router) {
+                private router: Router,
+                public dialog: MatDialog) {
     }
 
     order: Drinks[] = [];
@@ -178,8 +181,8 @@ export class BarComponent {
         this.order = [];
         this.order = [...this.order];
         this.getTotalCoins();
-
-        this.newTransaction();
+        this.sendMessage();
+        // this.newTransaction();
     }
 
     buyConsumables(amount, order) {
@@ -199,5 +202,33 @@ export class BarComponent {
         this.router.navigate(['/bar'])
     }
 
+    checkValue() {
+        if (this.totalCoins) {
+            let balance = document.getElementsByClassName('barBalance')[0].innerHTML;
+            return balance
+        } else return 0
+    }
 
+    openDialog(): void {
+        const dialogRef = this.dialog.open(DialogComponent, {
+            width: '500px',
+            disableClose: true,
+        });
+
+        let amount = this.totalCoins;
+        let order = '';
+        this.order.forEach((drink: Drinks) => {
+            order = order + (', ' + drink.value + ' ' + drink.name + '');
+        });
+        this.buyConsumables(amount, order);
+        this.order = [];
+        this.order = [...this.order];
+        this.getTotalCoins();
+
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+            this.sendMessage();
+        });
+    }
 }

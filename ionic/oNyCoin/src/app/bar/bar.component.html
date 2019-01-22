@@ -36,7 +36,7 @@
       </tr>
       </tbody>
       </table>
-    <button mat-raised-button (click)="confirmOrder()"  class="confirm-order-button">Confirm Order</button>
+    <button mat-raised-button [disabled]="!totalCoins || totalCoins > checkValue()" (click)="openDialog()"  class="confirm-order-button">Confirm Order</button>
     <button mat-raised-button (click)="cancelOrder()" class="confirm-order-button cancel-button">Cancel Order</button>
   </mat-sidenav>
   <rg-bar-balance></rg-bar-balance>
@@ -53,9 +53,9 @@
 </mat-grid-list>
 </mat-sidenav-container>
 
-<rg-dialog [(modalVisible)]="showDialog">
-  <mat-card-title>Order is being processed</mat-card-title>
-  <p >Please wait for the transaction to complete, the order ID will show when it's complete!</p>
-  <p id="transaction"></p>
-  <button  *ngIf="web3Service.transactionMade" mat-raised-button (click)="newTransaction()" class="btn addCard-button" >Close</button>
-</rg-dialog>
+<!--<rg-dialog [(modalVisible)]="showDialog">-->
+  <!--<mat-card-title>Order is being processed</mat-card-title>-->
+  <!--<p >Please wait for the transaction to complete, the order ID will show when it's complete!</p>-->
+  <!--<p id="transaction"></p>-->
+  <!--<button  *ngIf="web3Service.transactionMade" mat-raised-button (click)="newTransaction()" class="btn addCard-button" >Close</button>-->
+<!--</rg-dialog>-->

@@ -5,6 +5,8 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {Web3Service} from "../util/web3.service";
 import {EncrDecrService} from "../services/EncrDecr.service";
 import {Router} from "@angular/router";
+import {DialogComponent} from "../dialog/dialog.component";
+import {MatDialog} from "@angular/material";
 
 
 @Component({
@@ -22,7 +24,8 @@ export class AddCoinsComponent {
     public showDialog;
 
     constructor(public web3Service: Web3Service,
-                private EncrDecr: EncrDecrService) {
+                private EncrDecr: EncrDecrService,
+                public dialog: MatDialog) {
 
     }
 
@@ -74,5 +77,18 @@ export class AddCoinsComponent {
         this.web3Service.transactionMade = false;
         document.getElementById('transaction').innerHTML = "";
         this.showDialog = !this.showDialog;
+    }
+
+    openDialog(amount): void {
+        const dialogRef = this.dialog.open(DialogComponent, {
+            width: '500px',
+            disableClose: true,
+        });
+
+        this.web3Service.buyTokens(amount);
+
+        dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+        });
     }
 }
