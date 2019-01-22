@@ -181,8 +181,8 @@ export class BarComponent {
         this.order = [];
         this.order = [...this.order];
         this.getTotalCoins();
-
-        this.newTransaction();
+        this.sendMessage();
+        // this.newTransaction();
     }
 
     buyConsumables(amount, order) {
@@ -228,6 +228,7 @@ export class BarComponent {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
+            this.sendMessage();
         });
     }
 }

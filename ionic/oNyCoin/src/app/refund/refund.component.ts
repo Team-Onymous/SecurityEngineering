@@ -53,9 +53,7 @@ export class RefundComponent {
     }
 
     refund(amount) {
-
-        //to show modal
-        this.showDialog = !this.showDialog;
+        
     }
 
 
