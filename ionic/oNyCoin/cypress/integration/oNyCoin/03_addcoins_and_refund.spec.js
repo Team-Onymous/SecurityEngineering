@@ -55,10 +55,10 @@ context('Actions', () => {
         cy.get('input[name="Coins"]')
             .type('10').should('have.value', '10')
 
-        // Check if login works
         cy.get('.addCard-form')
             .submit()   // Submit a form
 
+        //wait for transaction to complete
         cy.wait(10000) //in case it loads slowly due to higher traffic
             .get('#transaction')
             .should('be', true);
@@ -66,6 +66,56 @@ context('Actions', () => {
         cy.get('button')
             .contains('Close')
             .click('center', {multiple: true})
+
+        cy.get('button')
+            .contains('Home')
+            .click('center', {multiple: true})
+            .location().should((loc) => {
+
+            expect(loc.host).to.eq('localhost:8100');
+            expect(loc.pathname).to.eq('/home');
+        });
+
+        //go to refund page
+        cy.get('button')
+            .contains('Refund')
+            .click('center', {multiple: true})
+            .location().should((loc) => {
+
+            expect(loc.host).to.eq('localhost:8100');
+            expect(loc.pathname).to.eq('/refund');
+        });
+
+        //input amount of coins
+        cy.get('input[name="Coins"]')
+            .type('10').should('have.value', '10')
+
+        //input amount of coins
+        cy.get('input[name="IbanNumber"]')
+            .type('nl92ingb0008567344').should('have.value', 'nl92ingb0008567344')
+
+        cy.get('button')
+            .contains('Refund Coins')
+            .click();
+
+        //wait for transaction to complete
+        cy.wait(10000) //in case it loads slowly due to higher traffic
+            .get('#transaction')
+            .should('be', true);
+
+        cy.get('button')
+            .contains('Close')
+            .click('center', {multiple: true})
+
+        // back to home
+        cy.get('button')
+            .contains('Home')
+            .click('center', {multiple: true})
+            .location().should((loc) => {
+
+            expect(loc.host).to.eq('localhost:8100');
+            expect(loc.pathname).to.eq('/home');
+        });
 
     });
     //

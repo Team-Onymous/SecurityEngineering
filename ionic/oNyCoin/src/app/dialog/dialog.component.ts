@@ -62,7 +62,6 @@ export class DialogComponent implements OnInit, OnDestroy {
             // whenever the window is less than 520, hide this component.
             this.visible = false;
         }
-
     }
 
     ngOnDestroy(): void {

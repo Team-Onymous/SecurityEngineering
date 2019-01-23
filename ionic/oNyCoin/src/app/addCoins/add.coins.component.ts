@@ -37,14 +37,6 @@ export class AddCoinsComponent {
             // whenever the window is less than 520, hide this component.
             this.visible = false;
         }
-        //
-        // let userAccount = JSON.parse(localStorage.getItem('user'));
-        // let decryptedPrivKey = this.EncrDecr.get(userAccount.email.substr(0, 2) + userAccount.lastname.substr(0, 2), atob(userAccount.wallet_key));
-        // console.log("Decrypted Privkey: " + decryptedPrivKey);
-        //
-        // //user account
-        // this.userAccount = this.web3.eth.accounts.privateKeyToAccount(decryptedPrivKey);
-
     }
 
 
