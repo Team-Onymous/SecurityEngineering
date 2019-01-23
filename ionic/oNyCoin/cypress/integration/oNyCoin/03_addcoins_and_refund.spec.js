@@ -20,7 +20,7 @@ context('Actions', () => {
 
         // check inputfields
         cy.get('#email')
-            .type('test@graag.nl').should('have.value', 'test@graag.nl');
+            .type('test@user.nl').should('have.value', 'test@user.nl');
 
 
         cy.get('#password')
@@ -53,7 +53,7 @@ context('Actions', () => {
         });
 
         cy.get('input[name="Coins"]')
-            .type('10').should('have.value', '10');
+            .type('16').should('have.value', '16');
 
         cy.get('.addCard-form')
             .submit();   // Submit a form
