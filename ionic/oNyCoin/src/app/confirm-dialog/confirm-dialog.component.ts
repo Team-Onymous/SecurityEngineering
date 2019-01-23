@@ -29,12 +29,12 @@ export interface DialogData {
 @Component({
     moduleId: module.id,
     selector: 'rg-dialog',
-    templateUrl: 'dialog.component.html',
-    styleUrls: ['dialog.component.css']
+    templateUrl: 'confirm-dialog.component.html',
+    styleUrls: ['confirm-dialog.component.css']
 })
 
 
-export class DialogComponent implements OnInit, OnDestroy {
+export class ConfirmDialogComponent implements OnInit, OnDestroy {
 
 
     @Input() closable = true;
@@ -49,7 +49,7 @@ export class DialogComponent implements OnInit, OnDestroy {
                 private router: Router,
                 private formBuilder: FormBuilder,
                 private EncrDecr: EncrDecrService,
-                public dialogRef: MatDialogRef<DialogComponent>,
+                public dialogRef: MatDialogRef<ConfirmDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: DialogData) {
 
     }
@@ -80,15 +80,8 @@ export class DialogComponent implements OnInit, OnDestroy {
     }
 
     close() {
-        this.web3Service.transactionMade = false;
-        document.getElementById('transaction').innerHTML = "";
         this.dialogRef.close();
     }
 
-    newTransaction() {
-        // this.sendMessage();
 
-        // this.showDialog = !this.showDialog;
-
-    }
 }
