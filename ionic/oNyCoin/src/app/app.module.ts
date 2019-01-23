@@ -42,6 +42,7 @@ import {TransactionService} from "./services/transaction.service";
 import {EncrDecrService} from "./services/EncrDecr.service";
 import {WebsocketService} from "./services/webSocket.service";
 import {DialogComponent} from "./dialog/dialog.component";
+import {ConfirmDialogComponent} from "./confirm-dialog/confirm-dialog.component";
 
 @NgModule({
     declarations: [
@@ -60,8 +61,11 @@ import {DialogComponent} from "./dialog/dialog.component";
         BarComponent,
         AppComponent,
         BarBalanceComponent,
-        DialogComponent],
-    entryComponents: [DialogComponent],
+        DialogComponent,
+        ConfirmDialogComponent],
+    entryComponents: [
+        DialogComponent,
+        ConfirmDialogComponent],
     imports: [
         BrowserModule,
         IonicModule.forRoot(),

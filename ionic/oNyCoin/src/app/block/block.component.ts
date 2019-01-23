@@ -7,6 +7,9 @@ import {Router} from "@angular/router";
 import {environment} from "../../environments/environment";
 import {EncrDecrService} from "../services/EncrDecr.service";
 import {RespondService} from "../services/respond.service";
+import {DialogComponent} from "../dialog/dialog.component";
+import {MatDialog} from "@angular/material";
+import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 
 export interface Option {
   value: string;
@@ -39,7 +42,8 @@ export class BlockComponent{
   ];
   constructor(private userService: UserService, private router: Router,
               private EncrDecr: EncrDecrService,
-              private respondService: RespondService) {
+              private respondService: RespondService,
+              public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -88,6 +92,18 @@ export class BlockComponent{
         err => console.log(err)
       );
     }
+  }
+
+  openDialog(newpass): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '500px'
+    });
+
+    this.blockCard(newpass);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }

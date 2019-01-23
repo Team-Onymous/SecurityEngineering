@@ -4,7 +4,7 @@
       <mat-card class="addCard-card">
         <mat-card-title>Block Card</mat-card-title>
         <mat-card-content>
-          <form #addCoinsForm="ngForm" (ngSubmit)="blockCard(checked)" class="addCard-form">
+          <form #addCoinsForm="ngForm" (ngSubmit)="openDialog(checked)" class="addCard-form">
             <div>
               <mat-form-field>
                 <mat-select matNativeControl #Options="ngModel" placeholder="Reason" [(ngModel)]="selectedOption" name="Options">
@@ -16,7 +16,7 @@
               </mat-form-field>
                   <mat-checkbox [(ngModel)]="checked" name="checked">I want a new card</mat-checkbox>
               <br />
-              <button mat-raised-button [disabled]="" class="addCard-button">block Card</button>
+              <button mat-raised-button [disabled]="" class="addCard-button">Block Card</button>
             </div>
           </form>
         </mat-card-content>

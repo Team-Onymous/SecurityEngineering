@@ -42,81 +42,55 @@ context('Actions', () => {
             .should('be', true);
 
 
-        // go to the addcoins section
+        // go to the block card section
         cy.get('button')
-            .contains('Add OnyCoins')
+            .contains('Block Card')
             .click('center')
             .location().should((loc) => {
 
             expect(loc.host).to.eq('localhost:8100');
-            expect(loc.pathname).to.eq('/addcoins');
+            expect(loc.pathname).to.eq('/block');
         });
 
-        cy.get('input[name="Coins"]')
-            .type('10').should('have.value', '10');
+        // try all options
+        cy.get('mat-select[name="Options"]')
+            .click('center');
 
-        cy.get('.addCard-form')
-            .submit();   // Submit a form
+        cy.get('.mat-option-text')
+            .contains('Lost')
+            .click('center');
 
-        //wait for transaction to complete
-        cy.wait(10000) //in case it loads slowly due to higher traffic
-            .get('#transaction')
-            .should('be', true);
+        cy.get('.mat-select-value')
+            .click('center');
+
+        cy.get('.mat-option-text')
+            .contains('Stolen')
+            .click('center');
+
+        cy.get('.mat-select-value')
+            .click('center');
+
+        cy.get('.mat-option-text')
+            .contains('Not Used')
+            .click('center');
+
+
+        cy.get('.mat-select-value')
+            .click('center');
+
+        cy.get('.mat-option-text')
+            .contains('Other')
+            .click('center');
+
+        cy.get('.mat-checkbox-inner-container')
+            .click()
+
+        cy.get('.addCard-button')
+            .click('center', {multiple: true})
 
         cy.get('button')
             .contains('Close')
             .click('center', {multiple: true});
-
-        cy.get('button')
-            .contains('Home')
-            .click('center', {multiple: true})
-            .location().should((loc) => {
-
-            expect(loc.host).to.eq('localhost:8100');
-            expect(loc.pathname).to.eq('/home');
-        });
-
-        //go to refund page
-        cy.get('button')
-            .contains('Refund')
-            .click('center', {multiple: true})
-            .location().should((loc) => {
-
-            expect(loc.host).to.eq('localhost:8100');
-            expect(loc.pathname).to.eq('/refund');
-        });
-
-        //input amount of coins
-        cy.get('input[name="Coins"]')
-            .type('10').should('have.value', '10');
-
-        //input amount of coins
-        cy.get('input[name="IbanNumber"]')
-            .type('nl92ingb0008567344').should('have.value', 'nl92ingb0008567344');
-
-        cy.get('button')
-            .contains('Refund Coins')
-            .click();
-
-        //wait for transaction to complete
-        cy.wait(10000) //in case it loads slowly due to higher traffic
-            .get('#transaction')
-            .should('be', true);
-
-        cy.get('button')
-            .contains('Close')
-            .click('center', {multiple: true});
-
-        // back to home
-        cy.get('button')
-            .contains('Home')
-            .click('center', {multiple: true})
-            .location().should((loc) => {
-
-            expect(loc.host).to.eq('localhost:8100');
-            expect(loc.pathname).to.eq('/home');
-        });
-
     });
     //
     //     // check inputfields
