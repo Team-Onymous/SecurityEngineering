@@ -1,5 +1,6 @@
 /// <reference types="Cypress" />
 
+// visit page
 context('Actions', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8100/login')
