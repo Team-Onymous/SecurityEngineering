@@ -16,8 +16,10 @@ io.on('connection', (socket) => {
         io.emit('connection', {type: 'the date is: ', text: Date()})
     });
 
+    setTimeout(function () {
+        io.send('04583a31b61b80');
+    }, 3000);
     // // io.send('04583a31b61b80');
-    io.send('04583a31b61b80');
 
     rc522.listen((serialNumber) => {
         if (serialNumber) {
