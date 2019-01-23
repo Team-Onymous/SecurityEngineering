@@ -22,7 +22,7 @@ function generateLowerCaseString() {
     return text;
 }
 
-
+// visit page
 context('Actions', () => {
     beforeEach(() => {
         cy.visit('http://localhost:8100/register')
@@ -223,7 +223,7 @@ context('Actions', () => {
             expect(loc.pathname).to.eq('/home');
         });
 
-        // check if bockchain balance loads correctly
+        // check if blockchain balance loads correctly
         cy.get('.balance')
             .should('be', true)
     })
