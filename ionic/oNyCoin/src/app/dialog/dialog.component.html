@@ -1,0 +1,11 @@
+<!--<mat-card [@dialog] *ngIf="modalVisible" class="dialog">-->
+  <!--<ng-content></ng-content>-->
+<!--</mat-card>-->
+<!--<div *ngIf="modalVisible" class="overlay"></div>-->
+
+<div mat-dialog-content>
+  <mat-card-title>Order is being processed</mat-card-title>
+  <p >Please wait for the transaction to complete, the order ID will show when it's complete!</p>
+  <p id="transaction"></p>
+  <button *ngIf="web3Service.transactionMade" mat-raised-button (click)="close()" class="btn addCard-button" >Close</button>
+</div>

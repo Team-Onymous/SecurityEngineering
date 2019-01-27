@@ -1,0 +1,57 @@
+.padding-grid{
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.example-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.text-style {
+  font-size: 22px;
+  color: white;
+  font-family: 'tinymce', Arial;
+}
+
+.text-style-order {
+  font-size: 22px;
+  color: black;
+  font-family: 'tinymce', Arial;
+}
+
+.order-button {
+  height: 30px;
+  min-width: 10px;
+}
+
+.table-row-total {
+  position: absolute;
+  bottom: 50px;
+}
+.total-coins {
+  width: 1%;
+}
+.cancel-button {
+  right: 0;
+}
+
+.confirm-order-button {
+  position: absolute;
+  bottom: 0;
+  font-size: 16px;
+  margin: 10px 10px 10px 0;
+  color: white;
+  background-color: #38817A;
+}
+
+.addCard-button {
+  font-size: 16px;
+  margin: 10px 10px 10px 0;
+  color: white;
+  background-color: #38817A;
+}

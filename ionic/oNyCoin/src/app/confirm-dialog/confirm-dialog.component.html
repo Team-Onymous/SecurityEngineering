@@ -1,0 +1,11 @@
+<!--<mat-card [@dialog] *ngIf="modalVisible" class="dialog">-->
+  <!--<ng-content></ng-content>-->
+<!--</mat-card>-->
+<!--<div *ngIf="modalVisible" class="overlay"></div>-->
+
+<div mat-dialog-content>
+  <mat-card-title>Thank you for reporting</mat-card-title>
+  <p>We received your request and it will be handled accordingly</p>
+  <p id="transaction"></p>
+  <button mat-raised-button (click)="close()" class="btn addCard-button" >Close</button>
+</div>

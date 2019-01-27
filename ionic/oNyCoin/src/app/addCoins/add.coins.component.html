@@ -1,0 +1,41 @@
+<div class="outer">
+    <div class="middle">
+        <div [ngClass]="visible ? 'addCard-card-container' : 'addCard-card-container-xs'">
+            <mat-card class="addCard-card">
+                <mat-card-title>Add OnyCoins</mat-card-title>
+                <mat-card-content>
+                    <form #addCoinsForm="ngForm" (ngSubmit)="openDialog(Coins.value)" class="addCard-form">
+                        <div>
+                            <mat-form-field>
+                                <input matInput #Coins="ngModel" [(ngModel)]="coinsInput" name="Coins"
+                                       required class="addCard-input" pattern="[0-9]{1,2}" placeholder="Amount of Coins"/>
+                                <mat-icon class="clear" matSuffix (click)="Coins.value = ''">clear</mat-icon>
+                                <mat-hint *ngIf="Coins.invalid" [ngStyle]="warningStyle">
+                                    <span [hidden]="!Coins.errors?.required">Field can't be emty</span>
+                                    <span [hidden]="!Coins.errors?.pattern">The amount of coins can only be a number and the max is 99</span>
+                                </mat-hint>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput #CoinsInEuros disabled
+                                       name="CoinsInEuros" class="addCard-input"
+                                       placeholder="{{coinsInput}} euro"/>
+                            </mat-form-field>
+                            <br/>
+                            <button mat-raised-button [disabled]="!addCoinsForm.valid" class="addCard-button">
+                                Add Coins
+                            </button>
+                        </div>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<!--<rg-dialog [(modalVisible)]="showDialog">-->
+    <!--<mat-card-title>Order is being processed</mat-card-title>-->
+    <!--<p >Please wait for the transaction to complete, the order ID will show when it's complete!</p>-->
+    <!--<p id="transaction"></p>-->
+    <!--<button  *ngIf="web3Service.transactionMade" mat-raised-button (click)="newTransaction()" class="btn addCard-button" >Close</button>-->
+<!--</rg-dialog>-->
+

@@ -1,0 +1,35 @@
+<div [ngClass]="visible ? 'addCardbg' : 'addCardbg-xs'"></div>
+
+<div class="outer">
+  <div class="middle">
+    <div [ngClass]="visible ? 'addCard-card-container' : 'addCard-card-container-xs'">
+      <mat-card class="addCard-card">
+        <mat-card-title>OnyCoin Order Card</mat-card-title>
+        <mat-card-content>
+          <form #addCardForm="ngForm" class="addCard-form">
+            <div>
+              <mat-form-field>
+                <input matInput #StreetName name="StreetName" required class="addCard-input" placeholder="Street Name"/>
+                <mat-icon class="clear" matSuffix (click)="StreetName.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #HouseNumber name="HouseNumber" required class="addCard-input" placeholder="House Number"/>
+                <mat-icon class="clear" matSuffix (click)="HouseNumber.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #PostalCode name="PostalCode" required class="addCard-input" placeholder="Postal Code"/>
+                <mat-icon class="clear" matSuffix (click)="PostalCode.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #City name="City" required class="addCard-input" placeholder="City"/>
+                <mat-icon class="clear" matSuffix (click)="City.value = ''">clear</mat-icon>
+              </mat-form-field>
+              <br />
+              <button mat-raised-button [disabled]="StreetName.value == ''|| HouseNumber.value == '' || PostalCode.value == '' || City.value == ''" type="submit" class="addCard-button">Order Card</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

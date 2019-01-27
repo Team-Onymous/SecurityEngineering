@@ -1,0 +1,8 @@
+.idea
+dApp/node_modules
+dApp/build
+node_modules
+dbAPI/node_modules
+
+
+dbAPI/app/config/config\.json

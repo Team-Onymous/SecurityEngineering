@@ -1,0 +1,76 @@
+<div [ngClass]="visible ? 'registerbg' : 'registerbg-xs'"></div>
+
+<div class="outer">
+  <div class="middle">
+    <div [ngClass]="visible ? 'register-card-container' : 'register-card-container-xs'">
+      <mat-card class="register-card">
+        <mat-card-title>OnyCoin Register</mat-card-title>
+        <mat-card-content>
+          <form (ngSubmit)="goToRegister(FirstName.value, LastName.value, Email.value, DateOfBirth.value, password.value)" #registerForm="ngForm" class="register-form">
+            <div>
+              <mat-form-field>
+                <input matInput #FirstName="ngModel" [(ngModel)]="FirstNameInput" name="FirstName" pattern="[A-Za-z ]{1,32}"
+                       required class="register-input" placeholder="First Name"/>
+                <mat-icon class="clear" matSuffix (click)="FirstName.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="FirstName.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!FirstName.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!FirstName.errors?.pattern">first name can only be letters</span>
+                  </mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #LastName="ngModel" [(ngModel)]="LastNameInput"  name="LastName" pattern="[A-Za-z ]{1,32}"
+                       required class="register-input" placeholder="Last Name"/>
+                <mat-icon class="clear" matSuffix (click)="LastName.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="LastName.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!LastName.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!LastName.errors?.pattern">last name can only be letters</span>
+                </mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #Email="ngModel" [(ngModel)]="EmailInput" name="Email" required class="register-input" placeholder="E-mail"
+                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+                <mat-icon class="clear" matSuffix (click)="Email.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="Email.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!Email.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!Email.errors?.pattern">It isn't a correct email address</span>
+                </mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput #DateOfBirth="ngModel" [(ngModel)]="dateOfBirthInput" name="DateOfBirth" required
+                       class="register-input" placeholder="Date Of Birth(DD/MM/YYYY)" pattern="[0-9]{1,2}/[0-9]{1,2}/[0-9]{4}">
+                <mat-icon class="clear" matSuffix (click)="DateOfBirth.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="DateOfBirth.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!DateOfBirth.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!DateOfBirth.errors?.pattern">The date of birth isn't correct(DD/MM/YYYY)</span>
+                </mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput id="Password" #password="ngModel" [(ngModel)]="passwordInput"
+                       name="password" required class="register-input" placeholder="Password" minlength="8" type="password"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                <mat-icon class="clear" matSuffix (click)="password.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="password.invalid && password.dirty" [ngStyle]="warningStyle">
+                  <span [hidden]="!password.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!password.errors?.pattern">"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"</span>
+                </mat-hint>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput id="RepeatPassword" #RepeatPassword="ngModel" [(ngModel)]="passwordRepeatInput" minlength="8"
+                       name="RepeatPassword" required class="register-input" placeholder="Repeat Password" type="password"
+                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
+                <mat-icon class="clear" matSuffix (click)="RepeatPassword.value = ''">clear</mat-icon>
+                <mat-hint *ngIf="RepeatPassword.invalid" [ngStyle]="warningStyle">
+                  <span [hidden]="!RepeatPassword.errors?.required">Field can't be emty</span>
+                  <span [hidden]="!RepeatPassword.errors?.pattern">"Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"</span>
+                </mat-hint>
+              </mat-form-field>
+              <br />
+              <button mat-raised-button [disabled]="!registerForm.form.valid" class="register-button">Register</button>
+
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
